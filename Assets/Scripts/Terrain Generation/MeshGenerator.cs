@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-
     [RequireComponent(typeof(MeshFilter))]
     public class MeshGenerator : MonoBehaviour
     {
@@ -13,10 +12,11 @@ namespace com.limphus.retro_survival_shooter
 
         Vector3[] vertices; //array of vertices
         int[] triangles; //array of triangles
+        Vector2[] uvs; //array of uvs
 
         [Header("Terrain Size")]
-        [Range(1, 256)] [SerializeField] private int xSize = 20; //how big we want our grid of vertices on the x axis
-        [Range(1, 256)] [SerializeField] private int zSize = 20; //how big we want our grid of vertices on the z axis
+        [Range(1, 255)] [SerializeField] private int xSize = 20; //how big we want our grid of vertices on the x axis
+        [Range(1, 255)] [SerializeField] private int zSize = 20; //how big we want our grid of vertices on the z axis
 
         [Header("Terrain Height")]
         [SerializeField] private float heightMultiplier = 2.0f;
@@ -30,11 +30,13 @@ namespace com.limphus.retro_survival_shooter
         {
             mesh = new Mesh();
             GetComponent<MeshFilter>().mesh = mesh;
-
+            
             CreateShape();
             UpdateMesh();
-        }
 
+            Invoke(nameof(CreateShape), 1f);
+        }
+        
         private void CreateShape()
         {
             //using the xSize and zSize, generate a grid of vertices
@@ -87,23 +89,18 @@ namespace com.limphus.retro_survival_shooter
                 vert++; //we do this to elimiate weird behaviour with our grid
                 //i.e weird lighting effects and connections between certain vertices
             }
-            
-            //old mesh generation code - makes a quad
-            /*
-            vertices = new Vector3[]
-            {
-                new Vector3(0,0,0),
-                new Vector3(0,0,1),
-                new Vector3(1,0,0),
-                new Vector3(1,0,1)
-            };
 
-            triangles = new int[]
+
+            uvs = new Vector2[vertices.Length];
+
+            for (int i = 0, z = 0; z <= zSize; z++)
             {
-                0, 1, 2,
-                1, 3, 2
-            };
-            */
+                for (int x = 0; x <= xSize; x++)
+                {
+                    uvs[i] = new Vector2((float)x / xSize, (float)z / zSize);
+                    i++;
+                }
+            }
         }
 
         private void UpdateMesh()
@@ -112,6 +109,7 @@ namespace com.limphus.retro_survival_shooter
 
             mesh.vertices = vertices;
             mesh.triangles = triangles;
+            mesh.uv = uvs;
 
             mesh.RecalculateNormals();
         }
