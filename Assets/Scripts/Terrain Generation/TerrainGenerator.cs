@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
 {
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshCollider))]
-    public class MeshGenerator : MonoBehaviour
+    public class TerrainGenerator : MonoBehaviour
     {
         Mesh mesh; //the mesh component
 
@@ -18,15 +18,6 @@ namespace com.limphus.retro_survival_shooter
         [Header("Terrain Size")]
         [SerializeField] private Vector2Int size; //how big we want our grid of vertices
         [SerializeField] private int gridMultiplier; //how far apart we want our vertices
-
-        //[Header("Terrain Height")]
-        //[Tooltip("A lower value will create smaller hills and features, a higher value will create larger hills and peaks")] 
-        //[SerializeField] private float heightMultiplier = 2.0f;
-
-        //[Tooltip("A lower value will create smoother terrain, a higher value will create more rough terrain")]
-        //[Range(0.0f, 1.0f)]
-        //[SerializeField] private float noiseMultiplier = 0.3f;
-
 
         [Header("Perlin Noise")]
         [SerializeField] private float noiseScale = 1.0f;
@@ -43,14 +34,6 @@ namespace com.limphus.retro_survival_shooter
             AssetGenerator ag = GetComponentInChildren<AssetGenerator>();
 
             if (ag) ag.GenerateAssets();
-
-            /*
-            mesh = new Mesh();
-            GetComponent<MeshFilter>().mesh = mesh;
-            
-            CreateShape();
-            UpdateMesh();
-            */
         }
 
         public void GenerateMesh()
@@ -96,9 +79,6 @@ namespace com.limphus.retro_survival_shooter
                 {
                     //grabbing the perlin noise value, and multiplying it by the heightmultiplier
                     float y = heightMap[x, z] * heightMultiplier;
-
-                    //adding in simple perlin noise to offset our points on the y axis
-                    //float y = Mathf.PerlinNoise(x * noiseMultiplier, z * noiseMultiplier) * heightMultiplier;
 
                     //adding a new vertice to our array
                     vertices[i] = new Vector3(x * gridMultiplier, y, z * gridMultiplier);
@@ -165,96 +145,6 @@ namespace com.limphus.retro_survival_shooter
 
             return uvs;
         }
-
-        #region OLD CODE
-        private void CreateShape()
-        {
-            //using the xSize and zSize, generate a grid of vertices
-            //vertex count = (xSize + 1) * (zSize + 1)
-            vertices = new Vector3[(size.x + 1) * (size.y + 1)];
-
-            //using a nested for loop to generate all our vertices
-            //turns out you can add additional variables inside for loops?
-            //now we've got i = 0 and z = 0... pretty interesting.
-            for (int i = 0, z = 0; z <= size.y; z++)
-            {
-                for (int x = 0; x <= size.x; x++)
-                {
-                    //adding in simple perlin noise to offset our points on the y axis
-                    //float y = Mathf.PerlinNoise(x * noiseMultiplier, z * noiseMultiplier) * heightMultiplier;
-
-                    //adding a new vertice to our array
-                    //vertices[i] = new Vector3(x, y, z);
-                    i++;
-                }
-            }
-
-            //using another nested for loop to generate our triangles
-            triangles = new int[size.x * size.y * 6]; //our triangle array, 6 points in a quad multiplied by our xSize and zSize
-
-            int vert = 0, tris = 0; //used to keep track of the vertices and triangles we are on
-
-            for (int z = 0; z < size.y; z++)
-            {
-                for (int x = 0; x < size.x; x++)
-                {
-                    //generating a triangle
-                    //we add vert to each of the triangles to offset them correctly
-                    //we add tris to the index so that we don't update the same 6 points
-
-                    //first triangle
-                    triangles[tris + 0] = vert + 0;
-                    triangles[tris + 1] = vert + size.x + 1;
-                    triangles[tris + 2] = vert + 1;
-
-                    //second triangle
-                    triangles[tris + 3] = vert + 1;
-                    triangles[tris + 4] = vert + size.x + 1;
-                    triangles[tris + 5] = vert + size.x + 2;
-
-                    vert++;
-                    tris += 6;
-                }
-
-                vert++; //we do this to elimiate weird behaviour with our grid
-                //i.e weird lighting effects and connections between certain vertices
-            }
-
-            uvs = new Vector2[vertices.Length];
-
-            for (int i = 0, z = 0; z <= size.y; z++)
-            {
-                for (int x = 0; x <= size.x; x++)
-                {
-                    uvs[i] = new Vector2((float)x / size.x, (float)z / size.y);
-                    i++;
-                }
-            }
-        }
-
-        private void UpdateMesh()
-        {
-            mesh.Clear();
-
-            mesh.vertices = vertices;
-            mesh.triangles = triangles;
-            mesh.uv = uvs;
-
-            mesh.RecalculateNormals();
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (vertices == null) return;
-
-            //for (int i = 0; i < vertices.Length; i++)
-            {
-                //Gizmos.color = Color.red;
-                //Gizmos.DrawSphere(vertices[i], 0.1f);
-            }
-        }
-
-        #endregion
 
         private void OnValidate()
         {
