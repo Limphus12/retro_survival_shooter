@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 1, g: 1, b: 1, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.05
@@ -1358,7 +1358,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865530558}
-  m_Mesh: {fileID: 1175687324}
+  m_Mesh: {fileID: 1040675844}
 --- !u!4 &865530561
 Transform:
   m_ObjectHideFlags: 0
@@ -1407,7 +1407,7 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1175687324}
+  m_Mesh: {fileID: 1040675844}
 --- !u!4 &931536918 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 689925405051230777, guid: 1b5e0d1ef1e04a94fa4ac280b8e1b688, type: 3}
@@ -1418,17 +1418,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 549600546165614633, guid: b208168a7ab9eb34a9748fad9ef91e08, type: 3}
   m_PrefabInstance: {fileID: 549600545842467001}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1046704246 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 616512601690933506, guid: 7c71ef05ba4dfca40a1959d3cfd85e85, type: 3}
-  m_PrefabInstance: {fileID: 616512601722222964}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1149513385 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2183430095850145989, guid: 4e3949c359e994940803188126e66656, type: 3}
-  m_PrefabInstance: {fileID: 2183430096865437292}
-  m_PrefabAsset: {fileID: 0}
---- !u!43 &1175687324
+--- !u!43 &1040675844
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1592,6 +1582,16 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!4 &1046704246 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 616512601690933506, guid: 7c71ef05ba4dfca40a1959d3cfd85e85, type: 3}
+  m_PrefabInstance: {fileID: 616512601722222964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1149513385 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2183430095850145989, guid: 4e3949c359e994940803188126e66656, type: 3}
+  m_PrefabInstance: {fileID: 2183430096865437292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1284703469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1993093408802331787, guid: 8d020d3f117a9ff4cbc2720a2e9cf892, type: 3}
@@ -1616,7 +1616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1414635198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2056,7 +2056,7 @@ GameObject:
   - component: {fileID: 2058516404}
   - component: {fileID: 2058516405}
   m_Layer: 0
-  m_Name: Asset Generator
+  m_Name: Biome Generator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2119,15 +2119,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   envPlacementChance: 0.5
-  envPlacementOffset: -0.05
+  envHeightPlacementOffset: -0.1
+  envPlacementOffset: 4
   nonEnvPlacementChance: 0.001
-  nonEnvPlacementOffset: -0.05
+  nonEnvHeightPlacementOffset: -0.1
+  nonEnvPlacementOffset: -0.1
   envGridSize: {x: 128, y: 128}
   envGridMultiplier: 4
   envGridOffset: 2
   nonEnvGridSize: {x: 128, y: 128}
   nonEnvGridMultiplier: 4
-  nonEnvGridOffset: 8
+  nonEnvGridOffset: 16
 --- !u!4 &2114282475 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5942531564146134966, guid: 3b1712d22b62c644dbe517b9628705d0, type: 3}
@@ -2155,7 +2157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5358056577268887820, guid: aa08e714193186049979053adb49f548, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 40.05
+      value: 8.62
       objectReference: {fileID: 0}
     - target: {fileID: 5358056577268887820, guid: aa08e714193186049979053adb49f548, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2192,10 +2194,6 @@ PrefabInstance:
     - target: {fileID: 5358056577268887821, guid: aa08e714193186049979053adb49f548, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5358056577268887821, guid: aa08e714193186049979053adb49f548, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa08e714193186049979053adb49f548, type: 3}

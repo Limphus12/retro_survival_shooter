@@ -31,9 +31,9 @@ namespace com.limphus.retro_survival_shooter
             GenerateMesh();
 
             //now we grab the asset generator from our child and tell it to place assets!
-            AssetGenerator ag = GetComponentInChildren<AssetGenerator>();
+            BiomeGenerator assetGenerator = GetComponentInChildren<BiomeGenerator>();
 
-            if (ag) ag.GenerateAssets();
+            if (assetGenerator) assetGenerator.GenerateAssets(seed);
         }
 
         public void GenerateMesh()
@@ -70,7 +70,6 @@ namespace com.limphus.retro_survival_shooter
 
             //calculate a height map, passing in our size variables, seed etc.
             float[,] heightMap = Noise.ComplexNoiseMap(size.x + 1, size.y + 1, seed, noiseScale, octaves, persistance, lacunarity);
-            //float[,] heightMap = Noise.SimpleNoiseMap(size.x + 1, size.y + 1, noiseScale);
 
             //using a nested for loop to generate all our vertices
             for (int i = 0, z = 0; z <= size.y; z++)
