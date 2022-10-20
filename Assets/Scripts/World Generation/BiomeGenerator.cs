@@ -15,11 +15,11 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] private float envPlacementChance = 0.5f;
-        [SerializeField] private float envHeightPlacementOffset = 2.0f, envPlacementOffset = -0.1f;
+        [SerializeField] private float envHeightPlacementOffset = 2.0f;
 
         [Space]
         [SerializeField] private float nonEnvPlacementChance = 0.05f;
-        [SerializeField] private float nonEnvHeightPlacementOffset = 1.0f, nonEnvPlacementOffset = -0.1f;
+        [SerializeField] private float nonEnvHeightPlacementOffset = 1.0f;
 
         [Header("Grid Variables")]
         [SerializeField] private Vector2Int envGridSize;
@@ -29,36 +29,81 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector2Int nonEnvGridSize;
         [SerializeField] private int nonEnvGridMultiplier, nonEnvGridOffset;
         
-        private void SetSeed(int seed)
+        public void GenerateBiome(int seed)
         {
             //init the rng with our seed
             Random.InitState(seed);
+
+#if UNITY_EDITOR
+            //just calls the remove assets function
+            EditorRemoveAssets();
+#endif
+
+            //when generating our biome, always get rid of any previous assets
+            RemoveAssets();
+
+            //then generate the new assets
+            GenerateAssets();
         }
 
-        public void GenerateAssets(int seed)
+        public void ClearBiome()
+        {
+            //just calls the remove assets function
+            EditorRemoveAssets();
+        }
+
+        private void GenerateAssets()
+        {
+            AssetLoop(envGridSize, envGridMultiplier, envGridOffset, environmentalAssets, envPlacementChance, envHeightPlacementOffset);
+            Debug.Log("Spawned " + i + " Envionmental Assets");
+
+            AssetLoop(nonEnvGridSize, nonEnvGridMultiplier, nonEnvGridOffset, nonEnvironmentalAssets, nonEnvPlacementChance, nonEnvHeightPlacementOffset);
+            Debug.Log("Spawned " + i + " Non-Envionmental Assets");
+        }
+
+        private void RemoveAssets()
         {
             //if we have children
             if (transform.childCount != 0)
             {
                 //delete all of our children
-                for (int i = 0; i < transform.childCount; i++)
+                //for (int i = 0; i < transform.childCount; i++)
                 {
-                    Destroy(transform.GetChild(i));
+                    //Destroy(transform.GetChild(i).gameObject);
                 }
             }
 
-            SetSeed(seed);
+            while (transform.childCount != 0)
+            {
+                Destroy(transform.GetChild(transform.childCount - 1).gameObject);
 
-            Loop(envGridSize, envGridMultiplier, envGridOffset, environmentalAssets, envPlacementChance, envHeightPlacementOffset);
-            Debug.Log("Spawned " + i + " Envionmental Assets");
+                if (transform.childCount == 0) break;
+            }
+        }
 
-            Loop(nonEnvGridSize, nonEnvGridMultiplier, nonEnvGridOffset, nonEnvironmentalAssets, nonEnvPlacementChance, nonEnvHeightPlacementOffset);
-            Debug.Log("Spawned " + i + " Non-Envionmental Assets");
+        private void EditorRemoveAssets()
+        {
+            //if we have children
+            //if (transform.childCount != 0)
+            {
+                //delete all of our children
+                //for (int i = 0; i < transform.childCount; i++)
+                {
+                    //DestroyImmediate(transform.GetChild(i).gameObject);
+                }
+            }
+
+            while (transform.childCount != 0)
+            {
+                DestroyImmediate(transform.GetChild(transform.childCount - 1).gameObject);
+
+                if (transform.childCount == 0) break;
+            }
         }
 
         int i = 0;
 
-        private void Loop(Vector2Int gridSize, int gridMultiplier, int gridOffset, GameObject[] assets, float assetPlacementChance, float placementOffset)
+        private void AssetLoop(Vector2Int gridSize, int gridMultiplier, int gridOffset, GameObject[] assets, float assetPlacementChance, float placementOffset)
         {
             i = 0;
 

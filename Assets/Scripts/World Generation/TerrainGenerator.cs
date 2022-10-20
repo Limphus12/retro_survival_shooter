@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,22 +20,43 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("Perlin Noise")]
         [SerializeField] private float noiseScale = 1.0f;
-        [SerializeField] private int seed, octaves = 4;
+        [SerializeField] private int octaves = 4;
         [SerializeField] [Range(0f, 1f)] private float persistance = 0.5f;
         [SerializeField] private float lacunarity = 2.0f, heightMultiplier = 2.0f;
 
-        // Start is called before the first frame update
-        private void Start()
+        private int seed;
+
+        //sets our seed and generates the mesh
+        public void GenerateTerrain(int seed)
         {
+            this.seed = seed;
+
             GenerateMesh();
-
-            //now we grab the asset generator from our child and tell it to place assets!
-            BiomeGenerator assetGenerator = GetComponentInChildren<BiomeGenerator>();
-
-            if (assetGenerator) assetGenerator.GenerateAssets(seed);
         }
 
-        public void GenerateMesh()
+        public void ClearTerrain()
+        {
+            //create a new mesh
+            mesh = new Mesh();
+
+            //set the mesh filter's mesh
+            GetComponent<MeshFilter>().sharedMesh = mesh;
+
+            //ensure we have a clean mesh
+            mesh.Clear();
+
+            //recalculate normals on the mesh
+            mesh.RecalculateNormals();
+
+            // optionally, add a mesh collider (As suggested by Franku Kek via Youtube comments).
+            // To use this, your MeshGenerator GameObject needs to have a mesh collider
+            // component added to it.  Then, just re-enable the code below.
+            mesh.RecalculateBounds();
+            MeshCollider meshCollider = GetComponent<MeshCollider>();
+            meshCollider.sharedMesh = mesh;
+        }
+
+        private void GenerateMesh()
         {
             //create a new mesh
             mesh = new Mesh();
@@ -51,6 +71,7 @@ namespace com.limphus.retro_survival_shooter
             mesh.vertices = CreateVertices();
             mesh.triangles = CreateTriangles();
             mesh.uv = GenerateUVs();
+            mesh.colors = GenerateColors();
 
             //recalculate normals on the mesh
             mesh.RecalculateNormals();
@@ -61,6 +82,10 @@ namespace com.limphus.retro_survival_shooter
             mesh.RecalculateBounds();
             MeshCollider meshCollider = GetComponent<MeshCollider>();
             meshCollider.sharedMesh = mesh;
+
+            //now we grab the asset generator from our child and tell it to place assets!
+            BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
+            if (biomeGenerator) biomeGenerator.GenerateBiome(seed);
         }
 
         private Vector3[] CreateVertices()
@@ -145,14 +170,39 @@ namespace com.limphus.retro_survival_shooter
             return uvs;
         }
 
-        private void OnValidate()
+        private Color[] GenerateColors()
         {
-            if (size.x < 1) size.x = 1;
-            if (size.y < 1) size.y = 1;
-            if (lacunarity < 1) lacunarity = 1;
-            if (octaves < 0) octaves = 0;
+            //create a new color array
+            Color[] colors = new Color[vertices.Length];
 
-            GenerateMesh();
+            //nested for loop to generate color data
+            //this implementation picks a random color from R, G, B or Black
+            for (int i = 0, z = 0; z <= size.y; z++)
+            {
+                for (int x = 0; x <= size.x; x++)
+                {
+                    int j = Random.Range(0, 4);
+
+                    if (j == 0) colors[i] = Color.red;
+                    else if (j == 1) colors[i] = Color.green;
+                    else if (j == 2) colors[i] = Color.blue;
+                    else if (j == 3) colors[i] = Color.black;
+
+                    i++;
+                }
+            }
+
+            return colors;
         }
+
+        //private void OnValidate()
+        //{
+        //if (size.x < 1) size.x = 1;
+        //if (size.y < 1) size.y = 1;
+        //if (lacunarity < 1 || lacunarity > 1) lacunarity = 1;
+        //if (octaves < 0) octaves = 0;
+
+        //GenerateMesh();
+        //}
     }
 }

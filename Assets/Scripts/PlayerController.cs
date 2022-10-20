@@ -113,7 +113,7 @@ namespace com.limphus.retro_survival_shooter
             Move();
         }
 
-        float zLean;
+        //float zLean;
 
         //Deals with Movement
         void Move()
@@ -127,20 +127,18 @@ namespace com.limphus.retro_survival_shooter
                 rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
                 rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
 
-                //Camera Lean, sets the camera's Z rotation based off horizontal input.
                 if (!cameraLean)
                 {
                     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-                    transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
                 }
 
-                else
+                //camera lean, sets the camera's Z rotation based off horizontal input
+                else if (cameraLean)
                 {
                     float currentX = Input.GetAxis("Horizontal");
-
                     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, currentX * -cameraLeanAmount);
-                    transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
 
+                    #region hidden code
                     //if (Input.GetAxis("Mouse X") > 0.1f)
                     {
                         //zLean = Mathf.Lerp(zLean, -cameraLeanAmount, Time.deltaTime * 5f);
@@ -160,7 +158,10 @@ namespace com.limphus.retro_survival_shooter
 
                     //playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, zLean);
                     //transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+                    #endregion
                 }
+
+                transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
             }
         }
     }
