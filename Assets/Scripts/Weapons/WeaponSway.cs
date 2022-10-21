@@ -7,59 +7,94 @@ namespace com.limphus.retro_survival_shooter
 {
     public class WeaponSway : MonoBehaviour
     {
-        [Header("Settings")]
-        [SerializeField] private float swaySmooth = 8.0f;
-        [SerializeField] private float swayAmount = 2.0f, swayMaximum = 2.0f;
-        
-        [Space]
-        [SerializeField] private float tiltSmooth = 8.0f;
-        [SerializeField] private float tiltAmount = 2.0f, tiltMaximum = 2.0f;
+        [Header("Hipfire Settings")]
+        [SerializeField] private Vector3 hipPosition;
+        [SerializeField] private Quaternion hipRotation;
 
-        private Vector3 initialPosition;
+        [Space]
+        [SerializeField] private float hipSwaySmooth = 8.0f;
+        [SerializeField] private float hipSwayAmount = 2.0f, hipSwayMaximum = 2.0f;
+
+        [Space]
+        [SerializeField] private float hipTiltSmooth = 8.0f;
+        [SerializeField] private float hipTiltAmount = 2.0f, hipTiltMaximum = 2.0f;
+
+        [Header("Aiming Settings")]
+        [SerializeField] private Vector3 aimingPosition;
+        [SerializeField] private Quaternion aimingRotation;
+
+        [Space]
+        [SerializeField] private float aimingSwaySmooth = 8.0f;
+        [SerializeField] private float aimingSwayAmount = 2.0f, aimingSwayMaximum = 2.0f;
+
+        [Space]
+        [SerializeField] private float aimingTiltSmooth = 8.0f;
+        [SerializeField] private float aimingTiltAmount = 2.0f, aimingTiltMaximum = 2.0f;
+
         private Quaternion initialRotation;
+
+        private bool isAiming;
 
         private void Awake()
         {
-            initialPosition = transform.localPosition;
             initialRotation = transform.localRotation;
         }
 
         void Update()
         {
-            Sway();
-            Tilt();
+            if (Input.GetMouseButtonDown(1)) Aim();
+
+            CheckSway();
+            CheckTilt();
         }
 
-        private void Sway()
+        private void Aim() => isAiming = !isAiming;
+
+        private void CheckSway()
+        {
+            if (!isAiming) Sway(hipSwayAmount, hipSwayMaximum, hipSwaySmooth, hipPosition);
+
+            else if (isAiming) Sway(aimingSwayAmount, aimingSwayMaximum, aimingSwaySmooth, aimingPosition);
+        }
+
+        private void CheckTilt()
+        {
+            if (!isAiming) Tilt(hipTiltAmount, hipTiltMaximum, hipTiltSmooth, hipRotation);
+
+            else if (isAiming) Tilt(aimingTiltAmount, aimingTiltMaximum, aimingTiltSmooth, aimingRotation);
+        }
+
+        private void Sway(float amount, float maximum, float smooth, Vector3 position)
         {
             //calculate inputs
             Vector2 inputs = Inputs();
 
             //calculate sway positions
-            float swayPositionX = Mathf.Clamp(inputs.x * swayAmount, -swayMaximum , swayMaximum) / 100;
-            float swayPositionY = Mathf.Clamp(inputs.y * swayAmount, -swayMaximum, swayMaximum) / 100;
+            float swayPositionX = Mathf.Clamp(inputs.x * amount, -maximum , maximum) / 100;
+            float swayPositionY = Mathf.Clamp(inputs.y * amount, -maximum, maximum) / 100;
 
             //calculate final target position
             Vector3 targetPosition = new Vector3(swayPositionX, swayPositionY);
 
             //apply target position
-            transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition + initialPosition, swaySmooth * Time.deltaTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition + position, smooth * Time.deltaTime);
         }
 
-        private void Tilt()
-        {   
+        private void Tilt(float amount, float maximum, float smooth, Quaternion rotation)
+        {
             //calculate inputs
             Vector2 inputs = Inputs();
 
             //calculate tilt rotations
-            float tiltRotationY = Mathf.Clamp(inputs.x * tiltAmount, -tiltMaximum, tiltMaximum);
-            float tiltRotationX = Mathf.Clamp(inputs.y * tiltAmount, -tiltMaximum, tiltMaximum);
+            float tiltRotationY = Mathf.Clamp(inputs.x * amount, -maximum, maximum);
+            float tiltRotationX = Mathf.Clamp(inputs.y * amount, -maximum, maximum);
+            float tiltRotationZ = Mathf.Clamp(Input.GetAxis("Horizontal") * amount, -maximum, maximum);
 
             //calculate target rotation
-            Quaternion targetRotation = Quaternion.Euler(new Vector3(-tiltRotationX, tiltRotationY, tiltRotationY));
+            Quaternion targetRotation = Quaternion.Euler(new Vector3(tiltRotationX, -tiltRotationY, -tiltRotationZ));
 
             //apply target rotation
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation * initialRotation, tiltSmooth * Time.deltaTime);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation * initialRotation, smooth * Time.deltaTime);
         }
 
         private Vector2 Inputs()
