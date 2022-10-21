@@ -6,10 +6,12 @@ namespace com.limphus.retro_survival_shooter
 {
     public class AssetScript : MonoBehaviour
     {
+        [SerializeField] private Vector3 boxExtents = Vector3.one;
+
         // Start is called before the first frame update
         void Start()
         {
-            Collider[] collisions = Physics.OverlapBox(transform.position, Vector3.one * 10f);
+            Collider[] collisions = Physics.OverlapBox(transform.position, boxExtents);
 
             if (collisions.Length != 0)
             {

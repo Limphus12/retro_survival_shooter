@@ -24,6 +24,10 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] [Range(0f, 1f)] private float persistance = 0.5f;
         [SerializeField] private float lacunarity = 2.0f, heightMultiplier = 2.0f;
 
+        [Header("Vertex Colors")]
+        [Tooltip("The chances of choosing Red, Green, Blue or Black for the vertex color. For instance, [25, 50, 75] gives a 25% chance for each color.")]
+        [SerializeField] private Vector3Int colorChance = new Vector3Int(25, 50, 75);
+
         private int seed;
 
         //sets our seed and generates the mesh
@@ -176,18 +180,18 @@ namespace com.limphus.retro_survival_shooter
             Color[] colors = new Color[vertices.Length];
 
             //nested for loop to generate color data
-            //this implementation picks a random color from R, G, B or Black
+            //this implementation picks a random color from R, G, B or Black, based on the color chance.
             for (int i = 0, z = 0; z <= size.y; z++)
             {
                 for (int x = 0; x <= size.x; x++)
                 {
-                    int j = Random.Range(0, 4);
+                    int j = Random.Range(0, 101);
 
-                    if (j == 0) colors[i] = Color.red;
-                    else if (j == 1) colors[i] = Color.green;
-                    else if (j == 2) colors[i] = Color.blue;
-                    else if (j == 3) colors[i] = Color.black;
-
+                    if (j > 0 && j <= colorChance.x) colors[i] = Color.red;
+                    else if (j > colorChance.x && j <= colorChance.y) colors[i] = Color.green;
+                    else if (j > colorChance.y && j <= colorChance.z) colors[i] = Color.blue;
+                    else if (j > colorChance.z && j <= 100) colors[i] = Color.black;
+                    
                     i++;
                 }
             }
