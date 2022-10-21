@@ -79,8 +79,13 @@ namespace com.limphus.retro_survival_shooter
 
                 characterController.stepOffset = originalStepOffset;
 
-                //fixes a stutter issue when we're going down small slopes
-                moveDirection.y = -antiBumpAmount;
+                //checking if were close enough to the ground first
+                if (Physics.Raycast(transform.position, Vector3.down, 1.25f))
+                {
+                    //fixes a stutter issue when we're going down small slopes
+                    moveDirection.y = -antiBumpAmount;
+                }
+                
 
                 if (Input.GetButton("Jump") && canMove)
                 {
