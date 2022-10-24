@@ -42,13 +42,11 @@ namespace com.limphus.retro_survival_shooter
 
         void Update()
         {
-            if (Input.GetMouseButtonDown(1)) Aim();
-
             CheckSway();
             CheckTilt();
         }
 
-        private void Aim() => isAiming = !isAiming;
+        public void Aim(bool b) => isAiming = b;
 
         private void CheckSway()
         {

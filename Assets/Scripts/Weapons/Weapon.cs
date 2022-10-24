@@ -43,16 +43,15 @@ namespace com.limphus.retro_survival_shooter
         [Header("Bullet Variables")]
         [SerializeField] private AnimationCurve bulletDropOffCurve;
 
-        /*
-        [Header("Weapon Sway & Recoil")]
-        [SerializeField] private bool weaponSway;
+        [Header("Weapon Sway")]
+        [SerializeField] private WeaponSway weaponSway;
 
-        [Space]
-        [SerializeField] private float amount;
-        [SerializeField] private float maxAmount, smoothAmount, weaponRecoil;
-        */
+        [Header("Weapon Recoil")]
+        [SerializeField] private WeaponRecoil weaponRecoil;
+        [SerializeField] private WeaponRecoil cameraRecoil;
 
-        private bool isShooting, isCocking, isBursting, burst, burstResetInvoked;
+
+        private bool isShooting, isCocking, isBursting, burst, burstResetInvoked, isAiming;
 
         private int currentAmmo, currentBurstCounter;
 
@@ -69,17 +68,7 @@ namespace com.limphus.retro_survival_shooter
         }
 
         // Update is called once per frame
-        void Update()
-        {
-            Inputs();
-        }
-
-        void LateUpdate()
-        {
-            //if (weaponSway) Sway();
-        }
-
-        bool isZoomed = false;
+        void Update() => Inputs();
 
         //Detects the player input on the mouse, and checks if the weapon is currently shooting. If not, then shoot.
         void Inputs()
@@ -156,64 +145,37 @@ namespace com.limphus.retro_survival_shooter
                     break;
             }
 
-            if (isBursting)
-            {
-                CheckBurst();
-            }
-        
-            /*
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (!isZoomed)
-                {
-                    playerCameraTransform.GetComponent<Camera>().fieldOfView = 30;
-
-                    isZoomed = true;
-
-                    return;
-                }
-
-                else if (isZoomed)
-                {
-                    playerCameraTransform.GetComponent<Camera>().fieldOfView = 70;
-
-                    isZoomed = false;
-
-                    return;
-                }
-            }
-            */
+            if (isBursting) CheckBurst();
+            
+            if (Input.GetMouseButtonDown(1)) Aim();
         }
 
-        //weapon sway! looks very nice. also weapon recoil!!!
-        //there is a bool for turning these off btw, just so you know...
-        /*
-        void Sway()
+        private void Aim()
         {
-            float movementX = -Input.GetAxis("Mouse X") * amount * Time.deltaTime;
-            float movementY = -Input.GetAxis("Mouse Y") * amount * Time.deltaTime;
-            float movementZ = isShooting ? weaponRecoil * amount * Time.deltaTime : 0 ;
-            movementX = Mathf.Clamp(movementX, -maxAmount, maxAmount);
-            movementY = Mathf.Clamp(movementY, -maxAmount, maxAmount);
-            movementZ = Mathf.Clamp(movementZ, -maxAmount, maxAmount);
+            isAiming = !isAiming;
 
-            Vector3 finalPosition = new Vector3(movementX, movementY, movementZ);
-            transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition + initialPosition, smoothAmount * Time.deltaTime);
+            if (weaponSway && weaponRecoil && cameraRecoil)
+            {
+                weaponSway.Aim(isAiming);
+                weaponRecoil.Aim(isAiming);
+                cameraRecoil.Aim(isAiming);
+            }
         }
-        */
 
-        private GameObject previousBullet; //Use this in Shoot Method
-        private GameObject[] previousBullets; //Use this in MulitShoot Method
-
-        //Fires a single projectile from the camera, out forward.
+        //Fires a single raycast from the camera, out forward.
         void Shoot()
         {
             isShooting = true;
 
-            //Instantiate a single projectile from the camera.
-            //GameObject bullet = Instantiate(accurateProjectile, playerCameraTransform.position, playerCameraTransform.rotation);
+            //do raycasts to hit enemies
+            ShootRaycast(playerCameraTransform);
 
-            //bullet.GetComponent<Accurate_Projectile_Script>().InitVariables(bulletSpeed, damage, 0, effectiveRange, bulletDropOffCurve);
+            //do recoil
+            if (weaponRecoil && cameraRecoil)
+            {
+                weaponRecoil.Recoil();
+                cameraRecoil.Recoil();
+            }
 
             //Weapon effects, such as muzzle flash, weapon firing sounds etc.
             if (weaponFX)
@@ -224,7 +186,7 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        //Similar to the Shoot Method above, but loops over an array of transforms and fires projectiles from each.
+        //Similar to the Shoot Method above, but loops over an array of transforms and fires raycasts from each.
         void MultiShoot()
         {
             isShooting = true;
@@ -238,37 +200,35 @@ namespace com.limphus.retro_survival_shooter
 
             for (int i = 0; i < multiShotTransforms.Length; i++)
             {
-                //Instantiate multiple projectiles, setting their directions to be the multiShotTransforms[i].rotation.
+                ShootRaycast(multiShotTransforms[i]);
+            }
+        }
 
-                //Instantiate a single projectile from the camera.
-                //GameObject bullet = Instantiate(accurateProjectile, playerCameraTransform.position, multiShotTransforms[i].rotation);
+        void ShootRaycast(Transform point)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(point.position, point.forward, out hit, Mathf.Infinity))
+            {
+                Health hp = hit.transform.GetComponent<Health>();
 
-                //bullet.GetComponent<Accurate_Projectile_Script>().InitVariables(bulletSpeed, damage, 0, effectiveRange, bulletDropOffCurve);
+                if (hp) hp.TakeDamage(damage);
             }
         }
 
         //just resets isShooting to false :D
-        void ResetShoot()
-        {
-            isShooting = false;
-        }
+        void ResetShoot() => isShooting = false;
 
         void StartCock()
         {
             isCocking = true;
 
-            Debug.Log("cocking the weapon");
+            Debug.Log("Cocking the weapon");
 
             Invoke(nameof(ResetCock), boltTime);
             Invoke(nameof(ResetShoot), 1 / rateOfFire);
         }
 
-        void ResetCock()
-        {
-            Debug.Log("Cocked the weapon");
-
-            isCocking = false;
-        }
+        void ResetCock() => isCocking = false;
 
         void StartBurst()
         {

@@ -18,21 +18,11 @@ namespace com.limphus.retro_survival_shooter
 
         private Vector3 currentRotation, rotation;
 
-        void Update()
-        {
-            Inputs();
-            UpdateRecoil();
-        }
+        void Update() => UpdateRecoil();
 
-        private void Inputs()
-        {
-            if (Input.GetButtonDown("Fire1")) Recoil();
-            if (Input.GetButtonDown("Fire2")) Aim();
-        }
+        public void Aim(bool b) => isAiming = b;
 
-        private void Aim() => isAiming = !isAiming;
-
-        private void Recoil()
+        public void Recoil()
         {
             if (!isAiming)
             {
