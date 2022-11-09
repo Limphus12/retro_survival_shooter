@@ -31,9 +31,21 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private float aimingTiltSmooth = 8.0f;
         [SerializeField] private float aimingTiltAmount = 2.0f, aimingTiltMaximum = 2.0f;
 
+        [Header("Reloading Settings")]
+        [SerializeField] private Vector3 reloadingPosition;
+        [SerializeField] private Quaternion reloadingRotation;
+
+        [Space]
+        [SerializeField] private float reloadingSwaySmooth = 8.0f;
+        [SerializeField] private float reloadingSwayAmount = 2.0f, reloadingSwayMaximum = 2.0f;
+
+        [Space]
+        [SerializeField] private float reloadingTiltSmooth = 8.0f;
+        [SerializeField] private float reloadingTiltAmount = 2.0f, reloadingTiltMaximum = 2.0f;
+
         private Quaternion initialRotation;
 
-        private bool isAiming;
+        private bool isAiming, isReloading;
 
         private void Awake()
         {
@@ -48,16 +60,22 @@ namespace com.limphus.retro_survival_shooter
 
         public void Aim(bool b) => isAiming = b;
 
+        public void Reload(bool b) => isReloading = b;
+
         private void CheckSway()
         {
-            if (!isAiming) Sway(hipSwayAmount, hipSwayMaximum, hipSwaySmooth, hipPosition);
+            if (isReloading) Sway(reloadingSwayAmount, reloadingSwayMaximum, reloadingSwaySmooth, reloadingPosition);
+
+            else if (!isAiming) Sway(hipSwayAmount, hipSwayMaximum, hipSwaySmooth, hipPosition);
 
             else if (isAiming) Sway(aimingSwayAmount, aimingSwayMaximum, aimingSwaySmooth, aimingPosition);
         }
 
         private void CheckTilt()
         {
-            if (!isAiming) Tilt(hipTiltAmount, hipTiltMaximum, hipTiltSmooth, hipRotation);
+            if (isReloading) Tilt(reloadingTiltAmount, reloadingTiltMaximum, reloadingTiltSmooth, reloadingRotation);
+
+            else if (!isAiming) Tilt(hipTiltAmount, hipTiltMaximum, hipTiltSmooth, hipRotation);
 
             else if (isAiming) Tilt(aimingTiltAmount, aimingTiltMaximum, aimingTiltSmooth, aimingRotation);
         }
@@ -89,9 +107,12 @@ namespace com.limphus.retro_survival_shooter
             float tiltRotationZ = Mathf.Clamp(Input.GetAxis("Horizontal") * amount, -maximum, maximum);
 
             //calculate target rotation
-            Quaternion targetRotation = Quaternion.Euler(new Vector3(tiltRotationX, -tiltRotationY, -tiltRotationZ));
+            Quaternion tiltRotation = Quaternion.Euler(new Vector3(tiltRotationX, -tiltRotationY, -tiltRotationZ));
+
+            Quaternion targetRotation = rotation * tiltRotation;
 
             //apply target rotation
+            //transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation * initialRotation, smooth * Time.deltaTime);
             transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation * initialRotation, smooth * Time.deltaTime);
         }
 

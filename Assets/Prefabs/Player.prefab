@@ -904,6 +904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6822713637754612694}
   - component: {fileID: 6822713637754612695}
+  - component: {fileID: 1093618722}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -947,13 +948,44 @@ MonoBehaviour:
   hipTiltAmount: 4
   hipTiltMaximum: 8
   aimingPosition: {x: 0, y: -0.062, z: 0.06}
-  aimingRotation: {x: 0, y: 0, z: 0, w: 0}
+  aimingRotation: {x: 0, y: 0, z: 0, w: 1}
   aimingSwaySmooth: 8
   aimingSwayAmount: 0
   aimingSwayMaximum: 2
   aimingTiltSmooth: 8
   aimingTiltAmount: 0.5
   aimingTiltMaximum: 1
+  reloadingPosition: {x: 0.05, y: -0.1, z: 0.165}
+  reloadingRotation: {x: 0.3768697, y: -0.06645233, z: 0.16043007, w: 0.9098437}
+  reloadingSwaySmooth: 4
+  reloadingSwayAmount: 0
+  reloadingSwayMaximum: 2
+  reloadingTiltSmooth: 8
+  reloadingTiltAmount: 4
+  reloadingTiltMaximum: 8
+--- !u!114 &1093618722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6822713637754612689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10c31564b5fc39f4eb4b8671abec9626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Revolver
+  durability: 0
+  weight: 0
+  damage: 10
+  rateOfFire: 1.2
+  magazineSize: 6
+  reloadTime: 3
+  playerCamera: {fileID: 1154132035860330907}
+  cameraRecoil: {fileID: 6822713638158227432}
+  weaponRecoil: {fileID: 6822713638769394566}
+  weaponSway: {fileID: 6822713637754612695}
 --- !u!1 &6822713638110934634
 GameObject:
   m_ObjectHideFlags: 0

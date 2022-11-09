@@ -11,7 +11,8 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected double rateOfFire;
 
         [Space]
-        [SerializeField] private int magazineSize;
+        [SerializeField] protected int magazineSize;
+        [SerializeField] protected double reloadTime;
 
         [Space]
         [SerializeField] protected Transform playerCamera;

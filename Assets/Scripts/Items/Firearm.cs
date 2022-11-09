@@ -13,7 +13,8 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private WeaponSway weaponSway;
 
-        private bool isAiming;
+        private bool isAiming, isReloading;
+        private bool reloadInput;
 
         private void Update() => Inputs();
 
@@ -25,6 +26,9 @@ namespace com.limphus.retro_survival_shooter
             if (Input.GetMouseButtonDown(1)) rightMouseInput = true;
             else if (Input.GetMouseButtonUp(1)) rightMouseInput = false;
 
+            if (Input.GetKeyDown(KeyCode.R)) reloadInput = true;
+            else if (Input.GetKeyUp(KeyCode.R)) reloadInput = false;
+
             //leftMouseInput = Input.GetMouseButton(0);
             //rightMouseInput = Input.GetMouseButton(1);
 
@@ -33,6 +37,15 @@ namespace com.limphus.retro_survival_shooter
 
         protected override void CheckShoot()
         {
+            //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
+            if (reloadInput && !isReloading && (CheckReload() == 0 || CheckReload() == 1))
+            {
+                StartReload(); return;
+            }
+
+            //if we're already reloading, dont do anything else here.
+            else if (isReloading) return;
+
             //check for r-mouse input and update aiming
             Aim(rightMouseInput);
 
@@ -40,16 +53,19 @@ namespace com.limphus.retro_survival_shooter
             if (isShooting) return;
 
             //if were not shooting and we press the l-mouse button, start shooting
-            if (leftMouseInput) StartShoot();
+            if (leftMouseInput)
+            {
+                //if we have no ammo tho, cry about it
+                if (CheckReload() == 0) Debug.Log("No ammo in the mag, we can't fire!");
+
+                else StartShoot();
+            }
         }
 
         //starts shooting
         protected override void StartShoot()
         {
             isShooting = true;
-
-            //TODO - we need to deplete ammo from our current mag size.
-            //were also gonna need to do some reload functions and whatnot lmao.
 
             //shoot immedietly, as this is a gun
             Shoot();
@@ -63,6 +79,9 @@ namespace com.limphus.retro_survival_shooter
         {
             //call the hit function, passing through the player camera
             Hit(playerCamera);
+
+            //i think i wanna add an ammo usage variable in teh future, but idk yet.
+            currentAmmo -= 1;
 
             //if we have the camera and weapon recoil references, call the aim method on them too
             if (cameraRecoil && weaponRecoil)
@@ -98,6 +117,62 @@ namespace com.limphus.retro_survival_shooter
                 weaponRecoil.Aim(b);
                 weaponSway.Aim(b);
             }
+        }
+
+        private int CheckReload()
+        {
+            if (currentAmmo <= 0)
+            {
+                Debug.Log("Cannot Shoot, we have no ammo!");
+
+                return 0; //if we have no ammo in the mag
+            }
+
+            else if (currentAmmo < magazineSize)
+            {
+                Debug.Log("We have ammo, but not a full mag!");
+
+                return 1; //if we dont have the full amount
+            }
+
+            else if (currentAmmo == magazineSize)
+            {
+                Debug.Log("We got a full mag, let 'em loose!");
+
+                return 2; //if we are full
+            }
+
+            else return 3;
+        }
+
+        protected void StartReload()
+        {
+            Debug.Log("Reloading!");
+
+            //set isreloading to true and invoke our reload method
+            isReloading = true;
+
+            //if we have the weapon sway reference, call the reload method on it too
+            if (weaponSway) weaponSway.Reload(isReloading);
+
+            Invoke(nameof(Reload), (float)reloadTime);
+        }
+
+        protected void Reload()
+        {
+            //set our current ammo equal to our magazine size, and end the reload
+            currentAmmo = magazineSize; EndReload();
+        }
+
+        //ends reloading
+        protected void EndReload()
+        {
+            Debug.Log("Done our Reload!");
+
+            isReloading = false;
+
+            //if we have the weapon sway reference, call the reload method on it too
+            if (weaponSway) weaponSway.Reload(isReloading);
         }
     }
 }
