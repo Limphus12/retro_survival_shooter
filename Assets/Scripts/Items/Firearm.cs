@@ -7,6 +7,9 @@ namespace com.limphus.retro_survival_shooter
     public class Firearm : Weapon
     {
         [Header("Attributes - Firearm")]
+        [SerializeField] private int magazineSize;
+        [SerializeField] private double reloadTime;
+
         [SerializeField] private WeaponRecoil cameraRecoil;
         [SerializeField] private WeaponRecoil weaponRecoil;
 
@@ -15,6 +18,7 @@ namespace com.limphus.retro_survival_shooter
 
         private bool isAiming, isReloading;
         private bool reloadInput;
+        private int currentAmmo;
 
         private void Update() => Inputs();
 
@@ -40,7 +44,8 @@ namespace com.limphus.retro_survival_shooter
             //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
             if (reloadInput && !isReloading && (CheckReload() == 0 || CheckReload() == 1))
             {
-                StartReload(); return;
+                //make sure to stop aiming lmao.
+                StartReload(); Aim(false);  return;
             }
 
             //if we're already reloading, dont do anything else here.
