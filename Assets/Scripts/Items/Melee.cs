@@ -36,11 +36,7 @@ namespace com.limphus.retro_survival_shooter
             if (isShooting) return;
 
             //if were not swinging and we press the l-mouse button, start swinging
-            if (leftMouseInput)
-            {
-                //make sure to stop blocking too
-                StartShoot(); Block(false);
-            }
+            if (leftMouseInput) StartShoot();
 
             //else if were not shooting, determine if we're blocking
             else Block(rightMouseInput);

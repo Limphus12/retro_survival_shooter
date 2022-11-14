@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+    public enum FirearmSize { SMALL, LARGE } //prolly gonna be used to determine if we can put the gun in a holster or have to lug it on our back.
+    public enum FirearmFireType { SEMI, BURST, AUTO, MULTI, BOLT } //mostly gonna be using the bolt and multi fire types, as we're using older weapons in this game.
+
     public class Firearm : Weapon
     {
         [Header("Attributes - Firearm")]
@@ -15,6 +18,10 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] private WeaponSway weaponSway;
+
+        [Space]
+        [SerializeField] private FirearmFireType fireType;
+        [SerializeField] private FirearmSize size;
 
         private bool isAiming, isReloading;
         private bool reloadInput;
@@ -88,7 +95,7 @@ namespace com.limphus.retro_survival_shooter
             //i think i wanna add an ammo usage variable in teh future, but idk yet.
             currentAmmo -= 1;
 
-            //if we have the camera and weapon recoil references, call the aim method on them too
+            //if we have the camera and weapon recoil references, call the recoil method on them too
             if (cameraRecoil && weaponRecoil)
             {
                 cameraRecoil.Recoil();

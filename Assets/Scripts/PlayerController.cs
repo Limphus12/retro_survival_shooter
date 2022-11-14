@@ -10,7 +10,10 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Movement Settings")]
         [SerializeField] private float walkSpeed = 2.0f;
-        [SerializeField] private float runSpeed = 6.0f, jumpSpeed = 6.0f, gravity = 20.0f, antiBumpAmount = 100.0f;
+        [SerializeField] private float crouchSpeed = 1.0f, runSpeed = 6.0f, jumpSpeed = 6.0f, gravity = 20.0f, antiBumpAmount = 100.0f;
+
+        [Space]
+        [SerializeField] private float speedSmoothRate;
 
         [Header("Camera Settings")]
         [SerializeField] private Camera playerCamera;
@@ -20,20 +23,32 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private bool cameraLean = true;
         [SerializeField] private float cameraLeanAmount = 4.0f;
 
+        [Space]
+        [SerializeField] private Transform playerCameraHolder;
+
+
+        [Header("Stance Settings")]
+        public float standingHeight = 2.0f;
+        public float crouchingHeight = 1.0f;
+
+        [Space]
+        public Vector3 standingCenter = new Vector3(0, 0, 0);
+        public Vector3 crouchingCenter = new Vector3(0, -0.5f, 0), standingCameraPosition = new Vector3(0, 0.5f, 0), crouchingCameraPosition = new Vector3(0, 0, 0);
+
+        [Space]
+        public float cameraSmoothRate = 5f;
+
+        [Header("Input Settings")]
+        public KeyCode runKey = KeyCode.LeftShift;
+        public KeyCode crouchKey = KeyCode.LeftControl;
+
         [HideInInspector]
         public bool canMove = true;
 
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
-        private float rotationX = 0, originalStepOffset;
-        private bool hitCeiling;
-
-        private bool IsRunning()
-        {
-            if (Input.GetKey(KeyCode.LeftShift)) return true;
-
-            else return false;
-        }
+        private float rotationX = 0, originalStepOffset, currentSpeed;
+        private bool isCrouching, isRunning, isJumping, hitCeiling, isCoyoteTime, initRecoveringStamina, recoveringStamina;
 
         //Start is called before the first frame update
         void Start()
@@ -55,6 +70,26 @@ namespace com.limphus.retro_survival_shooter
         //Update is called once per frame
         void Update()
         {
+            Inputs();
+        }
+
+        void Inputs()
+        {
+            //if we're pressing the crouch key and not the sprint key
+            if (Input.GetKey(crouchKey) && !Input.GetKey(runKey))
+            {
+                Crouch();
+            }
+
+            //else if we're only pressing the run key
+            else if (Input.GetKey(runKey)) //add a stamina check later on
+            {
+                Run();
+            }
+
+            //else if were not pressing the crouch or run key
+            else Stand();
+
             CalculateMovement();
         }
 
@@ -65,8 +100,8 @@ namespace com.limphus.retro_survival_shooter
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
 
-            float curSpeedX = canMove ? IsRunning() ? runSpeed * Input.GetAxis("Horizontal") : walkSpeed * Input.GetAxis("Horizontal") : 0;
-            float curSpeedZ = canMove ? IsRunning() ? runSpeed * Input.GetAxis("Vertical") : walkSpeed * Input.GetAxis("Vertical") : 0;
+            float curSpeedX = canMove ? currentSpeed * Input.GetAxis("Horizontal") : 0;
+            float curSpeedZ = canMove ? currentSpeed * Input.GetAxis("Vertical") : 0;
 
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedZ) + (right * curSpeedX);
@@ -86,7 +121,6 @@ namespace com.limphus.retro_survival_shooter
                     moveDirection.y = -antiBumpAmount;
                 }
                 
-
                 if (Input.GetButton("Jump") && canMove)
                 {
                     moveDirection.y = jumpSpeed;
@@ -143,7 +177,7 @@ namespace com.limphus.retro_survival_shooter
                     float currentX = Input.GetAxis("Horizontal");
                     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, currentX * -cameraLeanAmount);
 
-                    #region hidden code
+                    #region testing
                     //if (Input.GetAxis("Mouse X") > 0.1f)
                     {
                         //zLean = Mathf.Lerp(zLean, -cameraLeanAmount, Time.deltaTime * 5f);
@@ -169,5 +203,72 @@ namespace com.limphus.retro_survival_shooter
                 transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
             }
         }
+
+        #region Stance Methods
+
+        void Crouch()
+        {
+            isCrouching = true;
+            isRunning = false;
+
+            ChangeStance(crouchingHeight, crouchingCenter, crouchingCameraPosition);
+            ChangeSpeed(crouchSpeed);
+        }
+
+        void Stand()
+        {
+            isCrouching = false;
+            isRunning = false;
+
+            ChangeStance(standingHeight, standingCenter, standingCameraPosition);
+            ChangeSpeed(walkSpeed);
+        }
+
+        void Run()
+        {
+            isRunning = true;
+
+            ChangeStance(standingHeight, standingCenter, standingCameraPosition);
+            ChangeSpeed(runSpeed);
+        }
+
+        private Vector3 previousCameraPos;
+
+        private float stanceI = 0f;
+
+        void ChangeStance(float height, Vector3 center, Vector3 cameraPos)
+        {
+            //If our previous pos is not our current inputed pos, reset stanceI to 0
+            if (previousCameraPos != cameraPos)
+            {
+                previousCameraPos = cameraPos;
+                stanceI = 0f;
+            }
+
+            characterController.height = height;
+            characterController.center = center;
+
+            playerCameraHolder.localPosition = Vector3.Lerp(playerCameraHolder.localPosition, cameraPos, (stanceI + Time.deltaTime) * cameraSmoothRate);
+        }
+
+        #endregion
+
+        #region Speed Methods
+
+        private float previousSpeed, speedI = 0f;
+
+        void ChangeSpeed(float speed)
+        {
+            //if our previous speed is not our current inputed speed, reset speedI to 0
+            if (previousSpeed != speed)
+            {
+                previousSpeed = speed;
+                speedI = 0f;
+            }
+
+            currentSpeed = Mathf.Lerp(currentSpeed, speed, (speedI + Time.deltaTime) * speedSmoothRate);
+        }
+
+        #endregion
     }
 }
