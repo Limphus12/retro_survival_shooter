@@ -83,7 +83,7 @@ namespace com.limphus.retro_survival_shooter
                 if (damageable != null) damageable.Damage(damage);
             }
 
-            //overlap box for melee combat - use in the future
+            //overlap box for melee combat - use in the future for larger swinging weapons
             //Collider[] colliders = Physics.OverlapBox(point.position, Vector3.one);
 
             //if (colliders.Length <= 0) return;

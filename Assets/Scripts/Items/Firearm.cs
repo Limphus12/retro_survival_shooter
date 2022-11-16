@@ -157,7 +157,7 @@ namespace com.limphus.retro_survival_shooter
             else return 3;
         }
 
-        protected void StartReload()
+        private void StartReload()
         {
             Debug.Log("Reloading!");
 
@@ -170,14 +170,14 @@ namespace com.limphus.retro_survival_shooter
             Invoke(nameof(Reload), (float)reloadTime);
         }
 
-        protected void Reload()
+        private void Reload()
         {
             //set our current ammo equal to our magazine size, and end the reload
             currentAmmo = magazineSize; EndReload();
         }
 
         //ends reloading
-        protected void EndReload()
+        private void EndReload()
         {
             Debug.Log("Done our Reload!");
 
