@@ -9,8 +9,8 @@ namespace com.limphus.retro_survival_shooter
     public class PlayerController : MonoBehaviour
     {
         [Header("Movement Settings")]
-        [SerializeField] private float walkSpeed = 2.0f;
-        [SerializeField] private float crouchSpeed = 1.0f, runSpeed = 6.0f, jumpSpeed = 6.0f, gravity = 20.0f, antiBumpAmount = 100.0f;
+        [SerializeField] private float walkSpeed = 3.0f;
+        [SerializeField] private float runSpeed = 6.0f, crouchSpeed = 1.0f, crouchRunSpeed = 2.0f, jumpSpeed = 5.0f, gravity = 20.0f, antiBumpAmount = 40.0f;
 
         [Space]
         [SerializeField] private float speedSmoothRate;
@@ -26,28 +26,27 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private Transform playerCameraHolder;
 
-
         [Header("Stance Settings")]
-        public float standingHeight = 2.0f;
-        public float crouchingHeight = 1.0f;
+        [SerializeField] private float standingHeight = 2.0f;
+        [SerializeField] private float crouchingHeight = 1.0f;
 
         [Space]
-        public Vector3 standingCenter = new Vector3(0, 0, 0);
-        public Vector3 crouchingCenter = new Vector3(0, -0.5f, 0), standingCameraPosition = new Vector3(0, 0.5f, 0), crouchingCameraPosition = new Vector3(0, 0, 0);
+        [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
+        [SerializeField] private Vector3 crouchingCenter = new Vector3(0, -0.5f, 0), standingCameraPosition = new Vector3(0, 0.5f, 0), crouchingCameraPosition = new Vector3(0, 0, 0);
 
         [Space]
-        public float cameraSmoothRate = 5f;
+        [SerializeField] private float cameraSmoothRate = 5f;
 
         [Header("Input Settings")]
-        public KeyCode runKey = KeyCode.LeftShift;
-        public KeyCode crouchKey = KeyCode.LeftControl;
+        [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
+        [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
         [HideInInspector]
         public bool canMove = true;
 
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
-        private float rotationX = 0, originalStepOffset, currentSpeed;
+        private float rotationX = 0, originalStepOffset, currentSpeed, currentHalfHeight;
         private bool isCrouching, isRunning, isJumping, hitCeiling, isCoyoteTime, initRecoveringStamina, recoveringStamina;
 
         //Start is called before the first frame update
@@ -81,14 +80,15 @@ namespace com.limphus.retro_survival_shooter
                 Crouch();
             }
 
-            //else if we're only pressing the run key
-            else if (Input.GetKey(runKey)) //add a stamina check later on
+            //else if we're only pressing the run key and we have the space to stand (just incase we go from crouching to running)
+            //btw not sure if we actually need to do the check? idk.
+            else if (Input.GetKey(runKey) && !HitCeiling(currentHalfHeight)) //add a stamina check later on
             {
                 Run();
             }
 
-            //else if were not pressing the crouch or run key
-            else Stand();
+            //else if were not pressing the crouch or run key, and we have the room to stand
+            else if (!HitCeiling(currentHalfHeight)) Stand();
 
             CalculateMovement();
         }
@@ -100,6 +100,7 @@ namespace com.limphus.retro_survival_shooter
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
 
+            //calculate current speed in the Horizontal and Vertical directions (WASD)
             float curSpeedX = canMove ? currentSpeed * Input.GetAxis("Horizontal") : 0;
             float curSpeedZ = canMove ? currentSpeed * Input.GetAxis("Vertical") : 0;
 
@@ -110,17 +111,16 @@ namespace com.limphus.retro_survival_shooter
             //hits the ground. After that, check for the player input, and jump if so.
             if (characterController.isGrounded)
             {
-                hitCeiling = false;
-
                 characterController.stepOffset = originalStepOffset;
 
-                //checking if were close enough to the ground first
-                if (Physics.Raycast(transform.position, Vector3.down, 1.25f))
+                //if we hit the ground
+                if (HitGround())
                 {
                     //fixes a stutter issue when we're going down small slopes
                     moveDirection.y = -antiBumpAmount;
                 }
                 
+                //jumping!
                 if (Input.GetButton("Jump") && canMove)
                 {
                     moveDirection.y = jumpSpeed;
@@ -142,10 +142,9 @@ namespace com.limphus.retro_survival_shooter
                 characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
             }
 
-            if (Physics.Raycast(transform.position, transform.up, 1.1f) && !hitCeiling)
+            //if we hit the ceiling when jumping, cancel our vertical velocity.
+            if (!HitCeiling(currentHalfHeight))
             {
-                hitCeiling = true;
-
                 moveDirection.y = 0;
             }
 
@@ -218,7 +217,6 @@ namespace com.limphus.retro_survival_shooter
         void Stand()
         {
             isCrouching = false;
-            isRunning = false;
 
             ChangeStance(standingHeight, standingCenter, standingCameraPosition);
             ChangeSpeed(walkSpeed);
@@ -229,7 +227,18 @@ namespace com.limphus.retro_survival_shooter
             isRunning = true;
 
             ChangeStance(standingHeight, standingCenter, standingCameraPosition);
-            ChangeSpeed(runSpeed);
+
+            //if we're not crouching, use our run speed
+            if (!isCrouching)
+            {
+                ChangeSpeed(runSpeed);
+            }
+
+            //if we're crouching, use our crouch run speed (like project zomboid lmao).
+            else if (isCrouching)
+            {
+                ChangeSpeed(crouchRunSpeed);
+            }
         }
 
         private Vector3 previousCameraPos;
@@ -249,6 +258,35 @@ namespace com.limphus.retro_survival_shooter
             characterController.center = center;
 
             playerCameraHolder.localPosition = Vector3.Lerp(playerCameraHolder.localPosition, cameraPos, (stanceI + Time.deltaTime) * cameraSmoothRate);
+
+            //calculate current half height (used in determining if we can either stand or for when we hit the ceiling whilst jumping).
+            currentHalfHeight = height / 2;
+        }
+
+        #endregion
+
+        #region HitChecks
+
+        bool HitCeiling(float currentHalfHeight)
+        {
+            //raycast upwards from our center
+            if (Physics.Raycast(transform.position, transform.up, currentHalfHeight + 0.1f))
+            {
+                return true;
+            }
+
+            else return false;
+        }
+
+        bool HitGround()
+        {
+            //raycast downwards from our center
+            if (Physics.Raycast(transform.position, Vector3.down, currentHalfHeight + 0.25f))
+            {
+                return true;
+            }
+
+            else return false;
         }
 
         #endregion
