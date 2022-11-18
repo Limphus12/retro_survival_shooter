@@ -11,7 +11,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Attributes - Firearm")]
         [SerializeField] private int magazineSize;
-        [SerializeField] private double reloadTime;
+        [SerializeField] private float reloadTime;
 
         [SerializeField] private WeaponRecoil cameraRecoil;
         [SerializeField] private WeaponRecoil weaponRecoil;
@@ -83,7 +83,7 @@ namespace com.limphus.retro_survival_shooter
             Shoot();
 
             //invoke end shoot after our rate of fire
-            Invoke(nameof(EndShoot), 1 / (float)rateOfFire);
+            Invoke(nameof(EndShoot), 1 / rateOfFire);
         }
 
         //shoots!
@@ -167,7 +167,7 @@ namespace com.limphus.retro_survival_shooter
             //if we have the weapon sway reference, call the reload method on it too
             if (weaponSway) weaponSway.Reload(isReloading);
 
-            Invoke(nameof(Reload), (float)reloadTime);
+            Invoke(nameof(Reload), reloadTime);
         }
 
         private void Reload()

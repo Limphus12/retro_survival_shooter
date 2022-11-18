@@ -7,8 +7,8 @@ namespace com.limphus.retro_survival_shooter
     public abstract class Weapon : Item
     {
         [Header("Attributes - Weapon")]
-        [SerializeField] protected double damage;
-        [SerializeField] protected double rateOfFire;
+        [SerializeField] protected int damage;
+        [SerializeField] protected float rateOfFire;
 
         [Space]
         [SerializeField] protected Transform playerCamera;

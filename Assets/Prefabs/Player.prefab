@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5bc1b9dcd8dcc47b4bc75c182fa65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: Baseball Bat
   durability: 0
   weight: 0
   damage: 100
@@ -734,6 +734,7 @@ GameObject:
   - component: {fileID: 5358056577268887820}
   - component: {fileID: 5358056577268887822}
   - component: {fileID: 5358056577268887823}
+  - component: {fileID: 891780389}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -811,8 +812,39 @@ MonoBehaviour:
   cameraSmoothRate: 5
   runKey: 304
   crouchKey: 306
-  debug: 1
+  debug: 0
   canMove: 1
+--- !u!114 &891780389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358056577268887821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9546f91763f00154e8ab15fd04066522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  isDead: 0
+  maxHunger: 100
+  maxThirst: 100
+  maxStamina: 100
+  startingTempurature: 2
+  currentHunger: 100
+  currentThirst: 100
+  currentStamina: 100
+  currentTempurature: 2
+  hungerTickRate: 2
+  thirstTickRate: 1
+  hungerDepletionRate: 1
+  thirstDepletionRate: 1
+  hungerDepletedTickRate: 2
+  thirstDepletedTickRate: 1
+  hungerDepletedDamage: 1
+  thirstDepletedDamage: 1
 --- !u!1 &5358056577461103855
 GameObject:
   m_ObjectHideFlags: 0

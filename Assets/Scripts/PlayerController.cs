@@ -51,22 +51,22 @@ namespace com.limphus.retro_survival_shooter
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
         private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
-        private bool isCrouching, isRunning, isJumping, hitCeiling, isCoyoteTime, initRecoveringStamina, recoveringStamina;
+        private bool isCrouching, isRunning, isJumping, isCoyoteTime;
 
         //Start is called before the first frame update
         void Start()
         {
-            //Grabs the CharacterController from the player object.
-            characterController = GetComponent<CharacterController>();
+            //Grabs the CharacterController from the player object
+            if (!characterController) characterController = GetComponent<CharacterController>();
 
-            //Grabs the camera from the player.
-            playerCamera = GetComponentInChildren<Camera>();
+            //Grabs the camera from the player
+            if (!playerCamera) playerCamera = GetComponentInChildren<Camera>();
 
-            //Lock Cursor
+            //Lock Cursor - replace with a player manager later on?
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
-            //Set the original step offset
+            //Set the original step offset - used for a bugfix
             originalStepOffset = characterController.stepOffset;
         }
 
@@ -105,6 +105,8 @@ namespace com.limphus.retro_survival_shooter
 
             CalculateMovement();
         }
+
+        #region Movement
 
         //Calculates Player Movement
         void CalculateMovement()
@@ -215,6 +217,8 @@ namespace com.limphus.retro_survival_shooter
                 transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
             }
         }
+
+        #endregion
 
         #region Stance Methods
 

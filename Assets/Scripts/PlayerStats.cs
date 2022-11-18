@@ -41,29 +41,14 @@ namespace com.limphus.retro_survival_shooter
         [Tooltip("How much Damage is depleted per tick when at 0 Hunger")] [SerializeField] private int hungerDepletedDamage;
         [Tooltip("How much Damage is depleted per tick when at 0 Thirst")] [SerializeField] private int thirstDepletedDamage;
 
-
-
-        
-
         private void Start()
         {
+            //firstly cancel all invokes
             CancelInvoke();
 
+            //then invoke our repeating hunger and thirst ticks
             InvokeRepeating(nameof(HungerTick), 0f, hungerTickRate);
             InvokeRepeating(nameof(ThirstTick), 0f, thirstTickRate);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                DepleteHunger(hungerDepletedDamage);
-            }
-
-            else if (Input.GetKeyDown(KeyCode.Y))
-            {
-                ReplenishHunger(hungerDepletedDamage);
-            }
         }
 
         #region Hunger

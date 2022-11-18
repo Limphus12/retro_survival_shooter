@@ -7,10 +7,10 @@ namespace com.limphus.retro_survival_shooter
     public class Melee : Weapon
     {
         [Header("Attributes - Melee")]
-        [SerializeField] private double meleeRange;
+        [SerializeField] private float meleeRange;
 
         [Tooltip("Assign a value less than the rate of fire.")]
-        [SerializeField] private double timeToHit; //I'd recommend half of the ROF because swinging should take the full ROF, whilst hitting should be at the apex of teh swing; halfway
+        [SerializeField] private float timeToHit; //I'd recommend half of the ROF because swinging should take the full ROF, whilst hitting should be at the apex of teh swing; halfway
 
         [Space]
         [SerializeField] private WeaponSway weaponSway;
@@ -48,10 +48,10 @@ namespace com.limphus.retro_survival_shooter
             isShooting = true;
 
             //invoking shoot after a delay to sim the swinging of a melee weapon
-            Invoke(nameof(Shoot), 1 / (float)timeToHit);
+            Invoke(nameof(Shoot), 1 / timeToHit);
 
             //invoke end shoot after our rate of fire
-            Invoke(nameof(EndShoot), 1 / (float)rateOfFire);
+            Invoke(nameof(EndShoot), 1 / rateOfFire);
 
             //if we have teh weapon sway reference, call the reload method (which we are using for the melee swinging)
             if (weaponSway) weaponSway.Reload(true);
@@ -73,10 +73,10 @@ namespace com.limphus.retro_survival_shooter
         protected override void Hit(Transform point)
         {
             //simple raycasting - prolly use this only for stabby knives in teh future?
-            double range = 1;
+            float range = 1;
 
             RaycastHit hit;
-            if (Physics.Raycast(point.position, point.forward, out hit, (float)range))
+            if (Physics.Raycast(point.position, point.forward, out hit, range))
             {
                 IDamageable damageable = hit.transform.GetComponent<IDamageable>();
 
