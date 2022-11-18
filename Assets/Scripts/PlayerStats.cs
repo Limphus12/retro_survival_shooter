@@ -6,15 +6,16 @@ namespace com.limphus.retro_survival_shooter
 {
     public enum Tempurature { VERY_COLD, COLD, NORMAL, HOT, VERY_HOT }
 
-    public class PlayerStats : CharacterStats
+    public class PlayerStats : EntityStats
     {
-        [Header("Attributes - Player Survival - Starting Stats")]
+        [Header("Variables - Player Survival - Starting Stats")]
         [SerializeField] private int maxHunger;
         [SerializeField] private int maxThirst, maxStamina;
 
+        [Space]
         [SerializeField] private Tempurature startingTempurature;
 
-        [Header("Attributes - Player Survival - Current Stats")]
+        [Header("Variables - Player Survival - Current Stats")]
         [SerializeField] private int currentHunger;
         [SerializeField] private int currentThirst, currentStamina;
 
@@ -23,7 +24,7 @@ namespace com.limphus.retro_survival_shooter
 
 
 
-        [Header("Attributes - Player Survival - Hunger & Thirst Depletion")]
+        [Header("Variables - Player Survival - Hunger & Thirst Depletion")]
         [Tooltip("[IN SECONDS] - How quickly Hunger depletes")] [SerializeField] private float hungerTickRate;
         [Tooltip("[IN SECONDS] - How quickly Thirst depletes")] [SerializeField] private float thirstTickRate;
 
@@ -33,13 +34,25 @@ namespace com.limphus.retro_survival_shooter
 
 
 
-        [Header("Attributes - Player Survival - Hunger & Thirst Damage")]
+        [Header("Variables - Player Survival - Hunger & Thirst Damage")]
         [Tooltip("[IN SECONDS] - How quickly damage occurs when at 0 Hunger")] [SerializeField] private float hungerDepletedTickRate;
         [Tooltip("[IN SECONDS] - How quickly damage occurs when at 0 Thirst")] [SerializeField] private float thirstDepletedTickRate;
 
         [Space]
         [Tooltip("How much Damage is depleted per tick when at 0 Hunger")] [SerializeField] private int hungerDepletedDamage;
         [Tooltip("How much Damage is depleted per tick when at 0 Thirst")] [SerializeField] private int thirstDepletedDamage;
+
+
+
+        [Header("Variables - Player Survival - Stamina")]
+        [Tooltip("[WHEN STAMINA IS BEING USED] How much Stamina is depleted per tick")] [SerializeField] private int staminaDepletionRate;
+        [Tooltip("[WHEN CONSUMING HUNGER AND THIRST] How much Stamina is replenished")] [SerializeField] private int staminaReplenishRate;
+
+        [Space]
+        [Tooltip("How much Hunger is depleted to replenish stamina")] [SerializeField] private int hungerStaminaDepletion;
+        [Tooltip("How much Thirst is depleted to replenish stamina")] [SerializeField] private int thirstStaminaDepletion;
+
+
 
         private void Start()
         {
@@ -49,6 +62,26 @@ namespace com.limphus.retro_survival_shooter
             //then invoke our repeating hunger and thirst ticks
             InvokeRepeating(nameof(HungerTick), 0f, hungerTickRate);
             InvokeRepeating(nameof(ThirstTick), 0f, thirstTickRate);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                DepleteStamina(staminaDepletionRate);
+            }
+        }
+
+
+        protected override void InitVariables()
+        {
+            base.InitVariables();
+
+            //set our current variables
+            SetCurrentHunger(maxHunger);
+            SetCurrentThirst(maxThirst);
+            SetCurrentStamina(maxStamina);
+            SetCurrentTempurature(startingTempurature);
         }
 
         #region Hunger
@@ -64,19 +97,19 @@ namespace com.limphus.retro_survival_shooter
         public void SetCurrentHunger(int amount)
         {
             currentHunger = amount;
+
+            //doing our clamping in here
+            currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
         }
 
         //a method to deplete hunger
         public void DepleteHunger(int amount)
         {
             //decreases current hunger
-            currentHunger -= amount;
-
-            //clamping the hunger between 0 and max hunger
-            currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
+            SetCurrentHunger(GetCurrentHunger() - amount);
 
             //checking if our hunger is 0
-            if (currentHunger <= 0)
+            if (GetCurrentHunger() <= 0)
             {
                 //we have to invoke a differnt method (hungerdepletedtick) that then calls the depleteHealth method
                 //cos invokes cannot pass through paramaters
@@ -91,18 +124,17 @@ namespace com.limphus.retro_survival_shooter
         //a method to replenish hunger
         public void ReplenishHunger(int amount)
         {
-            currentHunger += amount; //increaes current hunger
-
-            currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger); //clamping the hunger between 0 and max hunger
+            //increaes current hunger
+            SetCurrentHunger(GetCurrentHunger() + amount);
 
             //if we're above 0 hunger
-            if (currentHunger > 0)
+            if (GetCurrentHunger() > 0)
             {
                 //cancel the hunger depleted tick
                 CancelInvoke(nameof(HungerDepletedTick));
             }
 
-            if (currentHunger >= maxHunger) //if we have full hunger
+            if (GetCurrentHunger() >= maxHunger) //if we have full hunger
             {
                 //then debug log that we have full hunger
                 Debug.Log("Character (" + gameObject.name + ") is at Full Hunger");
@@ -124,19 +156,19 @@ namespace com.limphus.retro_survival_shooter
         public void SetCurrentThirst(int amount)
         {
             currentThirst = amount;
+
+            //doing our clamping in here
+            currentThirst = Mathf.Clamp(currentThirst, 0, maxThirst);
         }
 
         //a method to deplete thirst
         public void DepleteThirst(int amount)
         {
             //decreases current thirst
-            currentThirst -= amount;
-
-            //clamping the thirst between 0 and max thirst
-            currentThirst = Mathf.Clamp(currentThirst, 0, maxThirst);
+            SetCurrentThirst(GetCurrentThirst() - amount);
 
             //checking if our thirst is 0
-            if (currentThirst <= 0)
+            if (GetCurrentThirst() <= 0)
             {
                 //we have to invoke a differnt method (thirstdepletedtick) that then calls the depleteHealth method
                 //cos invokes cannot pass through paramaters
@@ -150,18 +182,17 @@ namespace com.limphus.retro_survival_shooter
         //a method to replenish thirst
         public void ReplenishThirst(int amount)
         {
-            currentThirst += amount; //increaes current health
-
-            currentThirst = Mathf.Clamp(currentThirst, 0, maxThirst); //clamping the health between 0 and max health
+            //increaes current thirst
+            SetCurrentThirst(GetCurrentThirst() + amount);
 
             //if we're above 0 thirst
-            if (currentThirst > 0)
+            if (GetCurrentThirst() > 0)
             {
                 //cancel the thirst depleted tick
                 CancelInvoke(nameof(ThirstDepletedTick));
             }
 
-            if (currentThirst >= maxThirst) //if we have full thirst
+            if (GetCurrentThirst() >= maxThirst) //if we have full thirst
             {
                 //then debug log that we have full thirst
                 Debug.Log("Character (" + gameObject.name + ") is at Full Thirst");
@@ -169,6 +200,79 @@ namespace com.limphus.retro_survival_shooter
         }
 
         #endregion
+
+        #region Stamina
+
+        //used to grab our current stamina
+        //(maybe replace with events instead?)
+        public int GetCurrentStamina()
+        {
+            return currentStamina;
+        }
+
+        //sets our current stamina
+        public void SetCurrentStamina(int amount)
+        {
+            currentStamina = amount;
+
+            //doing our clamping in here
+            currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+        }
+
+        //a method to deplete stamina
+        public void DepleteStamina(int amount)
+        {
+            //decreases current stamina
+            SetCurrentStamina(GetCurrentStamina() - amount);
+
+            //checking if our stamina is 0
+            if (GetCurrentStamina() <= 0)
+            {
+                ReplenishStamina();
+            }
+        }
+
+        //a method to replenish stamina, using hunger and thirst
+        public void ReplenishStamina()
+        {
+            //if we have the hunger and thirst to spare
+            if (GetCurrentHunger() >= hungerStaminaDepletion && GetCurrentThirst() >= thirstStaminaDepletion)
+            {
+                //replenish our stamina
+                ReplenishStamina(staminaReplenishRate);
+
+                DepleteHunger(hungerStaminaDepletion);
+                DepleteThirst(thirstStaminaDepletion);
+            }
+        }
+
+        //a method to replenish stamina
+        public void ReplenishStamina(int amount)
+        {
+            //increases current stamina
+            SetCurrentStamina(GetCurrentStamina() + amount);
+
+            if (currentStamina >= maxStamina) //if we have full stamina
+            {
+                //then debug log that we have full stamina
+                Debug.Log("Character (" + gameObject.name + ") is at Full Stamina");
+            }
+        }
+
+        #endregion
+
+        //used to grab our current tempurature
+        //(maybe replace with events instead?)
+        public Tempurature GetCurrentTempurature()
+        {
+            return currentTempurature;
+        }
+
+        //sets our current tempurature
+        public void SetCurrentTempurature(Tempurature temp)
+        {
+            currentTempurature = temp;
+        }
 
         #region Ticks
 

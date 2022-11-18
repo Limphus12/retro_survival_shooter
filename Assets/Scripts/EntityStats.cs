@@ -5,24 +5,25 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class CharacterStats : MonoBehaviour
+    public class EntityStats : MonoBehaviour
     {
-        [Header("Attributes - Health")]
+        [Header("Variables - Health")]
         [SerializeField] protected int maxHealth = 100;
-
-        //later down the line we should do this stuff in scriptable objects instead...
-        //then just load in the stats from that scriptable object...
-
         [SerializeField] protected int currentHealth;
+
+        [Space]
         [SerializeField] protected bool isDead;
 
+
+        //later down the line we should do this max stuff in scriptable objects instead...
+        //then just load in the stats from that scriptable object...
 
         private void Start()
         {
             InitVariables();
         }
 
-        private void InitVariables()
+        protected virtual void InitVariables()
         {
             SetCurrentHealth(maxHealth);
 
@@ -40,19 +41,19 @@ namespace com.limphus.retro_survival_shooter
         public void SetCurrentHealth(int amount)
         {
             currentHealth = amount;
+
+            //doing our clamping in here
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         }
 
         //a method to deplete health
         public void DepleteHealth(int amount)
         {
             //decreases current health
-            currentHealth -= amount;
-
-            //clamping the health between 0 and max health
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+            SetCurrentHealth(GetCurrentHealth() - amount);
 
             //checking if our health is 0
-            if (currentHealth <= 0)
+            if (GetCurrentHealth() <= 0)
             {
                 Kill(); //kill this character
             }
@@ -61,20 +62,18 @@ namespace com.limphus.retro_survival_shooter
         //a method to replenish health
         public void ReplenishHealth(int amount)
         {
-            currentHealth += amount; //increaes current health
+            //increaes current health
+            SetCurrentHealth(GetCurrentHealth() + amount);
 
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); //clamping the health between 0 and max health
-
-            
-            if (currentHealth >= maxHealth) //if we have full health
+            if (GetCurrentHealth() >= maxHealth) //if we have full health
             {
                 //then debug log that we have full health
                 Debug.Log("Character (" + gameObject.name + ") is at Full Health");
             }
         }
 
-        //a method to kill this character
-        protected void Kill()
+        //a method to kill this entity
+        protected virtual void Kill()
         {
             //currently we're only debug logging lmao.
             Debug.Log("Character (" + gameObject.name + ") is Dead");
