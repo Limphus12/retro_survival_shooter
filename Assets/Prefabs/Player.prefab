@@ -789,8 +789,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 3
-  crouchSpeed: 1
   runSpeed: 6
+  crouchSpeed: 1
+  crouchRunSpeed: 2
   jumpSpeed: 6
   gravity: 20
   antiBumpAmount: 40
@@ -805,11 +806,12 @@ MonoBehaviour:
   crouchingHeight: 0.9
   standingCenter: {x: 0, y: 0, z: 0}
   crouchingCenter: {x: 0, y: -0.45, z: 0}
-  standingCameraPosition: {x: 0, y: 0.5, z: 0}
-  crouchingCameraPosition: {x: 0, y: 0, z: 0}
+  standingCameraPosition: {x: 0, y: 0.6, z: 0}
+  crouchingCameraPosition: {x: 0, y: -0.25, z: 0}
   cameraSmoothRate: 5
   runKey: 304
   crouchKey: 306
+  debug: 1
   canMove: 1
 --- !u!1 &5358056577461103855
 GameObject:
@@ -1188,6 +1190,8 @@ MonoBehaviour:
   cameraRecoil: {fileID: 6822713638158227432}
   weaponRecoil: {fileID: 6822713638769394566}
   weaponSway: {fileID: 6822713637754612695}
+  fireType: 4
+  size: 0
 --- !u!1 &6822713638110934634
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,12 +41,16 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
         [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
+
+        [Header("Debug Settings")]
+        public bool debug;
+
         [HideInInspector]
         public bool canMove = true;
 
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
-        private float rotationX = 0, originalStepOffset, currentSpeed, currentHalfHeight;
+        private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
         private bool isCrouching, isRunning, isJumping, hitCeiling, isCoyoteTime, initRecoveringStamina, recoveringStamina;
 
         //Start is called before the first frame update
@@ -74,21 +78,30 @@ namespace com.limphus.retro_survival_shooter
 
         void Inputs()
         {
-            //if we're pressing the crouch key and not the sprint key
-            if (Input.GetKey(crouchKey) && !Input.GetKey(runKey))
+            //if were not pressing the crouch key, and we have the room to stand
+            if (!Input.GetKey(crouchKey) && !HitCeiling(currentCeilingRaycast))
+            {
+                Stand();
+            }
+
+            //else if we're pressing the crouch key
+            else if (Input.GetKey(crouchKey))
             {
                 Crouch();
             }
 
+            //if we're not pressing the run key, then walk (sets our speed to either crouch speed or walk speed)
+            if (!Input.GetKey(runKey))
+            {
+                Walk();
+            }
+
             //else if we're only pressing the run key and we have the space to stand (just incase we go from crouching to running)
-            //btw not sure if we actually need to do the check? idk.
-            else if (Input.GetKey(runKey) && !HitCeiling(currentHalfHeight)) //add a stamina check later on
+            //btw not sure if we actually need to do the check? idk. EDIT, NO CEILING CHECK, AS WE CAN RUN WHILST CROUCHING
+            else if (Input.GetKey(runKey)) //add a stamina check later on
             {
                 Run();
             }
-
-            //else if were not pressing the crouch or run key, and we have the room to stand
-            else if (!HitCeiling(currentHalfHeight)) Stand();
 
             CalculateMovement();
         }
@@ -140,12 +153,12 @@ namespace com.limphus.retro_survival_shooter
                 moveDirection.y -= gravity * Time.deltaTime;
 
                 characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
-            }
 
-            //if we hit the ceiling when jumping, cancel our vertical velocity.
-            if (!HitCeiling(currentHalfHeight))
-            {
-                moveDirection.y = 0;
+                //if we hit the ceiling when jumping, cancel our vertical velocity.
+                if (HitCeiling(currentCeilingRaycast))
+                {
+                    moveDirection.y = 0;
+                }
             }
 
             Move();
@@ -208,7 +221,6 @@ namespace com.limphus.retro_survival_shooter
         void Crouch()
         {
             isCrouching = true;
-            isRunning = false;
 
             ChangeStance(crouchingHeight, crouchingCenter, crouchingCameraPosition);
             ChangeSpeed(crouchSpeed);
@@ -226,7 +238,7 @@ namespace com.limphus.retro_survival_shooter
         {
             isRunning = true;
 
-            ChangeStance(standingHeight, standingCenter, standingCameraPosition);
+            //ChangeStance(standingHeight, standingCenter, standingCameraPosition);
 
             //if we're not crouching, use our run speed
             if (!isCrouching)
@@ -238,6 +250,23 @@ namespace com.limphus.retro_survival_shooter
             else if (isCrouching)
             {
                 ChangeSpeed(crouchRunSpeed);
+            }
+        }
+
+        void Walk()
+        {
+            isRunning = false;
+
+            //if we're not crouching, use our walk speed
+            if (!isCrouching)
+            {
+                ChangeSpeed(walkSpeed);
+            }
+
+            //if we're crouching, use our crouch speed
+            else if (isCrouching)
+            {
+                ChangeSpeed(crouchSpeed);
             }
         }
 
@@ -259,18 +288,29 @@ namespace com.limphus.retro_survival_shooter
 
             playerCameraHolder.localPosition = Vector3.Lerp(playerCameraHolder.localPosition, cameraPos, (stanceI + Time.deltaTime) * cameraSmoothRate);
 
-            //calculate current half height (used in determining if we can either stand or for when we hit the ceiling whilst jumping).
-            currentHalfHeight = height / 2;
+            //calculate current raycasts used in determining if we can either stand or for when we hit the ceiling whilst jumping
+            //as well as the ground check stuff for the antibump
+            if (!isCrouching)
+            {
+                currentCeilingRaycast = standingHeight / 2 + 0.1f;
+                currentGroundRaycast = standingHeight / 2 + 0.25f;
+            }
+
+            else if (isCrouching)
+            {
+                currentCeilingRaycast = standingHeight / 2 + 0.1f;
+                currentGroundRaycast = standingHeight / 2 + 0.25f;
+            }
         }
 
         #endregion
 
         #region HitChecks
 
-        bool HitCeiling(float currentHalfHeight)
+        bool HitCeiling(float currentRaycastHeight)
         {
             //raycast upwards from our center
-            if (Physics.Raycast(transform.position, transform.up, currentHalfHeight + 0.1f))
+            if (Physics.Raycast(transform.position, transform.up, currentRaycastHeight))
             {
                 return true;
             }
@@ -281,7 +321,7 @@ namespace com.limphus.retro_survival_shooter
         bool HitGround()
         {
             //raycast downwards from our center
-            if (Physics.Raycast(transform.position, Vector3.down, currentHalfHeight + 0.25f))
+            if (Physics.Raycast(transform.position, -transform.up, currentGroundRaycast))
             {
                 return true;
             }
@@ -308,5 +348,17 @@ namespace com.limphus.retro_survival_shooter
         }
 
         #endregion
+
+        private void OnDrawGizmos()
+        {
+            if (debug)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawRay(transform.position, transform.up * currentCeilingRaycast);
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawRay(transform.position, -transform.up * currentGroundRaycast);
+            }
+        }
     }
 }
