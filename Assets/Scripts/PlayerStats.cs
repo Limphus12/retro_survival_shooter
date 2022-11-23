@@ -261,6 +261,8 @@ namespace com.limphus.retro_survival_shooter
 
         #endregion
 
+        #region Tempurature
+
         //used to grab our current tempurature
         //(maybe replace with events instead?)
         public Tempurature GetCurrentTempurature()
@@ -273,6 +275,8 @@ namespace com.limphus.retro_survival_shooter
         {
             currentTempurature = temp;
         }
+
+        #endregion
 
         #region Ticks
 
