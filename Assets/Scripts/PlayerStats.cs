@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public enum Tempurature { VERY_COLD, COLD, NORMAL, HOT, VERY_HOT }
+    public enum Temperature { VERY_COLD, COLD, NORMAL, HOT, VERY_HOT }
 
     public class PlayerStats : EntityStats
     {
@@ -13,14 +14,14 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private int maxThirst, maxStamina;
 
         [Space]
-        [SerializeField] private Tempurature startingTempurature;
+        [SerializeField] private Temperature startingTemperature;
 
         [Header("Variables - Player Survival - Current Stats")]
         [SerializeField] private int currentHunger;
         [SerializeField] private int currentThirst, currentStamina;
 
         [Space]
-        [SerializeField] private Tempurature currentTempurature;
+        [SerializeField] private Temperature currentTemperature;
 
 
 
@@ -52,7 +53,11 @@ namespace com.limphus.retro_survival_shooter
         [Tooltip("How much Hunger is depleted to replenish stamina")] [SerializeField] private int hungerStaminaDepletion;
         [Tooltip("How much Thirst is depleted to replenish stamina")] [SerializeField] private int thirstStaminaDepletion;
 
+        public class OnIntChangedEventArgs : EventArgs { public int i; }
+        public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
 
+        public event EventHandler<OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged;
+        public event EventHandler<OnTemperatureChangedEventArgs> OnTemperatureChanged;
 
         private void Start()
         {
@@ -68,10 +73,9 @@ namespace com.limphus.retro_survival_shooter
         {
             if (Input.GetKeyDown(KeyCode.T))
             {
-                DepleteStamina(staminaDepletionRate);
+                //DepleteStamina(staminaDepletionRate);
             }
         }
-
 
         protected override void InitVariables()
         {
@@ -81,7 +85,7 @@ namespace com.limphus.retro_survival_shooter
             SetCurrentHunger(maxHunger);
             SetCurrentThirst(maxThirst);
             SetCurrentStamina(maxStamina);
-            SetCurrentTempurature(startingTempurature);
+            SetCurrentTemperature(startingTemperature);
         }
 
         #region Hunger
@@ -100,6 +104,9 @@ namespace com.limphus.retro_survival_shooter
 
             //doing our clamping in here
             currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
+
+            //firing off our event here
+            OnHungerChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentHunger });
         }
 
         //a method to deplete hunger
@@ -159,6 +166,9 @@ namespace com.limphus.retro_survival_shooter
 
             //doing our clamping in here
             currentThirst = Mathf.Clamp(currentThirst, 0, maxThirst);
+
+            //firing off our event here
+            OnThirstChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentThirst });
         }
 
         //a method to deplete thirst
@@ -217,6 +227,9 @@ namespace com.limphus.retro_survival_shooter
 
             //doing our clamping in here
             currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+
+            //firing off our event here
+            OnStaminaChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentStamina });
         }
 
         //a method to deplete stamina
@@ -261,19 +274,22 @@ namespace com.limphus.retro_survival_shooter
 
         #endregion
 
-        #region Tempurature
+        #region Temperature
 
-        //used to grab our current tempurature
+        //used to grab our current temperature
         //(maybe replace with events instead?)
-        public Tempurature GetCurrentTempurature()
+        public Temperature GetCurrentTemperature()
         {
-            return currentTempurature;
+            return currentTemperature;
         }
 
-        //sets our current tempurature
-        public void SetCurrentTempurature(Tempurature temp)
+        //sets our current temperature
+        public void SetCurrentTemperature(Temperature temp)
         {
-            currentTempurature = temp;
+            currentTemperature = temp;
+
+            //firing off our event here
+            OnTemperatureChanged?.Invoke(this, new OnTemperatureChangedEventArgs { i = currentTemperature });
         }
 
         #endregion
