@@ -53,14 +53,19 @@ namespace com.limphus.retro_survival_shooter
         private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
         private bool isCrouching, isRunning, isJumping, isCoyoteTime;
 
+        private PlayerStats playerStats;
+
         //Start is called before the first frame update
         void Start()
         {
             //Grabs the CharacterController from the player object
             if (!characterController) characterController = GetComponent<CharacterController>();
 
-            //Grabs the camera from the player
+            //Grabs the camera from the player children
             if (!playerCamera) playerCamera = GetComponentInChildren<Camera>();
+
+            //Grabs the player stats from the player object
+            if (!playerStats) playerStats = GetComponent<PlayerStats>();
 
             //Lock Cursor - replace with a player manager later on?
             Cursor.lockState = CursorLockMode.Locked;
@@ -93,6 +98,9 @@ namespace com.limphus.retro_survival_shooter
             //if we're not pressing the run key, then walk (sets our speed to either crouch speed or walk speed)
             if (!Input.GetKey(runKey))
             {
+                //if we have the playerstats reference, cancel teh stamina tick
+                if (playerStats) playerStats.CancelStaminaTick();
+
                 Walk();
             }
 
@@ -100,7 +108,23 @@ namespace com.limphus.retro_survival_shooter
             //btw not sure if we actually need to do the check? idk. EDIT, NO CEILING CHECK, AS WE CAN RUN WHILST CROUCHING
             else if (Input.GetKey(runKey)) //add a stamina check later on
             {
-                Run();
+                //if we have the playerstats reference and we have the stamina to spare
+                if (playerStats && playerStats.GetCurrentStamina() > 0)
+                {
+                    //if we're not invoking the stamina tick, start invoking it
+                    if (!playerStats.IsInvoking(nameof(playerStats.StaminaTick)))
+                    {
+                        playerStats.DepleteStamina();
+                        
+                        //and run!
+                        Run();
+                    }
+
+                    //if we are invoking, then run!
+                    else Run();
+
+                }
+
             }
 
             CalculateMovement();
@@ -241,8 +265,6 @@ namespace com.limphus.retro_survival_shooter
         void Run()
         {
             isRunning = true;
-
-            //ChangeStance(standingHeight, standingCenter, standingCameraPosition);
 
             //if we're not crouching, use our run speed
             if (!isCrouching)

@@ -53,6 +53,9 @@ namespace com.limphus.retro_survival_shooter
         [Tooltip("How much Hunger is depleted to replenish stamina")] [SerializeField] private int hungerStaminaDepletion;
         [Tooltip("How much Thirst is depleted to replenish stamina")] [SerializeField] private int thirstStaminaDepletion;
 
+        [Space]
+        [Tooltip("[IN SECONDS] - How quickly Stamina depletes")] [SerializeField] private float staminaTickRate;
+
         public class OnIntChangedEventArgs : EventArgs { public int i; }
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
 
@@ -232,6 +235,12 @@ namespace com.limphus.retro_survival_shooter
             OnStaminaChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentStamina });
         }
 
+        //method to invoke our stamina tick
+        public void DepleteStamina()
+        {
+            InvokeRepeating(nameof(StaminaTick), 0, staminaTickRate);
+        }
+
         //a method to deplete stamina
         public void DepleteStamina(int amount)
         {
@@ -305,6 +314,16 @@ namespace com.limphus.retro_survival_shooter
         private void ThirstTick()
         {
             DepleteThirst(thirstDepletionRate);
+        }
+
+        public void StaminaTick()
+        {
+            DepleteStamina(staminaDepletionRate);
+        }
+
+        public void CancelStaminaTick()
+        {
+            CancelInvoke(nameof(StaminaTick));
         }
 
         //damage ticks - when hunger and thirst are depleted
