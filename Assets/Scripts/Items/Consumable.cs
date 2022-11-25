@@ -17,7 +17,7 @@ namespace com.limphus.retro_survival_shooter
         //NOTE - I would've put the initializations for the remaining consume amount in this class
         //but at runtime this was not allowing initialization. i guess abstract classes cannot
         //call unity methods? interesting nonetheless, but now those initializations are in the
-        //classes that inherit from this class.
+        //class(es) that inherit from this class
 
         protected abstract void Inputs();
         protected abstract void CheckConsume();
