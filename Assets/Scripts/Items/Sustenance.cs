@@ -4,16 +4,20 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class Food : Consumable
+    public enum SustenanceType { FOOD, DRINK }
+
+    public class Sustenance : Consumable
     {
-        [Header("Attributes - Food")]
-        [Tooltip("The total amount of hunger that can be consumed from this")] [SerializeField] private int hungerAmount;
+        [Header("Attributes - Sustenance")]
+        [SerializeField] private SustenanceType sustenanceType;
+
+        [Tooltip("The total amount of sustenace that can be consumed from this")] [SerializeField] private int sustenanceAmount;
 
         [Space]
         [SerializeField] private WeaponSway weaponSway;
         [SerializeField] private PlayerStats playerStats;
 
-        [SerializeField] private int remainingHungerAmount = -1;
+        private int remainingSustenanceAmount = -1;
 
         // Start is called before the first frame update
         void Start()
@@ -22,7 +26,7 @@ namespace com.limphus.retro_survival_shooter
             if (remainingConsumeAmount == -1) remainingConsumeAmount = consumeAmount;
 
             //if we haven't initialized the hunger remaining, do it here.
-            if (remainingHungerAmount == -1) remainingHungerAmount = hungerAmount;
+            if (remainingSustenanceAmount == -1) remainingSustenanceAmount = sustenanceAmount;
         }
 
         //Used for Initialization
@@ -32,7 +36,7 @@ namespace com.limphus.retro_survival_shooter
             if (remainingConsumeAmount == -1) remainingConsumeAmount = consumeAmount;
 
             //if we haven't initialized the hunger remaining, do it here.
-            if (remainingHungerAmount == -1) remainingHungerAmount = hungerAmount;
+            if (remainingSustenanceAmount == -1) remainingSustenanceAmount = sustenanceAmount;
         }
 
         // Update is called once per frame
@@ -64,7 +68,7 @@ namespace com.limphus.retro_survival_shooter
                 //if we are holding the right mouse button but we cannot consume it
                 else if (rightMouseInput && remainingConsumeAmount == 0)
                 {
-                    Debug.Log("We cannot consume this food, we've already ate it all!");
+                    Debug.Log("We cannot consume this susteance, we've already consumed it all!");
                 }
             }
 
@@ -108,23 +112,51 @@ namespace com.limphus.retro_survival_shooter
                 if (remainingConsumeAmount > 1)
                 {
                     //round to an int how much hunger we're gonna consume
-                    int i = Mathf.RoundToInt(hungerAmount / consumeAmount);
+                    int i = Mathf.RoundToInt(sustenanceAmount / consumeAmount);
 
-                    //call the replenish hunger method on our player stats reference
-                    playerStats.ReplenishHunger(i);
+                    //switch statement to replenish either hunger or thirst
+                    switch (sustenanceType)
+                    {
+                        case SustenanceType.FOOD:
+                            //call the replenish hunger method on our player stats reference
+                            playerStats.ReplenishHunger(i);
+                            break;
+
+                        case SustenanceType.DRINK:
+                            //call the replenish thirst method on our player stats reference
+                            playerStats.ReplenishThirst(i);
+                            break;
+
+                        default:
+                            break;
+                    }
 
                     //decreases our remaining hunger amount
-                    remainingHungerAmount -= i;
+                    remainingSustenanceAmount -= i;
                 }
 
                 //if we're on our last consume, just consume the rest of it, no maths required
                 else if (remainingConsumeAmount == 1)
                 {
-                    //call the replenish hunger method on our player stats reference
-                    playerStats.ReplenishHunger(remainingHungerAmount);
+                    //switch statement to replenish either hunger or thirst
+                    switch (sustenanceType)
+                    {
+                        case SustenanceType.FOOD:
+                            //call the replenish hunger method on our player stats reference
+                            playerStats.ReplenishHunger(remainingSustenanceAmount);
+                            break;
+
+                        case SustenanceType.DRINK:
+                            //call the replenish thirst method on our player stats reference
+                            playerStats.ReplenishThirst(remainingSustenanceAmount);
+                            break;
+
+                        default:
+                            break;
+                    }
 
                     //decreases our remaining hunger amount
-                    remainingHungerAmount = 0;
+                    remainingSustenanceAmount = 0;
                 }
             }
 

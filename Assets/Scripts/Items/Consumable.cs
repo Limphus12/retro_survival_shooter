@@ -12,7 +12,7 @@ namespace com.limphus.retro_survival_shooter
 
         protected bool isConsuming, leftMouseInput, rightMouseInput;
 
-        [SerializeField] protected int remainingConsumeAmount = -1;
+        protected int remainingConsumeAmount = -1;
 
         //NOTE - I would've put the initializations for the remaining consume amount in this class
         //but at runtime this was not allowing initialization. i guess abstract classes cannot
