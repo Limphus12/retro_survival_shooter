@@ -8,9 +8,6 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Attributes - Item")]
         [SerializeField] protected string itemName;
-
-        [Space]
-        [SerializeField] protected int durability;
         [SerializeField] protected double weight;
     }
 }
