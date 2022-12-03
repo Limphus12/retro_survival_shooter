@@ -12,12 +12,7 @@ namespace com.limphus.retro_survival_shooter
         //private static string SAVE_FOLDER = "";
 
         public static readonly string SAVE_FOLDER = Application.persistentDataPath + "/Saves/";
-        public static readonly string WORLD_FOLDER = Application.persistentDataPath + "/Saves/World";
-
-
-
-
-        public static readonly string SAVE_FILE = "/save.txt", JOURNAL_SAVE_FILE = "/drinkJournal.txt";
+        public static readonly string SAVE_FILE = "/save.txt";
 
         public static void Init()
         {
@@ -26,26 +21,21 @@ namespace com.limphus.retro_survival_shooter
             {
                 //creates the save folder and assigns the directory to the SAVE_FOLDER string.
                 Directory.CreateDirectory(SAVE_FOLDER);
-
-                //debug for getting the persistant data path.
-                //Debug.Log(Application.persistentDataPath);
             }
         }
 
-        //Save function
-        public static void Save(string saveFile, string saveString)
+        public static void Save(string saveString)
         {
-            File.WriteAllText(SAVE_FOLDER + saveFile, saveString);
+            File.WriteAllText(SAVE_FOLDER + SAVE_FILE, saveString);
         }
 
-        //Load function
-        public static string Load(string saveFile)
+        public static string Load()
         {
             //checking if the file exists.
-            if (File.Exists(SAVE_FOLDER + saveFile))
+            if (File.Exists(SAVE_FOLDER + SAVE_FILE))
             {
                 //grabbing the data from the .txt file
-                string saveString = File.ReadAllText(SAVE_FOLDER + saveFile);
+                string saveString = File.ReadAllText(SAVE_FOLDER + SAVE_FILE);
 
                 //returns the save string
                 return saveString;

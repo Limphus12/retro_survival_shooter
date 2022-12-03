@@ -29,8 +29,6 @@ namespace com.limphus.retro_survival_shooter
 
             //we're gonna need to eventually grab the current chunk from our save
 
-
-
             //grab the terrain generator from our child and tell it to generate our terrain!
             //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
             if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
@@ -98,15 +96,28 @@ namespace com.limphus.retro_survival_shooter
             //if we have a 0 at either chunk (x or y), then the
             //maths should just give us 0, so no offset.
 
-            //regen our world
-            //Generate();
-
-            //grab the terrain generator from our child and tell it to generate our terrain!
-            //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
+            //tell the terrain generator to generate our terrain!
             if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
 
-            //now we grab the biome generator from our child and tell it to place assets!
-            //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
+            //tell the biome generator to place assets!
+            if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
+        }
+
+        public Vector2Int GetCurrentChunk()
+        {
+            return currentChunk;
+        }
+
+        public void SetCurrentChunk(Vector2Int chunk)
+        {
+            currentChunk = chunk;
+
+            //now we reload our world!
+
+            //tell the terrain generator to generate our terrain!
+            if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
+
+            //tell the biome generator to place assets!
             if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
         }
     }
