@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boxExtents: {x: 10, y: 18, z: 12}
+  assetTag: EnvAsset
 --- !u!1 &859790831969048716
 GameObject:
   m_ObjectHideFlags: 0

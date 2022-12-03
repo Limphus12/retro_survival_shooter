@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -7865947501651671284}
   m_Layer: 0
   m_Name: Rock2m
-  m_TagString: EnvironmentalAsset
+  m_TagString: EnvAsset
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295

@@ -28,15 +28,18 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private Vector2Int nonEnvGridSize;
         [SerializeField] private int nonEnvGridMultiplier, nonEnvGridOffset;
-        
-        public void GenerateBiome(int seed)
+
+        int i = 0;
+
+        public void GenerateBiome()
         {
             //init the rng with our seed
-            Random.InitState(seed);
+            //EDIT - Moved to WorldGenerator
+            //Random.InitState(seed);
 
 #if UNITY_EDITOR
             //just calls the remove assets function
-            EditorRemoveAssets();
+            EditorClearBiome();
 #endif
 
             //when generating our biome, always get rid of any previous assets
@@ -46,7 +49,22 @@ namespace com.limphus.retro_survival_shooter
             GenerateAssets();
         }
 
+        public void GenerateRuntimeBiome()
+        {
+            //when generating our biome, always get rid of any previous assets
+            ClearBiome();
+
+            //then generate the new assets
+            GenerateAssets();
+        }
+
         public void ClearBiome()
+        {
+            //just calls the remove assets function
+            RemoveAssets();
+        }
+
+        public void EditorClearBiome()
         {
             //just calls the remove assets function
             EditorRemoveAssets();
@@ -67,22 +85,24 @@ namespace com.limphus.retro_survival_shooter
             if (transform.childCount != 0)
             {
                 //delete all of our children
-                //for (int i = 0; i < transform.childCount; i++)
+                for (int i = 0; i < transform.childCount; i++)
                 {
-                    //Destroy(transform.GetChild(i).gameObject);
+                    Destroy(transform.GetChild(i).gameObject);
                 }
             }
 
-            while (transform.childCount != 0)
+            //while (transform.childCount != 0)
             {
-                Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+                //Destroy(transform.GetChild(transform.childCount - 1).gameObject);
 
-                if (transform.childCount == 0) break;
+                //if (transform.childCount == 0) break;
             }
         }
 
         private void EditorRemoveAssets()
         {
+            Debug.Log("Editor - Removing Assets");
+
             //if we have children
             //if (transform.childCount != 0)
             {
@@ -100,8 +120,6 @@ namespace com.limphus.retro_survival_shooter
                 if (transform.childCount == 0) break;
             }
         }
-
-        int i = 0;
 
         private void AssetLoop(Vector2Int gridSize, int gridMultiplier, int gridOffset, GameObject[] assets, float assetPlacementChance, float placementOffset)
         {
@@ -140,7 +158,7 @@ namespace com.limphus.retro_survival_shooter
                             //...placing down a random asset from the placeable asset array!
                             Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, placementRotation, gameObject.transform);
 
-                            //increment k (for debug log)
+                            //increment i (for debug log)
                             i++;
                         }
                     }

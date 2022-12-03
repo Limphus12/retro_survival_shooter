@@ -24,6 +24,9 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] [Range(0f, 1f)] private float persistance = 0.5f;
         [SerializeField] private float lacunarity = 2.0f, heightMultiplier = 2.0f;
 
+        [Space]
+        [SerializeField] private Vector2Int offset;
+
         [Header("Vertex Colors")]
         [Tooltip("The chances of choosing Red, Green, Blue or Black for the vertex color. For instance, [25, 50, 75] gives a 25% chance for each color.")]
         [SerializeField] private Vector3Int colorChance = new Vector3Int(25, 50, 75);
@@ -31,10 +34,14 @@ namespace com.limphus.retro_survival_shooter
         private int seed;
 
         //sets our seed and generates the mesh
-        public void GenerateTerrain(int seed)
+        public void GenerateTerrain(int seed, Vector2Int offset)
         {
-            this.seed = seed;
+            this.seed = seed; this.offset = offset;
 
+            //make sure to clear the current terrain first!
+            ClearTerrain();
+
+            //then start generating the mesh!
             GenerateMesh();
         }
 
@@ -71,7 +78,7 @@ namespace com.limphus.retro_survival_shooter
             //ensure we have a clean mesh
             mesh.Clear();
 
-            //generate the vertices and triangles
+            //generate the vertices, triangles, UVs and colours
             mesh.vertices = CreateVertices();
             mesh.triangles = CreateTriangles();
             mesh.uv = GenerateUVs();
@@ -87,9 +94,9 @@ namespace com.limphus.retro_survival_shooter
             MeshCollider meshCollider = GetComponent<MeshCollider>();
             meshCollider.sharedMesh = mesh;
 
-            //now we grab the asset generator from our child and tell it to place assets!
-            BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
-            if (biomeGenerator) biomeGenerator.GenerateBiome(seed);
+            //now we grab the biome generator from our child and tell it to place assets!
+            //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
+            //if (biomeGenerator) biomeGenerator.GenerateBiome(seed);
         }
 
         private Vector3[] CreateVertices()
@@ -98,7 +105,7 @@ namespace com.limphus.retro_survival_shooter
             Vector3[] vertices = new Vector3[(size.x + 1) * (size.y + 1)];
 
             //calculate a height map, passing in our size variables, seed etc.
-            float[,] heightMap = Noise.ComplexNoiseMap(size.x + 1, size.y + 1, seed, noiseScale, octaves, persistance, lacunarity);
+            float[,] heightMap = Noise.ComplexNoiseMap(size.x + 1, size.y + 1, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
             //using a nested for loop to generate all our vertices
             for (int i = 0, z = 0; z <= size.y; z++)

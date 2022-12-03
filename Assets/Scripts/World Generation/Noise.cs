@@ -6,7 +6,7 @@ namespace com.limphus.retro_survival_shooter
 {
     public static class Noise
     {
-        public static float[,] ComplexNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity)
+        public static float[,] ComplexNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
         {
             //initialise the noiseMap array
             float[,] noiseMap = new float[mapWidth, mapHeight];
@@ -20,8 +20,8 @@ namespace com.limphus.retro_survival_shooter
             for (int i = 0; i < octaves; i++)
             {
                 //too high a value will break the generation, this seems like a good range
-                float offsetX = prng.Next(-100000, 100000);
-                float offsetY = prng.Next(-100000, 100000);
+                float offsetX = prng.Next(-100000, 100000) + offset.x;
+                float offsetY = prng.Next(-100000, 100000) + offset.y;
 
                 octaveOffsets[i] = new Vector2(offsetX, offsetY);
             }
