@@ -1,15 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [Serializable]
+    public class GameObjectCollection
+    {
+        public List<GameObject> gameObjects = new List<GameObject>();
+    }
+
     public class SaveSystem : MonoBehaviour
     {
+        [Header("Player Stuff")]
         [SerializeField] private Transform playerTransform;
 
+        [SerializeField] private PlayerStats playerStats;
+
+        [Header("World Stuff")]
         [SerializeField] private WorldGenerator worldGenerator;
+        [SerializeField] private TerrainGenerator terrainGenerator;
+        [SerializeField] private BiomeGenerator biomeGenerator;
+
+        [Header("Test")]
+        [SerializeField] private List<GameObject> gameObjects = new List<GameObject>();
+
+        private void Test()
+        {
+            GameObjectCollection gameObjCollection = new GameObjectCollection
+            {
+                gameObjects = gameObjects
+            };
+
+            string potion = JsonUtility.ToJson(gameObjCollection, true);
+            System.IO.File.WriteAllText(Application.persistentDataPath + "/Saves/" + "/GameObjects.json", potion);
+        }
 
         private void Awake()
         {
@@ -22,6 +48,9 @@ namespace com.limphus.retro_survival_shooter
             //finding the player in the scene
             if (!playerTransform) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
+            //finding the player stats in the scene
+            if (!playerStats) playerStats = GameObject.FindObjectOfType<PlayerStats>();
+
             //finding the world generator in the scene
             if (!worldGenerator) worldGenerator = GameObject.FindObjectOfType<WorldGenerator>();
         }
@@ -33,32 +62,46 @@ namespace com.limphus.retro_survival_shooter
 
         private void Inputs()
         {
-            if (Input.GetKeyDown(KeyCode.F5)) Save();
+            if (Input.GetKeyDown(KeyCode.F5)) Test();
+            //if (Input.GetKeyDown(KeyCode.F5)) Save();
 
-            if (Input.GetKeyDown(KeyCode.F9)) Load();
+            //if (Input.GetKeyDown(KeyCode.F9)) Load();
         }
+
+        
 
         private void Save()
         {
             //creating a new save object, setting the values
             //SaveObject saveObject = new SaveObject { playerPosition = playerTransform.position };
 
-            if (playerTransform && worldGenerator)
+            //if we have the player transform, the player stats and the world generator
+            if (playerTransform && playerStats && worldGenerator)
             {
-                //creating a new save object, setting the values
-                SaveObject saveObject = new SaveObject { playerPosition = playerTransform.position, currentChunk = worldGenerator.GetCurrentChunk() };
+                //create a new set of player data
+                PlayerData playerData = new PlayerData
+                {
+                    currentPosition = playerTransform.position,
+                    currentRotation = playerTransform.rotation,
 
-                //using json utilities to write a json file
-                string json = JsonUtility.ToJson(saveObject);
+                    currentHealth = playerStats.GetCurrentHealth(),
+                    currentHunger = playerStats.GetCurrentHunger(),
+                    currentThirst = playerStats.GetCurrentThirst(),
+                    currentStamina = playerStats.GetCurrentStamina(),
+                    currentTempurature = playerStats.GetCurrentTemperature()
+                };
+
+                //creating a new save object, setting the values
+                SaveObject saveObject = new SaveObject { playerData = playerData, currentChunk = worldGenerator.GetCurrentChunk() };
+
+                //using json utilities to write a json file -  true for prettyPrint
+                string json = JsonUtility.ToJson(saveObject, true);
 
                 //calling the save method on the save manager
                 SaveManager.Save(json);
             }
 
-            else
-            {
-                Debug.Log("Missing World Generator, cannot Save!");
-            }
+            else Debug.Log("Missing Critical References, cannot Save!");
         }
 
         private void Load()
@@ -71,8 +114,24 @@ namespace com.limphus.retro_survival_shooter
                 //creating a save object from the json/string
                 SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
 
-                //set the player position from the save object we just created.
-                if (playerTransform) playerTransform.position = saveObject.playerPosition;
+                //grab the player data from the save object
+                PlayerData playerData = saveObject.playerData;
+
+                //set the player position from the player data we just loaded
+                if (playerTransform)
+                {
+                    playerTransform.SetPositionAndRotation(playerData.currentPosition, playerData.currentRotation);
+                }
+
+                //sets the player stats from the player data we just loaded
+                if (playerStats)
+                {
+                    playerStats.SetCurrentHealth(playerData.currentHealth);
+                    playerStats.SetCurrentHunger(playerData.currentHunger);
+                    playerStats.SetCurrentThirst(playerData.currentThirst);
+                    playerStats.SetCurrentStamina(playerData.currentStamina);
+                    playerStats.SetCurrentTemperature(playerData.currentTempurature);
+                }
 
                 //set the world generator's current chunk from the save object we created.
                 if (worldGenerator) worldGenerator.SetCurrentChunk(saveObject.currentChunk);
@@ -83,11 +142,40 @@ namespace com.limphus.retro_survival_shooter
 
         private class SaveObject
         {
-            public Vector3 playerPosition;
+            public PlayerData playerData;
 
             public Vector2Int currentChunk;
-
-            //later on add health values, current game level etc.
         }
+
+        [Serializable]
+        private struct PlayerData
+        {
+            public Vector3 currentPosition;
+
+            public Quaternion currentRotation;
+
+            public int currentHealth, currentHunger, currentThirst, currentStamina;
+
+            public Temperature currentTempurature;
+        }
+
+        [Serializable]
+        private struct WorldData
+        {
+            public int seed;
+
+            public Vector2Int currentChunk;
+        }
+
+        [Serializable]
+        private struct ChunkData
+        {
+            public Vector2Int chunk;
+
+            GameObject[] gameObjects;
+
+            //idk what to put here lmao
+        }
+
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-
 namespace com.limphus.retro_survival_shooter
 {
     public static class SaveManager
@@ -12,7 +11,7 @@ namespace com.limphus.retro_survival_shooter
         //private static string SAVE_FOLDER = "";
 
         public static readonly string SAVE_FOLDER = Application.persistentDataPath + "/Saves/";
-        public static readonly string SAVE_FILE = "/save.txt";
+        public static readonly string SAVE_FILE = "/save.json", WORLD_FILE = "/world.json", CHUNK_FILE = "/chunk.json";
 
         public static void Init()
         {

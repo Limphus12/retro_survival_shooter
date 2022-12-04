@@ -90,28 +90,11 @@ namespace com.limphus.retro_survival_shooter
                     Destroy(transform.GetChild(i).gameObject);
                 }
             }
-
-            //while (transform.childCount != 0)
-            {
-                //Destroy(transform.GetChild(transform.childCount - 1).gameObject);
-
-                //if (transform.childCount == 0) break;
-            }
         }
 
         private void EditorRemoveAssets()
         {
             Debug.Log("Editor - Removing Assets");
-
-            //if we have children
-            //if (transform.childCount != 0)
-            {
-                //delete all of our children
-                //for (int i = 0; i < transform.childCount; i++)
-                {
-                    //DestroyImmediate(transform.GetChild(i).gameObject);
-                }
-            }
 
             while (transform.childCount != 0)
             {

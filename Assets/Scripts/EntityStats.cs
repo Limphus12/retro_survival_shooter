@@ -44,6 +44,9 @@ namespace com.limphus.retro_survival_shooter
 
             //doing our clamping in here
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+            
+            //check our health
+            CheckHealth();
         }
 
         //a method to deplete health
@@ -52,10 +55,23 @@ namespace com.limphus.retro_survival_shooter
             //decreases current health
             SetCurrentHealth(GetCurrentHealth() - amount);
 
+            //check our health
+            CheckHealth();
+        }
+
+        //a method to check our current health
+        void CheckHealth()
+        {
             //checking if our health is 0
             if (GetCurrentHealth() <= 0)
             {
                 Kill(); //kill this character
+            }
+
+            else if (GetCurrentHealth() >= maxHealth) //if we have full health
+            {
+                //then debug log that we have full health
+                Debug.Log("Character (" + gameObject.name + ") is at Full Health");
             }
         }
 
@@ -64,12 +80,9 @@ namespace com.limphus.retro_survival_shooter
         {
             //increaes current health
             SetCurrentHealth(GetCurrentHealth() + amount);
-
-            if (GetCurrentHealth() >= maxHealth) //if we have full health
-            {
-                //then debug log that we have full health
-                Debug.Log("Character (" + gameObject.name + ") is at Full Health");
-            }
+            
+            //check our health
+            CheckHealth();
         }
 
         //a method to kill this entity

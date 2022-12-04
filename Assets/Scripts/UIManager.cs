@@ -84,7 +84,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void PlayerStatsOnTemperatureChanged(object sender, PlayerStats.OnTemperatureChangedEventArgs e)
         {
-            if (temperatureText) temperatureText.text = "Temperature" + e.i.ToString();
+            if (temperatureText) temperatureText.text = "Temperature - " + e.i.ToString();
         }
 
         #endregion
