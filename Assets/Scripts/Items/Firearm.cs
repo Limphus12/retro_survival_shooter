@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [Serializable]
     public enum FirearmSize { SMALL, LARGE } //prolly gonna be used to determine if we can put the gun in a holster or have to lug it on our back.
+    
+    [Serializable]
     public enum FirearmFireType { SEMI, BURST, AUTO, MULTI, BOLT } //mostly gonna be using the bolt and multi fire types, as we're using older weapons in this game.
 
     public class Firearm : Weapon
     {
         [Header("Attributes - Firearm")]
+        [SerializeField] private FirearmData firearmData;
+
+        [Space]
         [SerializeField] private int magazineSize;
         [SerializeField] private float reloadTime;
 
@@ -26,6 +33,33 @@ namespace com.limphus.retro_survival_shooter
         private bool isAiming, isReloading;
         private bool reloadInput;
         private int currentAmmo;
+
+        //initialization
+        protected override void Init()
+        {
+            base.Init();
+
+            if (!weaponData)
+            {
+                Debug.LogWarning("No Weapon Data found for " + gameObject.name + "; Assign Weapon Data!");
+                return;
+            }
+
+            damage = weaponData.damage;
+            rateOfFire = weaponData.rateOfFire;
+
+            if (!firearmData)
+            {
+                Debug.LogWarning("No Firearm Data found for " + gameObject.name + "; Assign Firearm Data!");
+                return;
+            }
+
+            magazineSize = firearmData.magazineSize;
+            reloadTime = firearmData.reloadTime;
+
+            fireType = firearmData.fireType;
+            size = firearmData.size;
+        }
 
         private void Update() => Inputs();
 
@@ -185,6 +219,31 @@ namespace com.limphus.retro_survival_shooter
 
             //if we have the weapon sway reference, call the reload method on it too
             if (weaponSway) weaponSway.Reload(isReloading);
+        }
+
+        public int GetMagazineSize()
+        {
+            return magazineSize;
+        }
+
+        public void SetMagazineSize(int amount)
+        {
+            magazineSize = amount;
+        }
+
+        public float GetReloadTime()
+        {
+            return reloadTime;
+        }
+
+        public FirearmFireType GetFirearmFireType()
+        {
+            return fireType;
+        }
+
+        public FirearmSize GetFirearmSize()
+        {
+            return size;
         }
     }
 }

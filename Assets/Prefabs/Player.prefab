@@ -1751,8 +1751,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6822713637482451986}
+  - component: {fileID: 2321877550024325284}
   m_Layer: 0
-  m_Name: WeaponHolder
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1775,6 +1776,19 @@ Transform:
   m_Father: {fileID: 1154132035860330907}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2321877550024325284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6822713637482451981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855c4b06c5ce8fe4f8b4ef4e4ebcfe9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
 --- !u!1 &6822713638110934634
 GameObject:
   m_ObjectHideFlags: 0

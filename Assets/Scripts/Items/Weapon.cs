@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [Serializable]
     public abstract class Weapon : Item
     {
         [Header("Attributes - Weapon")]
+        [SerializeField] protected WeaponData weaponData;
+
         [SerializeField] protected int damage;
         [SerializeField] protected float rateOfFire;
 
