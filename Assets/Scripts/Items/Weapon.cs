@@ -11,6 +11,7 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Weapon")]
         [SerializeField] protected WeaponData weaponData;
 
+        [Space]
         [SerializeField] protected int damage;
         [SerializeField] protected float rateOfFire;
 

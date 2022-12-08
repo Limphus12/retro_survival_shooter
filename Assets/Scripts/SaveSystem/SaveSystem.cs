@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 namespace com.limphus.retro_survival_shooter
 {
     [Serializable]
-    public class GameObjectCollection
+    public class Test
     {
-        public List<GameObject> gameObjects = new List<GameObject>();
+        public FirearmData firearmData;
     }
 
     public class SaveSystem : MonoBehaviour
@@ -27,19 +28,45 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private BiomeGenerator biomeGenerator;
 
         [Header("Test")]
-        [SerializeField] private List<GameObject> gameObjects = new List<GameObject>();
+        [SerializeField] private FirearmData firearmData;
 
-        [SerializeField] private Firearm firearm;
+        public TextMeshProUGUI debugtext;
+
+        //[SerializeField] private Firearm firearm;
 
         private void Test()
         {
-            GameObjectCollection gameObjCollection = new GameObjectCollection
+            Test test = new Test
             {
-                gameObjects = gameObjects
+                firearmData = Resources.Load<FirearmData>("Items/Firearms/FirearmData001")
             };
 
-            string potion = JsonUtility.ToJson(gameObjCollection, true);
-            System.IO.File.WriteAllText(Application.persistentDataPath + "/Saves/" + "/GameObjects.json", potion);
+            Debug.Log(test.firearmData.itemName);
+
+            string str = JsonUtility.ToJson(test, true);
+            System.IO.File.WriteAllText(Application.persistentDataPath + "/Saves/" + "/Test_001.json", str);
+        }
+
+        private void Test2()
+        {
+            //checking if the file exists.
+            if (System.IO.File.Exists(Application.persistentDataPath + "/Saves/" + "/Test_001.json"))
+            {
+                //grabbing the data from the .txt file
+                string saveString = System.IO.File.ReadAllText(Application.persistentDataPath + "/Saves/" + "/Test_001.json");
+
+                //create a save object
+                Test saveObject = JsonUtility.FromJson<Test>(saveString);
+
+                //setting our firearm data
+                firearmData = saveObject.firearmData;
+
+                //debug text
+                debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "...";
+
+                //returns the save string
+                Debug.Log(saveString);
+            }
         }
 
         private void Awake()
@@ -67,10 +94,13 @@ namespace com.limphus.retro_survival_shooter
 
         private void Inputs()
         {
-            //if (Input.GetKeyDown(KeyCode.F5)) Test();
-            if (Input.GetKeyDown(KeyCode.F5)) Save();
+            if (Input.GetKeyDown(KeyCode.F5)) Test();
 
-            if (Input.GetKeyDown(KeyCode.F9)) Load();
+            if (Input.GetKeyDown(KeyCode.F9)) Test2();
+
+            //if (Input.GetKeyDown(KeyCode.F5)) Save();
+
+            //if (Input.GetKeyDown(KeyCode.F9)) Load();
         }
 
         private void Save()
@@ -116,21 +146,22 @@ namespace com.limphus.retro_survival_shooter
 
                 //create a new set of player inventory data, and assign the list
                 //by grabbing the items from the player inventory
-                PlayerInventoryData inventoryData = new PlayerInventoryData
+                //PlayerInventoryData inventoryData = new PlayerInventoryData
                 {
-                    inventoryItems = itemDatas,
+                    //inventoryItems = itemDatas,
 
-                    firearmData = new FirearmData 
+                    //firearmData = new FirearmData 
                     { 
-                        magazineSize = firearm.GetMagazineSize(), 
-                        reloadTime = firearm.GetReloadTime(), 
-                        fireType = firearm.GetFirearmFireType(), 
-                        size = firearm.GetFirearmSize()
+                        //magazineSize = firearm.GetMagazineSize(), 
+                        //reloadTime = firearm.GetReloadTime(), 
+                        //fireType = firearm.GetFirearmFireType(), 
+                        //size = firearm.GetFirearmSize()
                     }
                 };
 
                 //creating a new save object, setting the values
-                SaveObject saveObject = new SaveObject { playerData = playerData, currentChunk = worldGenerator.GetCurrentChunk(), playerInventoryData = inventoryData };
+                //SaveObject saveObject = new SaveObject { playerData = playerData, currentChunk = worldGenerator.GetCurrentChunk(), playerInventoryData = inventoryData };
+                SaveObject saveObject = new SaveObject { playerData = playerData, currentChunk = worldGenerator.GetCurrentChunk() };
 
                 //using json utilities to write a json file -  true for prettyPrint
                 string json = JsonUtility.ToJson(saveObject, true);
@@ -156,7 +187,7 @@ namespace com.limphus.retro_survival_shooter
                 PlayerData playerData = saveObject.playerData;
 
                 //grab the player inventory data from the save object
-                PlayerInventoryData playerInventoryData = saveObject.playerInventoryData;
+                //PlayerInventoryData playerInventoryData = saveObject.playerInventoryData;
 
                 //set the player position from the player data we just loaded
                 if (playerTransform)
@@ -198,11 +229,9 @@ namespace com.limphus.retro_survival_shooter
         {
             public PlayerData playerData;
 
-            public PlayerInventoryData playerInventoryData;
+            //public PlayerInventoryData playerInventoryData;
 
             public Vector2Int currentChunk;
-
-
         }
 
         [Serializable]
@@ -254,7 +283,7 @@ namespace com.limphus.retro_survival_shooter
         }
 
         [Serializable]
-        private struct FirearmData
+        private struct SFirearmData
         {
             public int magazineSize;
             public float reloadTime;

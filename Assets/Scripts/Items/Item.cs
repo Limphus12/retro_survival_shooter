@@ -12,6 +12,9 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected ItemData itemData;
 
         [Space]
+        [SerializeField] protected GameObject model;
+
+        [Space]
         [SerializeField] protected string itemName;
         [SerializeField] protected double itemWeight;
 

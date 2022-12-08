@@ -37,22 +37,17 @@ namespace com.limphus.retro_survival_shooter
         //initialization
         protected override void Init()
         {
-            base.Init();
-
-            if (!weaponData)
-            {
-                Debug.LogWarning("No Weapon Data found for " + gameObject.name + "; Assign Weapon Data!");
-                return;
-            }
-
-            damage = weaponData.damage;
-            rateOfFire = weaponData.rateOfFire;
-
             if (!firearmData)
             {
                 Debug.LogWarning("No Firearm Data found for " + gameObject.name + "; Assign Firearm Data!");
                 return;
             }
+
+            itemName = firearmData.itemName;
+            itemWeight = firearmData.itemWeight;
+
+            damage = firearmData.damage;
+            rateOfFire = firearmData.rateOfFire;
 
             magazineSize = firearmData.magazineSize;
             reloadTime = firearmData.reloadTime;

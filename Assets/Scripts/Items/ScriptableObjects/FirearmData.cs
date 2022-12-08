@@ -5,7 +5,9 @@ using UnityEngine;
 namespace com.limphus.retro_survival_shooter
 {
     [CreateAssetMenu(fileName = "FirearmData", menuName = "Items/Firearm")]
-    public class FirearmData : ScriptableObject
+
+    [System.Serializable]
+    public class FirearmData : WeaponData
     {
         [Header("Attributes - Firearm")]
         public int magazineSize;
