@@ -9,7 +9,7 @@ namespace com.limphus.retro_survival_shooter
     [Serializable]
     public class Test
     {
-        public FirearmData firearmData;
+        public List<ItemData> itemDatas;
     }
 
     public class SaveSystem : MonoBehaviour
@@ -29,40 +29,57 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("Test")]
         [SerializeField] private FirearmData firearmData;
+        [SerializeField] private MeleeData meleeData;
+        [SerializeField] private SustenanceData sustenanceData;
 
+        [Space]
         public TextMeshProUGUI debugtext;
-
-        //[SerializeField] private Firearm firearm;
 
         private void Test()
         {
+            List<Item> items = playerInventory.GetItems();
+
+            List<ItemData> itemDatas = new List<ItemData>();
+
+            foreach(Item item in items)
+            {
+                ItemData data = item.GetItemData();
+
+                itemDatas.Add(data);
+            }
+
             Test test = new Test
             {
-                firearmData = Resources.Load<FirearmData>("Items/Firearms/FirearmData001")
+                itemDatas = itemDatas
             };
 
-            Debug.Log(test.firearmData.itemName);
-
             string str = JsonUtility.ToJson(test, true);
-            System.IO.File.WriteAllText(Application.persistentDataPath + "/Saves/" + "/Test_001.json", str);
+            System.IO.File.WriteAllText(Application.persistentDataPath + "/Saves/" + "/Test_002.json", str);
         }
 
         private void Test2()
         {
             //checking if the file exists.
-            if (System.IO.File.Exists(Application.persistentDataPath + "/Saves/" + "/Test_001.json"))
+            if (System.IO.File.Exists(Application.persistentDataPath + "/Saves/" + "/Test_002.json"))
             {
                 //grabbing the data from the .txt file
-                string saveString = System.IO.File.ReadAllText(Application.persistentDataPath + "/Saves/" + "/Test_001.json");
+                string saveString = System.IO.File.ReadAllText(Application.persistentDataPath + "/Saves/" + "/Test_002.json");
 
                 //create a save object
                 Test saveObject = JsonUtility.FromJson<Test>(saveString);
 
                 //setting our firearm data
-                firearmData = saveObject.firearmData;
+                firearmData = (FirearmData)saveObject.itemDatas[0];
+                meleeData = (MeleeData)saveObject.itemDatas[1];
+                sustenanceData = (SustenanceData)saveObject.itemDatas[2];
 
-                //debug text
-                debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "...";
+                //debug text - 1
+                //debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "...";
+
+
+                debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "..." + "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.rateOfFire + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
+
+                //debugtext.text = "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.rateOfFire + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
 
                 //returns the save string
                 Debug.Log(saveString);
@@ -124,24 +141,24 @@ namespace com.limphus.retro_survival_shooter
                     currentTempurature = playerStats.GetCurrentTemperature()
                 };
 
-                List<Item> items = playerInventory.GetItems();
+                //List<Item> items = playerInventory.GetItems();
 
-                List<ItemData> itemDatas = new List<ItemData>();
+                //List<ItemData> itemDatas = new List<ItemData>();
 
-                foreach(Item item in items)
+                //foreach(Item item in items)
                 {
                     //Firearm firearm = item.GetComponent<Firearm>();
                     //WeaponSway weaponSway = item.GetComponent<WeaponSway>();
 
-                    ItemData itemData = new ItemData
+                    //ItemData itemData = new ItemData
                     {
-                        currentPosition = item.transform.position,
-                        currentRotation = item.transform.rotation,
+                        //currentPosition = item.transform.position,
+                        //currentRotation = item.transform.rotation,
                         //firearm = firearm,
                         //weaponSway = weaponSway
                     };
 
-                    itemDatas.Add(itemData);
+                    //itemDatas.Add(itemData);
                 }
 
                 //create a new set of player inventory data, and assign the list
@@ -273,7 +290,7 @@ namespace com.limphus.retro_survival_shooter
         }
 
         [Serializable]
-        private struct ItemData
+        private struct SItemData
         {
             public Vector3 currentPosition;
 

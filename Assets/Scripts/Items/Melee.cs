@@ -7,6 +7,9 @@ namespace com.limphus.retro_survival_shooter
     public class Melee : Weapon
     {
         [Header("Attributes - Melee")]
+        [SerializeField] private MeleeData meleeData;
+
+        [Space]
         [SerializeField] private float meleeRange;
 
         [Tooltip("Assign a value less than the rate of fire.")]
@@ -16,6 +19,25 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private WeaponSway weaponSway;
 
         private bool isBlocking;
+
+        //initialization
+        protected override void Init()
+        {
+            if (!meleeData)
+            {
+                Debug.LogWarning("No Melee Data found for " + gameObject.name + "; Assign Melee Data!");
+                return;
+            }
+
+            itemName = meleeData.itemName;
+            itemWeight = meleeData.itemWeight;
+
+            damage = meleeData.damage;
+            rateOfFire = meleeData.rateOfFire;
+
+            meleeRange = meleeData.meleeRange;
+            timeToHit = meleeData.timeToHit;
+        }
 
         private void Update() => Inputs();
 
@@ -102,6 +124,20 @@ namespace com.limphus.retro_survival_shooter
 
             //if we have the weapon sway reference, call the aim method on it as well (which we are using to block instead)
             if (weaponSway) weaponSway.Aim(b);
+        }
+
+        public override ItemData GetItemData()
+        {
+            if (meleeData != null) return meleeData;
+
+            else return null;
+        }
+
+        public override void SetItemData(ItemData itemData)
+        {
+            meleeData = (MeleeData)itemData;
+
+            Init();
         }
     }
 }

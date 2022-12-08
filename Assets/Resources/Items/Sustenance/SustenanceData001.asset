@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07159347c5c8ccc4c9e0a185512cfa2f, type: 3}
+  m_Name: SustenanceData001
+  m_EditorClassIdentifier: 
+  model: {fileID: 0}
+  itemName: Canned Peaches
+  itemWeight: 0.8
+  consumeAmount: 4
+  consumeTime: 2
+  sustenanceType: 0
+  sustenanceAmount: 25

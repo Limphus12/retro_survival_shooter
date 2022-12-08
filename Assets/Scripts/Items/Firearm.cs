@@ -216,29 +216,18 @@ namespace com.limphus.retro_survival_shooter
             if (weaponSway) weaponSway.Reload(isReloading);
         }
 
-        public int GetMagazineSize()
+        public override ItemData GetItemData()
         {
-            return magazineSize;
+            if (firearmData != null) return firearmData;
+
+            else return null;
         }
 
-        public void SetMagazineSize(int amount)
+        public override void SetItemData(ItemData itemData)
         {
-            magazineSize = amount;
-        }
+            firearmData = (FirearmData)itemData;
 
-        public float GetReloadTime()
-        {
-            return reloadTime;
-        }
-
-        public FirearmFireType GetFirearmFireType()
-        {
-            return fireType;
-        }
-
-        public FirearmSize GetFirearmSize()
-        {
-            return size;
+            Init();
         }
     }
 }

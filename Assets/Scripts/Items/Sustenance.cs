@@ -4,11 +4,15 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [System.Serializable]
     public enum SustenanceType { FOOD, DRINK }
 
     public class Sustenance : Consumable
     {
         [Header("Attributes - Sustenance")]
+        [SerializeField] private SustenanceData sustenanceData;
+
+        [Space]
         [SerializeField] private SustenanceType sustenanceType;
 
         [Tooltip("The total amount of sustenace that can be consumed from this")] [SerializeField] private int sustenanceAmount;
@@ -18,6 +22,24 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private PlayerStats playerStats;
 
         private int remainingSustenanceAmount = -1;
+
+        protected override void Init()
+        {
+            if (!sustenanceData)
+            {
+                Debug.LogWarning("No Sustenance Data found for " + gameObject.name + "; Assign Sustenance Data!");
+                return;
+            }
+
+            itemName = sustenanceData.itemName;
+            itemWeight = sustenanceData.itemWeight;
+
+            consumeAmount = sustenanceData.consumeAmount;
+            consumeTime = sustenanceData.consumeTime;
+
+            sustenanceAmount = sustenanceData.sustenanceAmount;
+            sustenanceType = sustenanceData.sustenanceType;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -182,6 +204,20 @@ namespace com.limphus.retro_survival_shooter
         {
             //if we have the weapon sway reference, call the aim method on it too
             if (weaponSway) weaponSway.Aim(b);
+        }
+
+        public override ItemData GetItemData()
+        {
+            if (sustenanceData != null) return sustenanceData;
+
+            else return null;
+        }
+
+        public override void SetItemData(ItemData itemData)
+        {
+            sustenanceData = (SustenanceData)itemData;
+
+            Init();
         }
     }
 }

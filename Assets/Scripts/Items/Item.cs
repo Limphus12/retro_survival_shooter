@@ -34,5 +34,19 @@ namespace com.limphus.retro_survival_shooter
             itemName = itemData.itemName;
             itemWeight = itemData.itemWeight;
         }
+
+        public virtual ItemData GetItemData()
+        {
+            if (itemData != null) return itemData;
+
+            else return null;
+        }
+
+        public virtual void SetItemData(ItemData itemData)
+        {
+            this.itemData = itemData;
+
+            Init();
+        }
     }
 }

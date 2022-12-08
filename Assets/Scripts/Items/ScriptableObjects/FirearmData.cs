@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    [CreateAssetMenu(fileName = "FirearmData", menuName = "Items/Firearm")]
+    [CreateAssetMenu(fileName = "FirearmData", menuName = "Items/Weapon/Firearm")]
 
     [System.Serializable]
     public class FirearmData : WeaponData
