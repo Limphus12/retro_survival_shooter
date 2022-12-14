@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
     public class BiomeGenerator : MonoBehaviour
     {
         [Header("Asset Variables")]
-        [SerializeField] private GameObject[] environmentalAssets, nonEnvironmentalAssets;
+        [SerializeField] private BiomeData biomeData;
 
         [Header("Placement Variables")]
         [SerializeField] private float raycastHeight;
@@ -31,6 +31,7 @@ namespace com.limphus.retro_survival_shooter
 
         int i = 0;
 
+        //apparently not using this?
         public void GenerateBiome()
         {
             //init the rng with our seed
@@ -38,7 +39,7 @@ namespace com.limphus.retro_survival_shooter
             //Random.InitState(seed);
 
 #if UNITY_EDITOR
-            //just calls the remove assets function
+            //for use in-editor
             EditorClearBiome();
 #endif
 
@@ -49,6 +50,7 @@ namespace com.limphus.retro_survival_shooter
             GenerateAssets();
         }
 
+        //used for initial generation
         public void GenerateRuntimeBiome()
         {
             //when generating our biome, always get rid of any previous assets
@@ -56,6 +58,16 @@ namespace com.limphus.retro_survival_shooter
 
             //then generate the new assets
             GenerateAssets();
+        }
+
+        //for use with the save system
+        public void GenerateRuntimeBiome(BiomeData biomeData)
+        {
+            //when generating our biome, always get rid of any previous assets
+            ClearBiome();
+
+            //then generate the new assets
+            GenerateAssets(biomeData);
         }
 
         public void ClearBiome()
@@ -72,10 +84,34 @@ namespace com.limphus.retro_survival_shooter
 
         private void GenerateAssets()
         {
-            AssetLoop(envGridSize, envGridMultiplier, envGridOffset, environmentalAssets, envPlacementChance, envHeightPlacementOffset);
+            if (!biomeData)
+            {
+                Debug.Log("We have no Biome assigned!");
+
+                return;
+            }
+
+            AssetLoop(envGridSize, envGridMultiplier, envGridOffset, biomeData.environmentalAssets, envPlacementChance, envHeightPlacementOffset);
             Debug.Log("Spawned " + i + " Envionmental Assets");
 
-            AssetLoop(nonEnvGridSize, nonEnvGridMultiplier, nonEnvGridOffset, nonEnvironmentalAssets, nonEnvPlacementChance, nonEnvHeightPlacementOffset);
+            AssetLoop(nonEnvGridSize, nonEnvGridMultiplier, nonEnvGridOffset, biomeData.nonEnvironmentalAssets, nonEnvPlacementChance, nonEnvHeightPlacementOffset);
+            Debug.Log("Spawned " + i + " Non-Envionmental Assets");
+        }
+
+        //for use with the save system
+        private void GenerateAssets(BiomeData biomeData)
+        {
+            if (!biomeData)
+            {
+                Debug.Log("We have no Biome assigned!");
+
+                return;
+            }
+
+            AssetLoop(envGridSize, envGridMultiplier, envGridOffset, biomeData.environmentalAssets, envPlacementChance, envHeightPlacementOffset);
+            Debug.Log("Spawned " + i + " Envionmental Assets");
+
+            AssetLoop(nonEnvGridSize, nonEnvGridMultiplier, nonEnvGridOffset, biomeData.nonEnvironmentalAssets, nonEnvPlacementChance, nonEnvHeightPlacementOffset);
             Debug.Log("Spawned " + i + " Non-Envionmental Assets");
         }
 
@@ -148,5 +184,10 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
         }
+    }
+
+    public struct BiomeDataStruct
+    {
+        GameObject[] assets;
     }
 }

@@ -46,7 +46,6 @@ namespace com.limphus.retro_survival_shooter
             Debug.Log("Generating World");
         }
 
-
         public void ClearWorld()
         {
             //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
@@ -69,46 +68,17 @@ namespace com.limphus.retro_survival_shooter
         {
             Debug.Log("Move Chunk");
 
-            //was gonna use a vec2int for our paramater
-            //but we cant use that in our event :/
-
-            //update our current chunk
-            //currentChunk += direction;
-
             //north
-            if (i <= 0)
-            {
-                currentChunk.y++;
-            }
+            if (i <= 0) currentChunk.y++;
 
             //east
-            else if (i == 1)
-            {
-                currentChunk.x++;
-            }
+            else if (i == 1) currentChunk.x++;
 
             //south
-            else if (i == 2)
-            {
-                currentChunk.y--;
-            }
+            else if (i == 2) currentChunk.y--;
 
             //west
-            else if (i >= 3)
-            {
-                currentChunk.x--;
-            }
-
-            //MATHS: if our current chunk is (-10, 9)
-            //then we'll end up with (-1280, 1152) on the offset
-            //if we have a 0 at either chunk (x or y), then the
-            //maths should just give us 0, so no offset.
-
-            //generate our world!
-            //GenerateWorld();
-
-            //for some reason, we cant call the generateworld function, but these below work fine?
-            //ah its because we're calling teh generateruntimebiome here, whereas the 
+            else if (i >= 3) currentChunk.x--;
 
             //tell the terrain generator to generate our terrain!
             if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
@@ -128,12 +98,6 @@ namespace com.limphus.retro_survival_shooter
 
             //generate our world!
             GenerateWorld();
-
-            //tell the terrain generator to generate our terrain!
-            //if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
-
-            //tell the biome generator to place assets!
-            //if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
         }
     }
 
@@ -159,4 +123,10 @@ namespace com.limphus.retro_survival_shooter
         }
     }
 #endif
+
+    [System.Serializable]
+    public struct WorldDataStruct
+    {
+        public MeshData meshData;
+    }
 }

@@ -18,10 +18,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected string itemName;
         [SerializeField] protected double itemWeight;
 
-        private void Awake()
-        {
-            Init();
-        }
+        private void Awake() => Init();
 
         protected virtual void Init()
         {
@@ -31,8 +28,11 @@ namespace com.limphus.retro_survival_shooter
                 return;
             }
 
+            model = itemData.model;
             itemName = itemData.itemName;
             itemWeight = itemData.itemWeight;
+
+            name = itemName;
         }
 
         public virtual ItemData GetItemData()

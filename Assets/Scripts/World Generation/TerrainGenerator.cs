@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -13,6 +14,7 @@ namespace com.limphus.retro_survival_shooter
         Vector3[] vertices; //array of vertices
         int[] triangles; //array of triangles
         Vector2[] uvs; //array of uvs
+        Color[] colors; //array of colors
 
         [Header("Terrain Size")]
         [SerializeField] private Vector2Int size; //how big we want our grid of vertices
@@ -93,10 +95,48 @@ namespace com.limphus.retro_survival_shooter
             mesh.RecalculateBounds();
             MeshCollider meshCollider = GetComponent<MeshCollider>();
             meshCollider.sharedMesh = mesh;
+        }
 
-            //now we grab the biome generator from our child and tell it to place assets!
-            //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
-            //if (biomeGenerator) biomeGenerator.GenerateBiome(seed);
+        //when we want to generate a mesh based on MeshData
+        public void GenerateMesh(MeshData meshData)
+        {
+            //create a new mesh
+            mesh = new Mesh();
+
+            //set the mesh filter's mesh
+            GetComponent<MeshFilter>().sharedMesh = mesh;
+
+            //ensure we have a clean mesh
+            mesh.Clear();
+
+            //set the vertices, triangles, UVs and colours
+            mesh.vertices = meshData.vertices;
+            mesh.triangles = meshData.triangles;
+            mesh.uv = meshData.uvs;
+            mesh.colors = meshData.colors;
+
+            //recalculate normals on the mesh
+            mesh.RecalculateNormals();
+
+            // optionally, add a mesh collider (As suggested by Franku Kek via Youtube comments).
+            // To use this, your MeshGenerator GameObject needs to have a mesh collider
+            // component added to it.  Then, just re-enable the code below.
+            mesh.RecalculateBounds();
+            MeshCollider meshCollider = GetComponent<MeshCollider>();
+            meshCollider.sharedMesh = mesh;
+        }
+
+        public MeshData GetMeshData()
+        {
+            MeshData meshData = new MeshData
+            {
+                vertices = vertices,
+                triangles = triangles,
+                uvs = uvs,
+                colors = colors
+            };
+
+            return meshData;
         }
 
         private Vector3[] CreateVertices()
@@ -121,7 +161,7 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
 
-            //need to do this so that the uvs can be calculated
+            //setting our vertices to these generated ones
             this.vertices = vertices;
 
             return vertices;
@@ -160,6 +200,9 @@ namespace com.limphus.retro_survival_shooter
                 //i.e weird lighting effects and connections between certain vertices
             }
 
+            //setting our triangles to these generated ones
+            this.triangles = triangles;
+
             return triangles;
         }
 
@@ -177,6 +220,9 @@ namespace com.limphus.retro_survival_shooter
                     i++;
                 }
             }
+
+            //setting our uvs to these generated ones
+            this.uvs = uvs;
 
             return uvs;
         }
@@ -203,17 +249,20 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
 
+            //setting our colors to these generated ones
+            this.colors = colors;
+
             return colors;
         }
-
-        //private void OnValidate()
-        //{
-        //if (size.x < 1) size.x = 1;
-        //if (size.y < 1) size.y = 1;
-        //if (lacunarity < 1 || lacunarity > 1) lacunarity = 1;
-        //if (octaves < 0) octaves = 0;
-
-        //GenerateMesh();
-        //}
     }
+
+    [System.Serializable]
+    public struct MeshData
+    {
+        public Vector3[] vertices; //array of vertices
+        public int[] triangles; //array of triangles
+        public Vector2[] uvs; //array of uvs
+        public Color[] colors; //array of colors
+    }
+
 }

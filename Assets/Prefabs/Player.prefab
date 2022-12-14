@@ -1242,11 +1242,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c31564b5fc39f4eb4b8671abec9626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 0}
+  model: {fileID: 0}
   itemName: Revolver
-  weight: 1.6
+  itemWeight: 0
+  weaponData: {fileID: 0}
   damage: 10
   rateOfFire: 1.2
   playerCamera: {fileID: 1154132035860330907}
+  firearmData: {fileID: 0}
   magazineSize: 6
   reloadTime: 3
   cameraRecoil: {fileID: 6822713638158227432}
@@ -1547,7 +1551,7 @@ MonoBehaviour:
   currentHunger: 100
   currentThirst: 100
   currentStamina: 100
-  currentTemperature: 0
+  currentTemperature: 2
   hungerTickRate: 2
   thirstTickRate: 1
   hungerDepletionRate: 1
@@ -1557,9 +1561,9 @@ MonoBehaviour:
   hungerDepletedDamage: 1
   thirstDepletedDamage: 1
   staminaDepletionRate: 1
-  staminaReplenishRate: 3
+  staminaReplenishRate: 100
   hungerStaminaDepletion: 1
-  thirstStaminaDepletion: 2
+  thirstStaminaDepletion: 3
   staminaTickRate: 0.2
 --- !u!1 &5358056577461103855
 GameObject:
@@ -2000,10 +2004,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3457cbe98ca89e84e89527c69c9f0450, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 0}
+  model: {fileID: 0}
   itemName: Canned Peaches
-  weight: 0.8
+  itemWeight: 0
   consumeAmount: 4
   consumeTime: 2
+  sustenanceData: {fileID: 0}
   sustenanceType: 0
   sustenanceAmount: 25
   weaponSway: {fileID: 7903484293113449638}
@@ -6973,11 +6980,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5bc1b9dcd8dcc47b4bc75c182fa65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemData: {fileID: 0}
+  model: {fileID: 0}
   itemName: Baseball Bat
-  weight: 1.6
+  itemWeight: 0
+  weaponData: {fileID: 0}
   damage: 100
   rateOfFire: 0.5
   playerCamera: {fileID: 1154132035860330907}
+  meleeData: {fileID: 0}
   meleeRange: 1.5
   timeToHit: 2
   weaponSway: {fileID: 8503975819222252327}

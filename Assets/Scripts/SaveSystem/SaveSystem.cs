@@ -95,13 +95,16 @@ namespace com.limphus.retro_survival_shooter
         private void Start()
         {
             //finding the player in the scene
-            if (!playerTransform) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            //if (!playerTransform) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
             //finding the player stats in the scene
-            if (!playerStats) playerStats = GameObject.FindObjectOfType<PlayerStats>();
+            if (!playerStats) playerStats = FindObjectOfType<PlayerStats>();
+            
+            //finding the player in the scene (using the player stats reference)
+            if (playerStats) playerTransform = playerStats.transform;
 
             //finding the world generator in the scene
-            if (!worldGenerator) worldGenerator = GameObject.FindObjectOfType<WorldGenerator>();
+            if (!worldGenerator) worldGenerator = FindObjectOfType<WorldGenerator>();
         }
 
         private void Update()
@@ -111,22 +114,19 @@ namespace com.limphus.retro_survival_shooter
 
         private void Inputs()
         {
-            if (Input.GetKeyDown(KeyCode.F5)) Test();
+            //if (Input.GetKeyDown(KeyCode.F5)) Test();
 
-            if (Input.GetKeyDown(KeyCode.F9)) Test2();
+            //if (Input.GetKeyDown(KeyCode.F9)) Test2();
 
-            //if (Input.GetKeyDown(KeyCode.F5)) Save();
+            if (Input.GetKeyDown(KeyCode.F5)) Save();
 
-            //if (Input.GetKeyDown(KeyCode.F9)) Load();
+            if (Input.GetKeyDown(KeyCode.F9)) Load();
         }
 
         private void Save()
         {
-            //creating a new save object, setting the values
-            //SaveObject saveObject = new SaveObject { playerPosition = playerTransform.position };
-
-            //if we have the player references and the world generator
-            if (playerTransform && playerStats && playerInventory && worldGenerator)
+            //if we have the player references and the generator references
+            if (playerTransform && playerStats && playerInventory && worldGenerator && terrainGenerator && biomeGenerator)
             {
                 //create a new set of player data
                 PlayerData playerData = new PlayerData
@@ -141,44 +141,13 @@ namespace com.limphus.retro_survival_shooter
                     currentTempurature = playerStats.GetCurrentTemperature()
                 };
 
-                //List<Item> items = playerInventory.GetItems();
-
-                //List<ItemData> itemDatas = new List<ItemData>();
-
-                //foreach(Item item in items)
+                WorldDataStruct worldData = new WorldDataStruct
                 {
-                    //Firearm firearm = item.GetComponent<Firearm>();
-                    //WeaponSway weaponSway = item.GetComponent<WeaponSway>();
-
-                    //ItemData itemData = new ItemData
-                    {
-                        //currentPosition = item.transform.position,
-                        //currentRotation = item.transform.rotation,
-                        //firearm = firearm,
-                        //weaponSway = weaponSway
-                    };
-
-                    //itemDatas.Add(itemData);
-                }
-
-                //create a new set of player inventory data, and assign the list
-                //by grabbing the items from the player inventory
-                //PlayerInventoryData inventoryData = new PlayerInventoryData
-                {
-                    //inventoryItems = itemDatas,
-
-                    //firearmData = new FirearmData 
-                    { 
-                        //magazineSize = firearm.GetMagazineSize(), 
-                        //reloadTime = firearm.GetReloadTime(), 
-                        //fireType = firearm.GetFirearmFireType(), 
-                        //size = firearm.GetFirearmSize()
-                    }
+                    meshData = terrainGenerator.GetMeshData()
                 };
 
                 //creating a new save object, setting the values
-                //SaveObject saveObject = new SaveObject { playerData = playerData, currentChunk = worldGenerator.GetCurrentChunk(), playerInventoryData = inventoryData };
-                SaveObject saveObject = new SaveObject { playerData = playerData, currentChunk = worldGenerator.GetCurrentChunk() };
+                SaveObject saveObject = new SaveObject { playerData = playerData, worldData = worldData };
 
                 //using json utilities to write a json file -  true for prettyPrint
                 string json = JsonUtility.ToJson(saveObject, true);
@@ -203,9 +172,6 @@ namespace com.limphus.retro_survival_shooter
                 //grab the player data from the save object
                 PlayerData playerData = saveObject.playerData;
 
-                //grab the player inventory data from the save object
-                //PlayerInventoryData playerInventoryData = saveObject.playerInventoryData;
-
                 //set the player position from the player data we just loaded
                 if (playerTransform)
                 {
@@ -222,21 +188,15 @@ namespace com.limphus.retro_survival_shooter
                     playerStats.SetCurrentTemperature(playerData.currentTempurature);
                 }
 
-                //sets the player's inventory from the player data we just loaded
-                if (playerInventory)
+                //grab the world data from the save object
+
+                //generate the world using the world data.
+                WorldDataStruct worldData = saveObject.worldData;
+
+                if (terrainGenerator)
                 {
-
-
-
-                    //foreach(Item item in playerInventoryData.inventoryItems)
-                    {
-                        //this cannot load the items since all it does is try to grab the instance id (which is currently the only thing saved).
-                        //Instantiate(new GameObject(item.name), item.transform.position, item.transform.rotation, playerInventory.transform);
-                    }
+                    terrainGenerator.GenerateMesh(worldData.meshData);
                 }
-
-                //set the world generator's current chunk from the save object we created.
-                if (worldGenerator) worldGenerator.SetCurrentChunk(saveObject.currentChunk);
             }
 
             else Debug.Log("No Save Detected!");
@@ -246,9 +206,7 @@ namespace com.limphus.retro_survival_shooter
         {
             public PlayerData playerData;
 
-            //public PlayerInventoryData playerInventoryData;
-
-            public Vector2Int currentChunk;
+            public WorldDataStruct worldData;
         }
 
         [Serializable]
@@ -261,57 +219,6 @@ namespace com.limphus.retro_survival_shooter
             public int currentHealth, currentHunger, currentThirst, currentStamina;
 
             public Temperature currentTempurature;
-        }
-
-        [Serializable]
-        private struct PlayerInventoryData
-        {
-            public List<ItemData> inventoryItems;
-
-            public FirearmData firearmData;
-        }
-
-        [Serializable]
-        private struct WorldData
-        {
-            public int seed;
-
-            public Vector2Int currentChunk;
-        }
-
-        [Serializable]
-        private struct ChunkData
-        {
-            public Vector2Int chunk;
-
-            GameObject[] gameObjects;
-
-            //idk what to put here lmao
-        }
-
-        [Serializable]
-        private struct SItemData
-        {
-            public Vector3 currentPosition;
-
-            public Quaternion currentRotation;
-
-            //public WeaponSway weaponSway;
-        }
-
-        [Serializable]
-        private struct SFirearmData
-        {
-            public int magazineSize;
-            public float reloadTime;
-
-            //public WeaponRecoil cameraRecoil;
-            //public WeaponRecoil weaponRecoil;
-
-            //public WeaponSway weaponSway;
-
-            public FirearmFireType fireType;
-            public FirearmSize size;
         }
     }
 }
