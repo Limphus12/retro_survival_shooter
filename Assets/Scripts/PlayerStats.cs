@@ -47,14 +47,16 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("Variables - Player Survival - Stamina")]
         [Tooltip("[WHEN STAMINA IS BEING USED] How much Stamina is depleted per tick")] [SerializeField] private int staminaDepletionRate;
-        [Tooltip("[WHEN CONSUMING HUNGER AND THIRST] How much Stamina is replenished")] [SerializeField] private int staminaReplenishRate;
+        [Tooltip("[WHEN STAMINA IS NOT BEING USED] How much Stamina is replenished")] [SerializeField] private int staminaReplenishRate;
+        [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float staminaReplenishTime;
 
         [Space]
         [Tooltip("How much Hunger is depleted to replenish stamina")] [SerializeField] private int hungerStaminaDepletion;
         [Tooltip("How much Thirst is depleted to replenish stamina")] [SerializeField] private int thirstStaminaDepletion;
 
         [Space]
-        [Tooltip("[IN SECONDS] - How quickly Stamina depletes")] [SerializeField] private float staminaTickRate;
+        [Tooltip("[IN SECONDS] - How quickly Stamina replenishes")] [SerializeField] private float staminaReplenishTickRate;
+        [Tooltip("[IN SECONDS] - How quickly Stamina depletes")] [SerializeField] private float staminaDepletionTickRate;
 
         public class OnIntChangedEventArgs : EventArgs { public int i; }
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
@@ -70,14 +72,6 @@ namespace com.limphus.retro_survival_shooter
             //then invoke our repeating hunger and thirst ticks
             InvokeRepeating(nameof(HungerTick), 0f, hungerTickRate);
             InvokeRepeating(nameof(ThirstTick), 0f, thirstTickRate);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                //DepleteStamina(staminaDepletionRate);
-            }
         }
 
         protected override void InitVariables()
@@ -238,7 +232,7 @@ namespace com.limphus.retro_survival_shooter
         //method to invoke our stamina tick
         public void DepleteStamina()
         {
-            InvokeRepeating(nameof(StaminaTick), 0, staminaTickRate);
+            InvokeRepeating(nameof(StaminaDepletionTick), 0, staminaDepletionTickRate);
         }
 
         //a method to deplete stamina
@@ -250,22 +244,14 @@ namespace com.limphus.retro_survival_shooter
             //checking if our stamina is 0
             if (GetCurrentStamina() <= 0)
             {
-                ReplenishStamina();
+                Debug.Log("Character (" + gameObject.name + ") Has no Stamina!");
             }
         }
 
-        //a method to replenish stamina, using hunger and thirst
+        //a method to replenish stamina, calling the stamina replenish tick after a certain amount of time
         public void ReplenishStamina()
         {
-            //if we have the hunger and thirst to spare
-            if (GetCurrentHunger() >= hungerStaminaDepletion && GetCurrentThirst() >= thirstStaminaDepletion)
-            {
-                //replenish our stamina
-                ReplenishStamina(staminaReplenishRate);
-
-                DepleteHunger(hungerStaminaDepletion);
-                DepleteThirst(thirstStaminaDepletion);
-            }
+            InvokeRepeating(nameof(StaminaReplenishTick), staminaReplenishTime, staminaReplenishTickRate);
         }
 
         //a method to replenish stamina
@@ -305,7 +291,6 @@ namespace com.limphus.retro_survival_shooter
 
         #region Ticks
 
-        //regular ticks - over time, hunger and thirst are depleted
         private void HungerTick()
         {
             DepleteHunger(hungerDepletionRate);
@@ -316,14 +301,24 @@ namespace com.limphus.retro_survival_shooter
             DepleteThirst(thirstDepletionRate);
         }
 
-        public void StaminaTick()
+        public void StaminaReplenishTick()
+        {
+            ReplenishStamina(staminaReplenishRate);
+        }
+
+        public void StaminaDepletionTick()
         {
             DepleteStamina(staminaDepletionRate);
         }
 
-        public void CancelStaminaTick()
+        public void CancelStaminaReplenishTick()
         {
-            CancelInvoke(nameof(StaminaTick));
+            CancelInvoke(nameof(StaminaReplenishTick));
+        }
+
+        public void CancelStaminaDepletionTick()
+        {
+            CancelInvoke(nameof(StaminaDepletionTick));
         }
 
         //damage ticks - when hunger and thirst are depleted

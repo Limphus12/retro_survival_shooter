@@ -98,23 +98,42 @@ namespace com.limphus.retro_survival_shooter
             //if we're not pressing the run key, then walk (sets our speed to either crouch speed or walk speed)
             if (!Input.GetKey(runKey))
             {
-                //if we have the playerstats reference, cancel teh stamina tick
-                if (playerStats) playerStats.CancelStaminaTick();
+                //if we have the playerstats reference, cancel the stamina depletion tick
+                if (playerStats)
+                {
+                    //if we're not invoking the stamina replenish tick, start invoking it
+                    if (!playerStats.IsInvoking(nameof(playerStats.StaminaReplenishTick)))
+                    {
+                        //call the replenish stamina
+                        playerStats.ReplenishStamina();
 
-                Walk();
+                        //cancel the stamina depletion tick
+                        playerStats.CancelStaminaDepletionTick();
+
+                        //and walk!
+                        Walk();
+                    }
+
+                    //else walk!
+                    else Walk();
+                }
             }
 
             //else if we're only pressing the run key and we have the space to stand (just incase we go from crouching to running)
             //btw not sure if we actually need to do the check? idk. EDIT, NO CEILING CHECK, AS WE CAN RUN WHILST CROUCHING
-            else if (Input.GetKey(runKey)) //add a stamina check later on
+            else if (Input.GetKey(runKey)) //add a stamina check later on (DONE)
             {
                 //if we have the playerstats reference and we have the stamina to spare
                 if (playerStats && playerStats.GetCurrentStamina() > 0)
                 {
-                    //if we're not invoking the stamina tick, start invoking it
-                    if (!playerStats.IsInvoking(nameof(playerStats.StaminaTick)))
+                    //if we're not invoking the stamina depletion tick, start invoking it
+                    if (!playerStats.IsInvoking(nameof(playerStats.StaminaDepletionTick)))
                     {
+                        //call the deplete stamina
                         playerStats.DepleteStamina();
+
+                        //cancel the stamina replenish tick
+                        playerStats.CancelInvoke(nameof(playerStats.StaminaReplenishTick));
                         
                         //and run!
                         Run();
@@ -122,7 +141,6 @@ namespace com.limphus.retro_survival_shooter
 
                     //if we are invoking, then run!
                     else Run();
-
                 }
 
             }
