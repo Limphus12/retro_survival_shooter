@@ -262,21 +262,21 @@ namespace com.limphus.retro_survival_shooter
         {
             if (currentAmmo <= 0)
             {
-                Debug.Log("Cannot Shoot, we have no ammo!");
+                //Debug.Log("Cannot Shoot, we have no ammo!");
 
                 return 0; //if we have no ammo in the mag
             }
 
             else if (currentAmmo < magazineSize)
             {
-                Debug.Log("We have ammo, but not a full mag!");
+                //Debug.Log("We have ammo, but not a full mag!");
 
                 return 1; //if we dont have the full amount
             }
 
             else if (currentAmmo == magazineSize)
             {
-                Debug.Log("We got a full mag, let 'em loose!");
+                //Debug.Log("We got a full mag, let 'em loose!");
 
                 return 2; //if we are full
             }
