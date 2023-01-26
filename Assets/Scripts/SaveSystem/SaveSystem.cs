@@ -141,13 +141,13 @@ namespace com.limphus.retro_survival_shooter
                     currentTempurature = playerStats.GetCurrentTemperature()
                 };
 
-                WorldDataStruct worldData = new WorldDataStruct
+                //WorldDataStruct worldData = new WorldDataStruct
                 {
-                    meshData = terrainGenerator.GetMeshData()
+                    //meshData = terrainGenerator.GetMeshData()
                 };
 
                 //creating a new save object, setting the values
-                SaveObject saveObject = new SaveObject { playerData = playerData, worldData = worldData };
+                SaveObject saveObject = new SaveObject { playerData = playerData };
 
                 //using json utilities to write a json file -  true for prettyPrint
                 string json = JsonUtility.ToJson(saveObject, true);
@@ -191,11 +191,11 @@ namespace com.limphus.retro_survival_shooter
                 //grab the world data from the save object
 
                 //generate the world using the world data.
-                WorldDataStruct worldData = saveObject.worldData;
+                //WorldDataStruct worldData = saveObject.worldData;
 
-                if (terrainGenerator)
+                //if (terrainGenerator)
                 {
-                    terrainGenerator.GenerateMesh(worldData.meshData);
+                    //terrainGenerator.GenerateMesh(worldData.meshData);
                 }
             }
 
@@ -206,7 +206,7 @@ namespace com.limphus.retro_survival_shooter
         {
             public PlayerData playerData;
 
-            public WorldDataStruct worldData;
+            //public WorldDataStruct worldData;
         }
 
         [Serializable]

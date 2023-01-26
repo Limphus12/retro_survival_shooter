@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [Serializable]
     public enum Temperature { VERY_COLD, COLD, NORMAL, HOT, VERY_HOT }
 
     public class PlayerStats : EntityStats
     {
-        [Header("Variables - Player Survival - Starting Stats")]
+        [Header("Variables - Player Survival - Initial Stats")]
         [SerializeField] private int maxHunger;
         [SerializeField] private int maxThirst, maxStamina;
 
@@ -48,15 +49,13 @@ namespace com.limphus.retro_survival_shooter
         [Header("Variables - Player Survival - Stamina")]
         [Tooltip("[WHEN STAMINA IS BEING USED] How much Stamina is depleted per tick")] [SerializeField] private int staminaDepletionRate;
         [Tooltip("[WHEN STAMINA IS NOT BEING USED] How much Stamina is replenished")] [SerializeField] private int staminaReplenishRate;
-        [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float staminaReplenishTime;
-
-        [Space]
-        [Tooltip("How much Hunger is depleted to replenish stamina")] [SerializeField] private int hungerStaminaDepletion;
-        [Tooltip("How much Thirst is depleted to replenish stamina")] [SerializeField] private int thirstStaminaDepletion;
 
         [Space]
         [Tooltip("[IN SECONDS] - How quickly Stamina replenishes")] [SerializeField] private float staminaReplenishTickRate;
         [Tooltip("[IN SECONDS] - How quickly Stamina depletes")] [SerializeField] private float staminaDepletionTickRate;
+
+        [Space]
+        [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float staminaReplenishTime;
 
         public class OnIntChangedEventArgs : EventArgs { public int i; }
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
@@ -120,7 +119,6 @@ namespace com.limphus.retro_survival_shooter
                 if (!IsInvoking(nameof(HungerDepletedTick)))
                 {
                     InvokeRepeating(nameof(HungerDepletedTick), 0f, hungerDepletedTickRate);
-
                 }
             }
         }

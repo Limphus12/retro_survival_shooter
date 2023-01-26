@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdc94422f76357c45a02664f3d33320d, type: 3}
+  m_Name: FirearmSoundData001
+  m_EditorClassIdentifier: 
+  equipClip: {fileID: 8300000, guid: 5d965a7520c053a41bcfb99d47c3682f, type: 3}
+  audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
+  firingClip: {fileID: 8300000, guid: 7297d7a29ec7c0248b5337b0d011ccb1, type: 3}
+  dryFiringClip: {fileID: 8300000, guid: 9a78d82aee3c910438d58114dbc47fda, type: 3}
+  reloadingClip: {fileID: 8300000, guid: a727d3594f054664e951e822fca83659, type: 3}
+  cockingClip: {fileID: 8300000, guid: 1dfda662ffab4e848b8bddb8a21741f1, type: 3}

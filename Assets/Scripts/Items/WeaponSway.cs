@@ -43,9 +43,21 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private float reloadingTiltSmooth = 8.0f;
         [SerializeField] private float reloadingTiltAmount = 2.0f, reloadingTiltMaximum = 2.0f;
 
+        [Header("Cocking Settings")]
+        [SerializeField] private Vector3 cockingPosition;
+        [SerializeField] private Quaternion cockingRotation;
+
+        [Space]
+        [SerializeField] private float cockingSwaySmooth = 4.0f;
+        [SerializeField] private float cockingSwayAmount = 0.0f, cockingSwayMaximum = 2.0f;
+
+        [Space]
+        [SerializeField] private float cockingTiltSmooth = 8.0f;
+        [SerializeField] private float cockingTiltAmount = 4.0f, cockingTiltMaximum = 8.0f;
+
         private Quaternion initialRotation;
 
-        private bool isAiming, isReloading;
+        private bool isAiming, isReloading, isCocking;
 
         private void Awake()
         {
@@ -62,11 +74,15 @@ namespace com.limphus.retro_survival_shooter
 
         public void Reload(bool b) => isReloading = b;
 
+        public void Cock(bool b) => isCocking = b;
+
         private void CheckSway()
         {
             if (isReloading) Sway(reloadingSwayAmount, reloadingSwayMaximum, reloadingSwaySmooth, reloadingPosition);
 
-            else if (!isAiming) Sway(hipSwayAmount, hipSwayMaximum, hipSwaySmooth, hipPosition);
+            else if (isCocking) Sway(cockingSwayAmount, cockingSwayMaximum, cockingSwaySmooth, cockingPosition);
+
+            else if (!isAiming && !isCocking) Sway(hipSwayAmount, hipSwayMaximum, hipSwaySmooth, hipPosition);
 
             else if (isAiming) Sway(aimingSwayAmount, aimingSwayMaximum, aimingSwaySmooth, aimingPosition);
         }
@@ -75,7 +91,9 @@ namespace com.limphus.retro_survival_shooter
         {
             if (isReloading) Tilt(reloadingTiltAmount, reloadingTiltMaximum, reloadingTiltSmooth, reloadingRotation);
 
-            else if (!isAiming) Tilt(hipTiltAmount, hipTiltMaximum, hipTiltSmooth, hipRotation);
+            else if (isCocking) Tilt(cockingTiltAmount, cockingTiltMaximum, cockingTiltSmooth, cockingRotation);
+
+            else if (!isAiming && !isCocking) Tilt(hipTiltAmount, hipTiltMaximum, hipTiltSmooth, hipRotation);
 
             else if (isAiming) Tilt(aimingTiltAmount, aimingTiltMaximum, aimingTiltSmooth, aimingRotation);
         }
@@ -112,7 +130,6 @@ namespace com.limphus.retro_survival_shooter
             Quaternion targetRotation = rotation * tiltRotation;
 
             //apply target rotation
-            //transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation * initialRotation, smooth * Time.deltaTime);
             transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation * initialRotation, smooth * Time.deltaTime);
         }
 

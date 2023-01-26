@@ -1562,11 +1562,9 @@ MonoBehaviour:
   thirstDepletedDamage: 1
   staminaDepletionRate: 1
   staminaReplenishRate: 1
-  staminaReplenishTime: 3
-  hungerStaminaDepletion: 1
-  thirstStaminaDepletion: 3
-  staminaReplenishTickRate: 1
-  staminaDepletionTickRate: 1
+  staminaReplenishTickRate: 0.25
+  staminaDepletionTickRate: 0.25
+  staminaReplenishTime: 5
 --- !u!1 &5358056577461103855
 GameObject:
   m_ObjectHideFlags: 0

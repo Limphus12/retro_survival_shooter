@@ -16,5 +16,9 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         public FirearmFireType fireType;
         public FirearmSize size;
+
+        [Space]
+        [Tooltip("Only used for the BOLT Fire Type")]
+        public float cockTime; //hah again, cock lmao
     }
 }
