@@ -28,7 +28,7 @@ namespace com.limphus.retro_survival_shooter
                 return;
             }
 
-            model = itemData.model;
+            model = itemData.prefab;
             itemName = itemData.itemName;
             itemWeight = itemData.itemWeight;
 

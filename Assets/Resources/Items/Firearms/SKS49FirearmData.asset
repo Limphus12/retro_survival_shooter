@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcc4c20617b5fac4aa3e96760d225ef9, type: 3}
-  m_Name: FirearmData002
+  m_Name: SKS49FirearmData
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  prefab: {fileID: 4745835920928684933, guid: 2147ebcdc6aa41b4eb058a4650f6360a, type: 3}
   itemName: SKS-49
   itemWeight: 3.2
   damage: 20
   rateOfFire: 1.2
   magazineSize: 6
-  reloadTime: 2
+  reloadTime: 1.5
   fireType: 3
   size: 1
+  shotType: 0
+  reloadType: 1
   cockTime: 1.3

@@ -9,13 +9,13 @@ namespace com.limphus.retro_survival_shooter
     public enum FirearmSize { SMALL, LARGE } //prolly gonna be used to determine if we can put the gun in a holster or have to lug it on our back.
     
     [Serializable]
-    public enum FirearmFireType { SEMI, BURST, AUTO, BOLT } //mostly gonna be using the bolt and semi fire types, as we're using older weapons in this game.
+    public enum FirearmFireType { SEMI, BURST, AUTO, COCK } //mostly gonna be using the bolt and semi fire types, as we're using older weapons in this game.
 
     [Serializable]
     public enum FirearmShotType { BULLET, BUCKSHOT, EXPLOSIVE } //will mostly use bullet and buckshot shot types, as we are using older weapons in the game.
 
     [Serializable]
-    public enum FirearmReloadType {  }
+    public enum FirearmReloadType { CYLINDER, BOLT, MAGAZINE } //will mostly use cylinder and bolt reload types, as we are using older weapons in the game.
 
     public class Firearm : Weapon
     {
@@ -37,12 +37,15 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private FirearmSize size;
 
         [Space]
+        [SerializeField] private FirearmShotType shotType;
+        [SerializeField] private FirearmReloadType reloadType;
+
+        [Space]
         [SerializeField] private float cockTime; //hah, cock
 
         [Space]
         [SerializeField] private FirearmSound firearmSound;
         [SerializeField] private FirearmAnimation firearmAnimation;
-
 
         private bool isAiming, isReloading, reloadInput, isCocked, isCocking;
         private int currentAmmo;
@@ -68,7 +71,19 @@ namespace com.limphus.retro_survival_shooter
             fireType = firearmData.fireType;
             size = firearmData.size;
 
+            shotType = firearmData.shotType;
+            reloadType = firearmData.reloadType;
+
             cockTime = firearmData.cockTime;
+        }
+
+        private void Start()
+        {
+            //need to check if we we're doing things i.e. reloading, cocking etc.
+
+            if (isReloading) StartReload();
+
+            else if (isCocking || !isCocked) StartCock();
         }
 
         private void Update()
@@ -93,8 +108,10 @@ namespace com.limphus.retro_survival_shooter
         protected override void CheckShoot()
         {
             //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
-            if (reloadInput && !isReloading && (CheckReload() == 0 || CheckReload() == 1))
+            if (reloadInput && !isReloading && !isShooting && (CheckReload() == 0 || CheckReload() == 1))
             {
+                //TODO: need to add extra functionality i.e. single bullet at-a-time reloads
+
                 //make sure to stop aiming lmao.
                 StartReload(); Aim(false); return;
             }
@@ -160,7 +177,7 @@ namespace com.limphus.retro_survival_shooter
                     }
 
                     break;
-                case FirearmFireType.BOLT:
+                case FirearmFireType.COCK:
 
                     //if we have no ammo tho, cry abou it
                     if (CheckReload() == 0)

@@ -10,7 +10,7 @@ namespace com.limphus.retro_survival_shooter
     public class ItemData : ScriptableObject
     {
         [Header("Attributes - Item")]
-        public GameObject model;
+        public GameObject prefab;
 
         [Space]
         public string itemName;

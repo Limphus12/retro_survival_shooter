@@ -19,5 +19,8 @@ MonoBehaviour:
   rateOfFire: 1.2
   magazineSize: 6
   reloadTime: 3
-  fireType: 4
+  fireType: 0
   size: 0
+  shotType: 0
+  reloadType: 0
+  cockTime: 1
