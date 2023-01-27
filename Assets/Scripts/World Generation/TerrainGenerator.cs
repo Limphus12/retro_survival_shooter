@@ -38,8 +38,18 @@ namespace com.limphus.retro_survival_shooter
         //sets our seed and generates the mesh
         public void GenerateTerrain(int seed, Vector2Int offset)
         {
-            this.seed = seed; this.offset = offset;
+            this.seed = seed; this.offset = new Vector2Int(Random.Range(-32000, 32000), Random.Range(-32000, 32000));
 
+            //make sure to clear the current terrain first!
+            ClearTerrain();
+
+            //then start generating the mesh!
+            GenerateMesh();
+        }
+
+        //just generates the mesh!
+        public void GenerateTerrain()
+        {
             //make sure to clear the current terrain first!
             ClearTerrain();
 

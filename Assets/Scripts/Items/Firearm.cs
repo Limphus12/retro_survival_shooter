@@ -14,6 +14,9 @@ namespace com.limphus.retro_survival_shooter
     [Serializable]
     public enum FirearmShotType { BULLET, BUCKSHOT, EXPLOSIVE } //will mostly use bullet and buckshot shot types, as we are using older weapons in the game.
 
+    [Serializable]
+    public enum FirearmReloadType {  }
+
     public class Firearm : Weapon
     {
         [Header("Attributes - Firearm")]
@@ -38,6 +41,8 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] private FirearmSound firearmSound;
+        [SerializeField] private FirearmAnimation firearmAnimation;
+
 
         private bool isAiming, isReloading, reloadInput, isCocked, isCocking;
         private int currentAmmo;
@@ -66,7 +71,10 @@ namespace com.limphus.retro_survival_shooter
             cockTime = firearmData.cockTime;
         }
 
-        private void Update() => Inputs();
+        private void Update()
+        {
+            Inputs(); Animation();
+        }
 
         protected override void Inputs()
         {
@@ -94,11 +102,11 @@ namespace com.limphus.retro_survival_shooter
             //if we're already reloading, dont do anything else here.
             else if (isReloading) return;
 
-            //check for r-mouse input and update aiming
-            Aim(rightMouseInput);
-
             //if were shooting already, dont do anything
             if (isShooting) return;
+
+            //check for r-mouse input and update aiming
+            Aim(rightMouseInput);
 
             //if we're not shooting, run through the fire types
             switch (fireType)
@@ -258,6 +266,55 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
+        private void Animation()
+        {
+            //if we have the 
+            if (firearmAnimation)
+            {
+                //if we're cocking the gun, then play this anim
+                if (isCocking)
+                {
+                    firearmAnimation.PlayFirearmCock();
+                    return;
+                }
+
+                //if we're reloading the gun, then play this anim
+                else if (isReloading) 
+                {
+                    firearmAnimation.PlayFirearmReload();
+                    return;
+                }
+
+                //if we're aiming the gun and we're not shooting, play this anim
+                else if (isAiming && !isShooting) 
+                {
+                    firearmAnimation.PlayFirearmAim();
+                    return;
+                }
+
+                //if we're aiming the gun and we're shooting, play this anim
+                else if (isAiming && isShooting) 
+                {
+                    firearmAnimation.PlayFirearmAimFire();
+                    return;
+                }
+
+                //if we're shooting, play this anim
+                else if (isShooting) 
+                {
+                    firearmAnimation.PlayFirearmFire();
+                    return;
+                }
+
+                //if we're not shooting, play this anim
+                else if (!isShooting) 
+                {
+                    firearmAnimation.PlayFirearmIdle();
+                    return;
+                }
+            }
+        }
+
         private int CheckReload()
         {
             if (currentAmmo <= 0)
@@ -329,7 +386,7 @@ namespace com.limphus.retro_survival_shooter
             //if we have the weapon sway reference, call the cock method on it too
             if (weaponSway) weaponSway.Cock(isCocking);
 
-            //if we have the firearm sound reference, call the play firing sound
+            //if we have the firearm sound reference, call the play cocking sound
             if (firearmSound) firearmSound.PlayCockingSound();
 
             Invoke(nameof(Cock), cockTime);

@@ -25,7 +25,7 @@ namespace com.limphus.retro_survival_shooter
         public void InitializeWorld()
         {
             //since world gen is the first step, we're gonna init our seed.
-            Random.InitState(seed);
+            //Random.InitState(seed);
 
             //generate our world!
             GenerateWorld();
@@ -37,7 +37,8 @@ namespace com.limphus.retro_survival_shooter
 
             //grab the terrain generator from our child and tell it to generate our terrain!
             //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
-            if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
+            //if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
+            if (terrainGenerator) terrainGenerator.GenerateTerrain();
 
             //now we grab the biome generator from our child and tell it to place assets!
             //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
