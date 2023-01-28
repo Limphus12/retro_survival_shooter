@@ -30,7 +30,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private WeaponRecoil weaponRecoil;
 
         [Space]
-        [SerializeField] private WeaponSway weaponSway;
+        [SerializeField] private FirearmSway firearmSway;
 
         [Space]
         [SerializeField] private FirearmFireType fireType;
@@ -275,17 +275,17 @@ namespace com.limphus.retro_survival_shooter
             isAiming = b;
 
             //if we have the camera and weapon recoil references, as well as the weapon sway reference, call the aim method on them too
-            if (cameraRecoil && weaponRecoil && weaponSway)
+            if (cameraRecoil && weaponRecoil && firearmSway)
             {
                 cameraRecoil.Aim(b);
                 weaponRecoil.Aim(b);
-                weaponSway.Aim(b);
+                firearmSway.Aim(b);
             }
         }
 
         private void Animation()
         {
-            //if we have the 
+            //if we have the animation reference
             if (firearmAnimation)
             {
                 //if we're cocking the gun, then play this anim
@@ -367,7 +367,7 @@ namespace com.limphus.retro_survival_shooter
             isReloading = true;
 
             //if we have the weapon sway reference, call the reload method on it too
-            if (weaponSway) weaponSway.Reload(isReloading);
+            if (firearmSway) firearmSway.Reload(isReloading);
 
             //if we have the firearm sound reference, call the play reload sound
             if (firearmSound) firearmSound.PlayReloadingSound();
@@ -389,7 +389,7 @@ namespace com.limphus.retro_survival_shooter
             isReloading = false;
 
             //if we have the weapon sway reference, call the reload method on it too
-            if (weaponSway) weaponSway.Reload(isReloading);
+            if (firearmSway) firearmSway.Reload(isReloading);
         }
 
         //starts cocking
@@ -401,7 +401,7 @@ namespace com.limphus.retro_survival_shooter
             isCocking = true;
 
             //if we have the weapon sway reference, call the cock method on it too
-            if (weaponSway) weaponSway.Cock(isCocking);
+            if (firearmSway) firearmSway.Cock(isCocking);
 
             //if we have the firearm sound reference, call the play cocking sound
             if (firearmSound) firearmSound.PlayCockingSound();
@@ -424,7 +424,7 @@ namespace com.limphus.retro_survival_shooter
             isCocking = false;
 
             //if we have the weapon sway reference, call the cock method on it too
-            if (weaponSway) weaponSway.Cock(isCocking);
+            if (firearmSway) firearmSway.Cock(isCocking);
         }
 
         public override ItemData GetItemData()

@@ -78,7 +78,7 @@ namespace com.limphus.retro_survival_shooter
         //Update is called once per frame
         void Update()
         {
-            Inputs();
+            if (canMove) Inputs();
         }
 
         void Inputs()
@@ -126,29 +126,58 @@ namespace com.limphus.retro_survival_shooter
                 //if we have the playerstats reference and we have the stamina to spare
                 if (playerStats && playerStats.GetCurrentStamina() > 0)
                 {
-                    //if we're not invoking the stamina depletion tick, start invoking it
-                    if (!playerStats.IsInvoking(nameof(playerStats.StaminaDepletionTick)))
+                    //if we are moving
+                    if (curSpeedX != 0 || curSpeedZ != 0)
                     {
-                        //call the deplete stamina
-                        playerStats.DepleteStamina();
+                        //if we're not invoking the stamina depletion tick, start invoking it
+                        if (!playerStats.IsInvoking(nameof(playerStats.StaminaDepletionTick)))
+                        {
+                            //call the deplete stamina
+                            playerStats.DepleteStamina();
 
-                        //cancel the stamina replenish tick
-                        playerStats.CancelInvoke(nameof(playerStats.StaminaReplenishTick));
-                        
-                        //and run!
-                        Run();
+                            //cancel the stamina replenish tick
+                            playerStats.CancelInvoke(nameof(playerStats.StaminaReplenishTick));
+
+                            //and run!
+                            Run();
+                        }
+
+                        //if we are invoking, then run!
+                        else Run();
                     }
 
-                    //if we are invoking, then run!
-                    else Run();
-                }
+                    //if we are not moving
+                    else if (curSpeedX == 0 || curSpeedZ == 0)
+                    {
+                        //if we're invoking the stamina depletion tick, stop invoking it
+                        if (playerStats.IsInvoking(nameof(playerStats.StaminaDepletionTick)))
+                        {
+                            //cancel the stamina depletion tick
+                            playerStats.CancelStaminaDepletionTick();
 
+                            //if we're not invoking the stamina replenish tick, start invoking it
+                            if (!playerStats.IsInvoking(nameof(playerStats.StaminaReplenishTick)))
+                            {
+                                //call the replenish stamina
+                                playerStats.ReplenishStamina();
+                            }
+
+                            //and 'run'!
+                            Run();
+                        }
+
+                        //if we are invoking, then 'run'!
+                        else Run();
+                    }
+                }
             }
 
             CalculateMovement();
         }
 
         #region Movement
+
+        public float curSpeedX, curSpeedZ;
 
         //Calculates Player Movement
         void CalculateMovement()
@@ -158,8 +187,8 @@ namespace com.limphus.retro_survival_shooter
             Vector3 right = transform.TransformDirection(Vector3.right);
 
             //calculate current speed in the Horizontal and Vertical directions (WASD)
-            float curSpeedX = canMove ? currentSpeed * Input.GetAxis("Horizontal") : 0;
-            float curSpeedZ = canMove ? currentSpeed * Input.GetAxis("Vertical") : 0;
+            curSpeedX = canMove ? currentSpeed * Input.GetAxis("Horizontal") : 0;
+            curSpeedZ = canMove ? currentSpeed * Input.GetAxis("Vertical") : 0;
 
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedZ) + (right * curSpeedX);

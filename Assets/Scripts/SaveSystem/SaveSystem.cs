@@ -37,7 +37,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void Test()
         {
-            List<GameObject> items = playerInventory.GetItems();
+            List<GameObject> items = playerInventory.GetInventoryItems();
 
             List<ItemData> itemDatas = new List<ItemData>();
 

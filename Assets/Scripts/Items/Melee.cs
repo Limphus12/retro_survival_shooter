@@ -74,9 +74,6 @@ namespace com.limphus.retro_survival_shooter
 
             //invoke end shoot after our rate of fire
             Invoke(nameof(EndShoot), 1 / rateOfFire);
-
-            //if we have teh weapon sway reference, call the reload method (which we are using for the melee swinging)
-            if (weaponSway) weaponSway.Reload(true);
         }
 
         //shoots!
@@ -84,9 +81,6 @@ namespace com.limphus.retro_survival_shooter
         {
             //call the hit function, passing through the player camera
             Hit(playerCamera);
-
-            //if we have teh weapon sway reference, call the reload method (which we are using for the melee swinging)
-            if (weaponSway) weaponSway.Reload(false);
         }
 
         //ends shooting
