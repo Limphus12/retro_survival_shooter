@@ -14,13 +14,16 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         public float lightAttackTimeToHit;
+        public int lightAttackStaminaCost;
 
         [Space]
         public float heavyAttackRate;
         public float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
+        public int heavyAttackStaminaCost;
 
         [Space]
         public float exhaustedAttackRate;
         public float exhaustedAttackDamage, exhaustedAttackTimeToHit;
+
     }
 }

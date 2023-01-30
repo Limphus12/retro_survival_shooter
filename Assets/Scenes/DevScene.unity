@@ -3253,7 +3253,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993654156743765309}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.15, y: -0.25, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3284,14 +3284,19 @@ MonoBehaviour:
   meleeData: {fileID: 11400000, guid: b6a0f23ddc5752243a4c496db5ad0c18, type: 2}
   attackRange: 0
   lightAttackTimeToHit: 0
+  lightAttackStaminaCost: 0
   heavyAttackRate: 0
   heavyAttackDamage: 0
   chargeUpTime: 0
   heavyAttackTimeToHit: 0
+  heavyAttackStaminaCost: 0
   exhaustedAttackRate: 0
   exhaustedAttackDamage: 0
   exhaustedAttackTimeToHit: 0
+  playerStats: {fileID: 0}
+  meleeSound: {fileID: 1993654156743765313}
   weaponSway: {fileID: 1993654156743765310}
+  meleeAnimation: {fileID: 1993654156743765312}
 --- !u!1 &1993654156743765309
 GameObject:
   m_ObjectHideFlags: 0
@@ -3302,7 +3307,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1993654156743765306}
   - component: {fileID: 1993654156743765307}
+  - component: {fileID: 1993654156743765313}
   - component: {fileID: 1993654156743765310}
+  - component: {fileID: 1993654156743765312}
+  - component: {fileID: 1993654156743765311}
   m_Layer: 0
   m_Name: Baseball Bat
   m_TagString: Untagged
@@ -3330,7 +3338,7 @@ MonoBehaviour:
   defaultTiltSmooth: 8
   defaultTiltAmount: 2
   defaultTiltMaximum: 2
-  aimingPosition: {x: -0.25, y: -0.25, z: 0.25}
+  aimingPosition: {x: -0.3, y: -0.25, z: 0.25}
   aimingRotation: {x: 0, y: 0, z: 0.50000006, w: -0.8660254}
   aimingSwaySmooth: 8
   aimingSwayAmount: 0
@@ -3338,6 +3346,61 @@ MonoBehaviour:
   aimingTiltSmooth: 8
   aimingTiltAmount: 0.5
   aimingTiltMaximum: 1
+--- !u!95 &1993654156743765311
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993654156743765309}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 666c4505a51c955499a1b3e28b6d0194, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1993654156743765312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993654156743765309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac963fb7e8e36b4299d55f2b201d5f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1993654156743765311}
+--- !u!114 &1993654156743765313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993654156743765309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3444cfab06f064244be7b2947ea400e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemSoundData: {fileID: 0}
+  equipClip: {fileID: 0}
+  audioMixerGroup: {fileID: 0}
+  meleeSoundData: {fileID: 11400000, guid: 7c80f9a3f76ed5a469f8e3065fc45d7e, type: 2}
+  lightAttackClip: {fileID: 0}
+  heavyAttackClip: {fileID: 0}
+  exhaustedAttackClip: {fileID: 0}
+  lightAttackHitClip: {fileID: 0}
+  heavyAttackHitClip: {fileID: 0}
+  exhaustedAttackHitClip: {fileID: 0}
+  blockHitClip: {fileID: 0}
 --- !u!114 &1993654157511044276
 MonoBehaviour:
   m_ObjectHideFlags: 0

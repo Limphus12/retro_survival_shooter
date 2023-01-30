@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12a92818164f2334eb3e9765eaf4790e, type: 3}
+  m_Name: MeleeSoundData001
+  m_EditorClassIdentifier: 
+  equipClip: {fileID: 8300000, guid: 5d965a7520c053a41bcfb99d47c3682f, type: 3}
+  audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
+  lightAttackClip: {fileID: 8300000, guid: 77fbff314978af74dbfa204cb7d9c1c5, type: 3}
+  heavyAttackClip: {fileID: 8300000, guid: 77fbff314978af74dbfa204cb7d9c1c5, type: 3}
+  exhaustedAttackClip: {fileID: 8300000, guid: 77fbff314978af74dbfa204cb7d9c1c5, type: 3}
+  lightAttackHitClip: {fileID: 8300000, guid: 5c2171cec3006974b98990634dbc7891, type: 3}
+  heavyAttackHitClip: {fileID: 8300000, guid: 5c2171cec3006974b98990634dbc7891, type: 3}
+  exhaustedAttackHitClip: {fileID: 8300000, guid: 5c2171cec3006974b98990634dbc7891, type: 3}
+  blockHitClip: {fileID: 8300000, guid: b5559104480e722468d051dc18d25c37, type: 3}

@@ -19,10 +19,12 @@ MonoBehaviour:
   attackRate: 1
   attackRange: 2
   lightAttackTimeToHit: 0.5
-  heavyAttackRate: 0.5
+  lightAttackStaminaCost: 10
+  heavyAttackRate: 0.66
   heavyAttackDamage: 100
-  chargeUpTime: 2
-  heavyAttackTimeToHit: 0.5
-  exhaustedAttackRate: 0.5
+  chargeUpTime: 1
+  heavyAttackTimeToHit: 0.33
+  heavyAttackStaminaCost: 30
+  exhaustedAttackRate: 0.33
   exhaustedAttackDamage: 10
-  exhaustedAttackTimeToHit: 1
+  exhaustedAttackTimeToHit: 1.5

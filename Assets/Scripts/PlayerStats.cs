@@ -319,6 +319,13 @@ namespace com.limphus.retro_survival_shooter
             CancelInvoke(nameof(StaminaDepletionTick));
         }
 
+        //a method to reset the stamina replenish tick
+        public void ResetStaminaReplenishTick()
+        {
+            CancelStaminaReplenishTick();
+            StaminaReplenishTick();
+        }
+
         //damage ticks - when hunger and thirst are depleted
         private void HungerDepletedTick()
         {

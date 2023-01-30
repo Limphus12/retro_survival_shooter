@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 
 namespace com.limphus.retro_survival_shooter
 {
-    [CreateAssetMenu(fileName = "ItemSoundData", menuName = "Sound/Item")]
+    [CreateAssetMenu(fileName = "ItemSoundData", menuName = "Sounds/Item")]
     public class ItemSoundData : ScriptableObject
     {
         [Header("Attributes - Item")]

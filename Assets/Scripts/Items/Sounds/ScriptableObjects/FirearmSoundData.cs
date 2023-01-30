@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    [CreateAssetMenu(fileName = "FirearmSoundData", menuName = "Sound/Firearm")]
+    [CreateAssetMenu(fileName = "FirearmSoundData", menuName = "Sounds/Firearm")]
     public class FirearmSoundData : ItemSoundData
     {
         [Header("Attributes - Firearm")]
