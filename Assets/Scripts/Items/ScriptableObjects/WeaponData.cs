@@ -11,6 +11,6 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Attributes - Weapon")]
         public int damage;
-        public float rateOfFire;
+        public float attackRate;
     }
 }

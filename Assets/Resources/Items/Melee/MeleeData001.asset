@@ -12,10 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e47961c2d3fa445af0fc4c9a4d6a44, type: 3}
   m_Name: MeleeData001
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  prefab: {fileID: 0}
   itemName: Baseball Bat
   itemWeight: 2.4
-  damage: 100
-  rateOfFire: 0.5
-  meleeRange: 1.5
-  timeToHit: 2
+  damage: 50
+  attackRate: 1
+  attackRange: 2
+  lightAttackTimeToHit: 0.5
+  heavyAttackRate: 0.5
+  heavyAttackDamage: 100
+  chargeUpTime: 2
+  heavyAttackTimeToHit: 0.5
+  exhaustedAttackRate: 0.5
+  exhaustedAttackDamage: 10
+  exhaustedAttackTimeToHit: 1

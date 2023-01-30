@@ -13,18 +13,18 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] protected int damage;
-        [SerializeField] protected float rateOfFire;
+        [SerializeField] protected float attackRate;
 
         [Space]
         [SerializeField] protected Transform playerCamera;
 
-        protected bool isShooting, leftMouseInput, rightMouseInput;
+        protected bool isAttacking, leftMouseInput, rightMouseInput;
 
         protected abstract void Inputs();
-        protected abstract void CheckShoot();
-        protected abstract void StartShoot();
-        protected abstract void Shoot();
-        protected abstract void EndShoot();
+        protected abstract void CheckAttack();
+        protected abstract void StartAttack();
+        protected abstract void Attack();
+        protected abstract void EndAttack();
         protected abstract void Hit(Transform point);
     }
 }

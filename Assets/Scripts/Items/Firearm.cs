@@ -26,12 +26,6 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private int magazineSize;
         [SerializeField] private float reloadTime;
 
-        [SerializeField] private WeaponRecoil cameraRecoil;
-        [SerializeField] private WeaponRecoil weaponRecoil;
-
-        [Space]
-        [SerializeField] private FirearmSway firearmSway;
-
         [Space]
         [SerializeField] private FirearmFireType fireType;
         [SerializeField] private FirearmSize size;
@@ -45,7 +39,15 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] private FirearmSound firearmSound;
+
+        [Space]
+        [SerializeField] private FirearmSway firearmSway;
         [SerializeField] private FirearmAnimation firearmAnimation;
+
+        [Space]
+        [SerializeField] private WeaponRecoil cameraRecoil;
+        [SerializeField] private WeaponRecoil weaponRecoil;
+
 
         private bool isAiming, isReloading, reloadInput, isCocked, isCocking;
         private int currentAmmo;
@@ -63,7 +65,7 @@ namespace com.limphus.retro_survival_shooter
             itemWeight = firearmData.itemWeight;
 
             damage = firearmData.damage;
-            rateOfFire = firearmData.rateOfFire;
+            attackRate = firearmData.attackRate;
 
             magazineSize = firearmData.magazineSize;
             reloadTime = firearmData.reloadTime;
@@ -102,13 +104,13 @@ namespace com.limphus.retro_survival_shooter
             if (Input.GetKeyDown(KeyCode.R)) reloadInput = true;
             else if (Input.GetKeyUp(KeyCode.R)) reloadInput = false;
 
-            CheckShoot();
+            CheckAttack();
         }
 
-        protected override void CheckShoot()
+        protected override void CheckAttack()
         {
             //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
-            if (reloadInput && !isReloading && !isShooting && (CheckReload() == 0 || CheckReload() == 1))
+            if (reloadInput && !isReloading && !isAttacking && (CheckReload() == 0 || CheckReload() == 1))
             {
                 //TODO: need to add extra functionality i.e. single bullet at-a-time reloads
 
@@ -120,7 +122,7 @@ namespace com.limphus.retro_survival_shooter
             else if (isReloading) return;
 
             //if were shooting already, dont do anything
-            if (isShooting) return;
+            if (isAttacking) return;
 
             //check for r-mouse input and update aiming
             Aim(rightMouseInput);
@@ -147,7 +149,7 @@ namespace com.limphus.retro_survival_shooter
                             return;
                         }
 
-                        StartShoot();
+                        StartAttack();
                     }
 
                     break;
@@ -173,7 +175,7 @@ namespace com.limphus.retro_survival_shooter
                             return;
                         }
 
-                        StartShoot();
+                        StartAttack();
                     }
 
                     break;
@@ -214,7 +216,7 @@ namespace com.limphus.retro_survival_shooter
                     {
                         isCocked = false;
 
-                        StartShoot();
+                        StartAttack();
                     }
                     
                     break;
@@ -222,22 +224,22 @@ namespace com.limphus.retro_survival_shooter
         }
 
         //starts shooting
-        protected override void StartShoot()
+        protected override void StartAttack()
         {
-            isShooting = true;
+            isAttacking = true;
 
             //shoot immedietly, as this is a gun
-            Shoot();
+            Attack();
 
             //if we have the firearm sound reference, call the play firing sound
             if (firearmSound) firearmSound.PlayFiringSound();
 
             //invoke end shoot after our rate of fire
-            Invoke(nameof(EndShoot), 1 / rateOfFire);
+            Invoke(nameof(EndAttack), 1 / attackRate);
         }
 
         //shoots!
-        protected override void Shoot()
+        protected override void Attack()
         {
             //call the hit function, passing through the player camera
             Hit(playerCamera);
@@ -254,7 +256,7 @@ namespace com.limphus.retro_survival_shooter
         }
 
         //ends shooting
-        protected override void EndShoot() => isShooting = false;
+        protected override void EndAttack() => isAttacking = false;
 
         protected override void Hit(Transform point)
         {
@@ -303,28 +305,28 @@ namespace com.limphus.retro_survival_shooter
                 }
 
                 //if we're aiming the gun and we're not shooting, play this anim
-                else if (isAiming && !isShooting) 
+                else if (isAiming && !isAttacking) 
                 {
                     firearmAnimation.PlayFirearmAim();
                     return;
                 }
 
                 //if we're aiming the gun and we're shooting, play this anim
-                else if (isAiming && isShooting) 
+                else if (isAiming && isAttacking) 
                 {
                     firearmAnimation.PlayFirearmAimFire();
                     return;
                 }
 
                 //if we're shooting, play this anim
-                else if (isShooting) 
+                else if (isAttacking) 
                 {
                     firearmAnimation.PlayFirearmFire();
                     return;
                 }
 
                 //if we're not shooting, play this anim
-                else if (!isShooting) 
+                else if (!isAttacking) 
                 {
                     firearmAnimation.PlayFirearmIdle();
                     return;

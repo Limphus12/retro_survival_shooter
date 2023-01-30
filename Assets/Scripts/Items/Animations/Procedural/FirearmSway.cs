@@ -32,19 +32,6 @@ namespace com.limphus.retro_survival_shooter
 
         protected bool isReloading, isCocking;
 
-        private Quaternion initialRotation;
-
-        private void Awake()
-        {
-            initialRotation = transform.localRotation;
-        }
-
-        private void Update()
-        {
-            CheckSway();
-            CheckTilt();
-        }
-
         public void Reload(bool b) => isReloading = b;
 
         public void Cock(bool b) => isCocking = b;

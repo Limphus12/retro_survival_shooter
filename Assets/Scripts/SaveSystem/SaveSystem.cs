@@ -79,7 +79,7 @@ namespace com.limphus.retro_survival_shooter
                 //debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "...";
 
 
-                debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "..." + "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.rateOfFire + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
+                debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.attackRate + "..." + "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.attackRate + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
 
                 //debugtext.text = "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.rateOfFire + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
 

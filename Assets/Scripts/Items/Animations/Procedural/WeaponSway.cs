@@ -21,19 +21,6 @@ namespace com.limphus.retro_survival_shooter
 
         protected bool isAiming;
 
-        private Quaternion initialRotation;
-
-        private void Awake()
-        {
-            initialRotation = transform.localRotation;
-        }
-
-        private void Update()
-        {
-            CheckSway();
-            CheckTilt();
-        }
-
         public void Aim(bool b) => isAiming = b;
 
         protected override void CheckSway()

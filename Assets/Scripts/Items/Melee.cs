@@ -10,15 +10,32 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private MeleeData meleeData;
 
         [Space]
-        [SerializeField] private float meleeRange;
+        [SerializeField] private float attackRange;
 
-        [Tooltip("Assign a value less than the rate of fire.")]
-        [SerializeField] private float timeToHit; //I'd recommend half of the ROF because swinging should take the full ROF, whilst hitting should be at the apex of teh swing; halfway
+        [Space]
+        [SerializeField] private float lightAttackTimeToHit; //pair this with the apex of the swing animation
+
+        [Space]
+        public float heavyAttackRate;
+        public float heavyAttackDamage;
+        public float chargeUpTime;
+        public float heavyAttackTimeToHit;
+
+        [Space]
+        public float exhaustedAttackRate;
+        public float exhaustedAttackDamage;
+        public float exhaustedAttackTimeToHit;
+
+        //[Space]
+        //[SerializeField] private MeleeSound meleeSound;
 
         [Space]
         [SerializeField] private WeaponSway weaponSway;
+        //[SerializeField] private MeleeAnimation meleeAnimation;
 
-        private bool isBlocking;
+        private bool isBlocking, isCharging, isCharged;
+
+        private bool previousLeftMouseInput;
 
         //initialization
         protected override void Init()
@@ -33,66 +50,142 @@ namespace com.limphus.retro_survival_shooter
             itemWeight = meleeData.itemWeight;
 
             damage = meleeData.damage;
-            rateOfFire = meleeData.rateOfFire;
+            attackRate = meleeData.attackRate;
 
-            meleeRange = meleeData.meleeRange;
-            timeToHit = meleeData.timeToHit;
+            attackRange = meleeData.attackRange;
+            lightAttackTimeToHit = meleeData.lightAttackTimeToHit;
+
+            heavyAttackRate = meleeData.heavyAttackRate;
+            heavyAttackDamage = meleeData.heavyAttackDamage;
+            chargeUpTime = meleeData.chargeUpTime;
+            heavyAttackTimeToHit = meleeData.heavyAttackTimeToHit;
+
+            exhaustedAttackRate = meleeData.exhaustedAttackRate;
+            exhaustedAttackDamage = meleeData.exhaustedAttackDamage;
+            exhaustedAttackTimeToHit = meleeData.exhaustedAttackTimeToHit;
         }
 
         private void Update() => Inputs();
 
         protected override void Inputs()
         {
+            previousLeftMouseInput = leftMouseInput;
+
             if (Input.GetMouseButtonDown(0)) leftMouseInput = true;
             else if (Input.GetMouseButtonUp(0)) leftMouseInput = false;
 
             if (Input.GetMouseButtonDown(1)) rightMouseInput = true;
             else if (Input.GetMouseButtonUp(1)) rightMouseInput = false;
 
-            CheckShoot();
+            CheckAttack();
         }
 
-        protected override void CheckShoot()
+        protected override void CheckAttack()
         {
-            //if were swinging already, dont do anything
-            if (isShooting) return;
+            //if were attacking already, dont do anything
+            if (isAttacking) return;
 
-            //if were not swinging and we press the l-mouse button, start swinging
-            if (leftMouseInput) StartShoot();
+            //if were not attacking and we press the l-mouse button
+            if (leftMouseInput)
+            {
+                //check for stamina
 
-            //else if were not shooting, determine if we're blocking
-            else Block(rightMouseInput);
+                //So in code, ima have to check if we have mouse input, either start a timer or invoke some methods, then if we let go of the mouse before the specified time,
+                //cancel the timer/invoke and do a light attack. However, if we go beyond the timer or we don't cancel the method invoke (because we held down the mouse),
+                //then do a heavy attack. All before this, however, we need to check if we even have any stamina,
+                //because if we don't, then we should perform an exhausted attack. Yeah, that sounds good…
+
+                //if we're already charged up, just return out of this, since we can only attack when we release the mouse button
+                if (isCharged) return;
+
+                //if we are invoking the charge function
+                if (IsInvoking(nameof(Charge)))
+                {
+                    //if we're not charged or not charging (which should be an impossibility
+                    if (!isCharged && !isCharging)
+                    {
+                        Debug.LogWarning("calling the Charge function, even though we are not charged or charging?! this may be a bug");
+                    }
+
+                    //else just return, since we should be charging
+                    else return;
+                }
+
+                //else if we're not invoking the charge, and we have not already charged
+                else if (!IsInvoking(nameof(Charge)) && !isCharged && !isCharging)
+                {
+                    StartCharge(); return;
+                }
+            }
+
+            //if we release the left mouse button
+            else if (!leftMouseInput)
+            {
+                //if we we're have not been holding down the mouse
+                if (previousLeftMouseInput == leftMouseInput)
+                {
+                    //determine if we're blocking using the right mouse input
+                    Block(rightMouseInput);
+                }
+
+                //if we were holding down the mouse in teh last frame
+                else if (previousLeftMouseInput != leftMouseInput)
+                {
+                    //if we have charged
+                    if (isCharged)
+                    {
+                        //do a heavy attack!
+                        Debug.Log("Heavy Attack!");
+
+                        ResetCharge();
+                    }
+
+                    //if we have not charged
+                    else if (!isCharged)
+                    {
+                        //if we are charging
+                        if (isCharging)
+                        {
+                            //cancel the charge
+                            CancelInvoke(nameof(Charge));
+                        }
+
+                        Debug.Log("light attack!");
+
+                        //do the light attack
+                        StartAttack();
+                    }
+                }
+            }
         }
 
-        //starts shooting
-        protected override void StartShoot()
+        //starts attacking
+        protected override void StartAttack()
         {
-            isShooting = true;
+            isAttacking = true;
 
-            //invoking shoot after a delay to sim the swinging of a melee weapon
-            Invoke(nameof(Shoot), 1 / timeToHit);
+            //invoking attack after a delay to simulate the swinging of a melee weapon
+            Invoke(nameof(Attack), lightAttackTimeToHit);
 
-            //invoke end shoot after our rate of fire
-            Invoke(nameof(EndShoot), 1 / rateOfFire);
+            //invoke end attack after our rate of fire
+            Invoke(nameof(EndAttack), 1 / attackRate);
         }
 
         //shoots!
-        protected override void Shoot()
+        protected override void Attack()
         {
             //call the hit function, passing through the player camera
             Hit(playerCamera);
         }
 
         //ends shooting
-        protected override void EndShoot() => isShooting = false;
+        protected override void EndAttack() => isAttacking = false;
 
         protected override void Hit(Transform point)
         {
             //simple raycasting - prolly use this only for stabby knives in teh future?
-            float range = 1;
-
             RaycastHit hit;
-            if (Physics.Raycast(point.position, point.forward, out hit, range))
+            if (Physics.Raycast(point.position, point.forward, out hit, attackRange))
             {
                 IDamageable damageable = hit.transform.GetComponent<IDamageable>();
 
@@ -110,6 +203,27 @@ namespace com.limphus.retro_survival_shooter
 
                 //if (damageable != null) damageable.Damage(damage);
             }
+        }
+
+        //we're gonna call this after ending a heavy attack!
+        private void ResetCharge()
+        {
+            isCharged = false;
+        }
+
+        private void StartCharge()
+        {
+            isCharging = true; Invoke(nameof(Charge), chargeUpTime);
+        }
+
+        private void Charge()
+        {
+            isCharged = true; EndCharge();
+        }
+
+        private void EndCharge()
+        {
+            isCharging = false;
         }
 
         private void Block(bool b)

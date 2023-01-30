@@ -10,7 +10,17 @@ namespace com.limphus.retro_survival_shooter
     public class MeleeData : WeaponData
     {
         [Header("Attributes - Melee")]
-        public float meleeRange;
-        public float timeToHit;
+        public float attackRange;
+
+        [Space]
+        public float lightAttackTimeToHit;
+
+        [Space]
+        public float heavyAttackRate;
+        public float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
+
+        [Space]
+        public float exhaustedAttackRate;
+        public float exhaustedAttackDamage, exhaustedAttackTimeToHit;
     }
 }

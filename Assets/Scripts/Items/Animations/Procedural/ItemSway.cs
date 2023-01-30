@@ -18,21 +18,28 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected float defaultTiltSmooth = 8.0f;
         [SerializeField] protected float defaultTiltAmount = 2.0f, defaultTiltMaximum = 2.0f;
 
-        private Quaternion initialRotation;
+        protected Quaternion initialRotation;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             initialRotation = transform.localRotation;
         }
 
-        private void Update() 
+        protected virtual void Update() 
         {
             CheckSway();
             CheckTilt();
         }
 
-        protected virtual void CheckSway() => Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
-        protected virtual void CheckTilt() => Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
+        protected virtual void CheckSway()
+        {
+            Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
+        }
+
+        protected virtual void CheckTilt()
+        {
+            Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
+        }
 
         protected void Sway(float amount, float maximum, float smooth, Vector3 position)
         {
@@ -71,9 +78,7 @@ namespace com.limphus.retro_survival_shooter
 
         private Vector2 Inputs()
         {
-            Vector2 inputs = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
-            return inputs;
+            return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         }
     }
 }

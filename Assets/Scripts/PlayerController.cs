@@ -177,7 +177,7 @@ namespace com.limphus.retro_survival_shooter
 
         #region Movement
 
-        public float curSpeedX, curSpeedZ;
+        private float curSpeedX, curSpeedZ;
 
         //Calculates Player Movement
         void CalculateMovement()
