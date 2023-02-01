@@ -42,9 +42,6 @@ namespace com.limphus.retro_survival_shooter
             blockHitClip = meleeSoundData.blockHitClip;
         }
 
-        protected override void Start() => PlayEquipSound();
-
-        public void PlayEquipSound() => PlaySound(equipClip);
         public void PlayLightAttackSound() => PlaySound(lightAttackClip);
         public void PlayHeavyAttackSound() => PlaySound(heavyAttackClip);
         public void PlayExhaustedAttackSound() => PlaySound(exhaustedAttackClip);

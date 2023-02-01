@@ -35,9 +35,6 @@ namespace com.limphus.retro_survival_shooter
             cockingClip = firearmSoundData.cockingClip;
         }
 
-        protected override void Start() => PlayEquipSound();
-
-        public void PlayEquipSound() => PlaySound(equipClip);
         public void PlayFiringSound() => PlaySound(firingClip);
         public void PlayReloadingSound() => PlaySound(reloadingClip);
         public void PlayDryFiringSound() => PlaySound(dryFiringClip);

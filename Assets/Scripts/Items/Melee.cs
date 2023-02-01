@@ -35,9 +35,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private WeaponSway weaponSway;
         [SerializeField] private MeleeAnimation meleeAnimation;
 
-        private bool isBlocking, isCharging, isCharged;
-
-        private bool previousLeftMouseInput;
+        private bool isBlocking, isCharging, isCharged, previousLeftMouseInput;
 
         //initialization
         protected override void Init()
@@ -69,6 +67,23 @@ namespace com.limphus.retro_survival_shooter
             exhaustedAttackTimeToHit = meleeData.exhaustedAttackTimeToHit;
 
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        }
+
+        public override void ToggleEquip(bool b)
+        {
+            isEquipped = b;
+
+            //if we have equipped the weapon, play the equip sound.
+            if (isEquipped && meleeSound)
+            {
+                meleeSound.PlayEquipSound();
+            }
+        }
+
+        private void Start()
+        {
+            //if this weapon is not equipped, then return;
+            if (!isEquipped) return;
         }
 
         private void Update()

@@ -22,7 +22,7 @@ namespace com.limphus.retro_survival_shooter
         void Start()
         {
             //grabs the currently equipped item
-            currentHandItem = playerHand.transform.GetChild(0).gameObject;
+            SetHandItem(playerHand.transform.GetChild(0).gameObject);
 
             //grabs all the items in the backpack
             for (int i = 0; i < playerInventory.transform.childCount; i++)
@@ -31,7 +31,7 @@ namespace com.limphus.retro_survival_shooter
 
                 if (item != null)
                 {
-                    inventoryItems.Add(item);
+                    AddInventoryItem(item);
 
                     item.transform.position = Vector3.zero;
                 }
@@ -147,6 +147,9 @@ namespace com.limphus.retro_survival_shooter
         public void AddInventoryItem(GameObject item)
         {
             inventoryItems.Add(item);
+
+            //grab the item component and toggle the isEquipped bool
+            item.GetComponent<Item>().ToggleEquip(false);
         }
 
         //a method to remove an item
@@ -158,6 +161,9 @@ namespace com.limphus.retro_survival_shooter
         public void SetHandItem(GameObject item)
         {
             currentHandItem = item;
+
+            //grab the item component and toggle the isEquipped bool
+            currentHandItem.GetComponent<Item>().ToggleEquip(true);
         }
 
         //a method to move an item

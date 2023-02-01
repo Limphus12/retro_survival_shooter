@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: SKS-49
   itemWeight: 3.2
   damage: 20
-  rateOfFire: 1.2
+  attackRate: 1.2
   magazineSize: 6
   reloadTime: 1.5
   fireType: 3

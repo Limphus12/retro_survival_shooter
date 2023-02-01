@@ -18,7 +18,37 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected string itemName;
         [SerializeField] protected double itemWeight;
 
+        [Space]
+        [SerializeField] protected ItemSound itemSound;
+
+        [Space]
+        [SerializeField] protected ItemSway itemSway;
+        [SerializeField] protected ItemAnimation itemAnimation;
+
         private void Awake() => Init();
+
+        protected bool isEquipped;
+
+        public bool IsEquipped()
+        {
+            return isEquipped;
+        }
+
+        public virtual void ToggleEquip(bool b)
+        {
+            isEquipped = b;
+
+            if (isEquipped && itemSound)
+            {
+                itemSound.PlayEquipSound();
+            }
+        }
+
+        private void Start()
+        {
+            //if this weapon is not equipped, then return;
+            if (!isEquipped) return;
+        }
 
         protected virtual void Init()
         {

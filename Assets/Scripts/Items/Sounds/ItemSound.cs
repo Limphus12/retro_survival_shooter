@@ -30,7 +30,7 @@ namespace com.limphus.retro_survival_shooter
             audioMixerGroup = itemSoundData.audioMixerGroup;
         }
 
-        protected virtual void Start() => PlaySound(equipClip);
+        public void PlayEquipSound() => PlaySound(equipClip);
 
         public virtual ItemSoundData GetItemSoundData()
         {

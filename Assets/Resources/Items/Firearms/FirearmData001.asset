@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc4c20617b5fac4aa3e96760d225ef9, type: 3}
   m_Name: FirearmData001
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  prefab: {fileID: 0}
   itemName: Revolver
   itemWeight: 1.6
   damage: 20
-  rateOfFire: 1.2
+  attackRate: 1
   magazineSize: 6
-  reloadTime: 3
-  fireType: 0
+  reloadTime: 6
+  fireType: 3
   size: 0
   shotType: 0
   reloadType: 0
-  cockTime: 1
+  cockTime: 1.3

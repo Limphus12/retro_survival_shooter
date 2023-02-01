@@ -48,7 +48,6 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private WeaponRecoil cameraRecoil;
         [SerializeField] private WeaponRecoil weaponRecoil;
 
-
         private bool isAiming, isReloading, reloadInput, isCocked, isCocking;
         private int currentAmmo;
 
@@ -79,17 +78,28 @@ namespace com.limphus.retro_survival_shooter
             cockTime = firearmData.cockTime;
         }
 
+        public override void ToggleEquip(bool b)
+        {
+            isEquipped = b;
+
+            //if we have equipped the weapon, play the equip sound.
+            if (isEquipped && firearmSound)
+            {
+                firearmSound.PlayEquipSound();
+            }
+        }
+
         private void Start()
         {
-            //need to check if we we're doing things i.e. reloading, cocking etc.
-
-            if (isReloading) StartReload();
-
-            else if (isCocking || !isCocked) StartCock();
+            //if this weapon is not equipped, then return;
+            if (!isEquipped) return;
         }
 
         private void Update()
         {
+            //if this weapon is not equipped, then return;
+            if (!isEquipped) return;
+
             Inputs(); Animation();
         }
 

@@ -172,6 +172,9 @@ MonoBehaviour:
   model: {fileID: 0}
   itemName: 
   itemWeight: 0
+  itemSound: {fileID: 0}
+  itemSway: {fileID: 0}
+  itemAnimation: {fileID: 0}
   consumeAmount: 0
   consumeTime: 0
   sustenanceData: {fileID: 11400000, guid: a50acf0429c95164dbc75dc255d3c599, type: 2}
@@ -231,7 +234,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1993654156743765306}
+  - {fileID: 7903484294919853396}
   m_Father: {fileID: 3675488085705703949}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3253,13 +3256,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993654156743765309}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: -0.25, z: 0.2}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1499939, y: -0.5, z: 0.4500122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1993654158457784562}
-  m_Father: {fileID: 76233179}
-  m_RootOrder: 0
+  m_Father: {fileID: 2679323340789131563}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1993654156743765307
 MonoBehaviour:
@@ -3277,6 +3280,9 @@ MonoBehaviour:
   model: {fileID: 0}
   itemName: 
   itemWeight: 0
+  itemSound: {fileID: 0}
+  itemSway: {fileID: 0}
+  itemAnimation: {fileID: 0}
   weaponData: {fileID: 0}
   damage: 0
   attackRate: 0
@@ -3317,7 +3323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1993654156743765310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3417,6 +3423,9 @@ MonoBehaviour:
   model: {fileID: 0}
   itemName: 
   itemWeight: 0
+  itemSound: {fileID: 0}
+  itemSway: {fileID: 0}
+  itemAnimation: {fileID: 0}
   weaponData: {fileID: 0}
   damage: 0
   attackRate: 0
@@ -3424,7 +3433,7 @@ MonoBehaviour:
   firearmData: {fileID: 11400000, guid: bdbaad293f52bb04a986d6ec2f6b2274, type: 2}
   magazineSize: 0
   reloadTime: 0
-  fireType: 0
+  fireType: 3
   size: 0
   shotType: 0
   reloadType: 0
@@ -3862,7 +3871,7 @@ Transform:
   m_Children:
   - {fileID: 4973596881886235456}
   - {fileID: 1678007}
-  - {fileID: 7903484294919853396}
+  - {fileID: 1993654156743765306}
   m_Father: {fileID: 1688866701}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5425,6 +5434,9 @@ MonoBehaviour:
   model: {fileID: 0}
   itemName: SKS-49
   itemWeight: 0
+  itemSound: {fileID: 0}
+  itemSway: {fileID: 0}
+  itemAnimation: {fileID: 0}
   weaponData: {fileID: 0}
   damage: 0
   attackRate: 0
@@ -5450,12 +5462,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7903484294919853397}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1000061, y: -0.35000038, z: 0.3999939}
+  m_LocalPosition: {x: 0.1000061, y: -0.10000038, z: 0.1499939}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8899670892687232796}
-  m_Father: {fileID: 2679323340789131563}
-  m_RootOrder: 2
+  m_Father: {fileID: 76233179}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7903484294919853397
 GameObject:
@@ -5477,7 +5489,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!198 &8198603269471133620
 ParticleSystem:
   m_ObjectHideFlags: 0
