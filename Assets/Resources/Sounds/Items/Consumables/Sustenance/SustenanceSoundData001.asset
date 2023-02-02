@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce0bba563ae2a2545bdf67b296cda90f, type: 3}
+  m_Name: SustenanceSoundData001
+  m_EditorClassIdentifier: 
+  equipClip: {fileID: 8300000, guid: 5d965a7520c053a41bcfb99d47c3682f, type: 3}
+  audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
+  consumeClip: {fileID: 8300000, guid: cc36698f3558b304e9ee37feb2d60eea, type: 3}

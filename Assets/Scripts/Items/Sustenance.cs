@@ -18,6 +18,9 @@ namespace com.limphus.retro_survival_shooter
         [Tooltip("The total amount of sustenace that can be consumed from this")] [SerializeField] private int sustenanceAmount;
 
         [Space]
+        [SerializeField] private SustenanceSound sustenanceSound;
+
+        [Space]
         [SerializeField] private WeaponSway weaponSway;
         [SerializeField] private PlayerStats playerStats;
 
@@ -41,13 +44,24 @@ namespace com.limphus.retro_survival_shooter
             sustenanceType = sustenanceData.sustenanceType;
         }
 
+        public override void ToggleEquip(bool b)
+        {
+            isEquipped = b;
+
+            //if we have equipped the sustenance, play the equip sound.
+            if (isEquipped && sustenanceSound)
+            {
+                sustenanceSound.PlayEquipSound();
+            }
+        }
+
         // Start is called before the first frame update
         void Start()
         {
             //if we haven't initialized the consume remaining, do it here.
             if (remainingConsumeAmount == -1) remainingConsumeAmount = consumeAmount;
 
-            //if we haven't initialized the hunger remaining, do it here.
+            //if we haven't initialized the sustenance remaining, do it here.
             if (remainingSustenanceAmount == -1) remainingSustenanceAmount = sustenanceAmount;
         }
 
@@ -57,7 +71,7 @@ namespace com.limphus.retro_survival_shooter
             //if we haven't initialized the consume remaining, do it here.
             if (remainingConsumeAmount == -1) remainingConsumeAmount = consumeAmount;
 
-            //if we haven't initialized the hunger remaining, do it here.
+            //if we haven't initialized the sustenance remaining, do it here.
             if (remainingSustenanceAmount == -1) remainingSustenanceAmount = sustenanceAmount;
         }
 
@@ -123,11 +137,11 @@ namespace com.limphus.retro_survival_shooter
 
         protected override void Consume()
         {
-            //check for the player stats script and increase the hunger amount
+            //check for the player stats script and increase the hunger or thirst amount
             if (playerStats)
             {
-                //do some maths to figure out how much of the hunger amount is used
-                //hunger usage = hunger amount / consume amount
+                //do some maths to figure out how much of the sustenance amount is used
+                //sustenance usage = sustenance amount / consume amount
                 //gotta round it to an int since we track hunger as an int
 
                 //if we're not on the final consume, do the maths
@@ -153,7 +167,7 @@ namespace com.limphus.retro_survival_shooter
                             break;
                     }
 
-                    //decreases our remaining hunger amount
+                    //decreases our remaining sustenance amount
                     remainingSustenanceAmount -= i;
                 }
 
@@ -177,13 +191,19 @@ namespace com.limphus.retro_survival_shooter
                             break;
                     }
 
-                    //decreases our remaining hunger amount
+                    //decreases our remaining sustenance amount
                     remainingSustenanceAmount = 0;
                 }
             }
 
             //decrease the remaining consume amount
             remainingConsumeAmount--;
+
+            //if we have the sustenance sound reference, play the consume sound
+            if (sustenanceSound)
+            {
+                sustenanceSound.PlayConsumeSound();
+            }
 
             //call the end consume menthod
             EndConsume();
