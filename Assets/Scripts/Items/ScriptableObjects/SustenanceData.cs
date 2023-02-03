@@ -10,7 +10,7 @@ namespace com.limphus.retro_survival_shooter
     public class SustenanceData : ConsumableData
     {
         [Header("Attributes - Sustenance")]
-        public SustenanceType sustenanceType;
+        public ConsumableType sustenanceType;
 
         [Tooltip("The total amount of sustenace that can be consumed from this")] public int sustenanceAmount;
     }

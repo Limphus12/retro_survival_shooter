@@ -5,7 +5,7 @@ using UnityEngine;
 namespace com.limphus.retro_survival_shooter
 {
     [System.Serializable]
-    public enum SustenanceType { FOOD, DRINK }
+    public enum ConsumableType { FOOD, DRINK, MEDICINE, DRUG }
 
     public class Sustenance : Consumable
     {
@@ -13,7 +13,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private SustenanceData sustenanceData;
 
         [Space]
-        [SerializeField] private SustenanceType sustenanceType;
+        [SerializeField] private ConsumableType sustenanceType;
 
         [Tooltip("The total amount of sustenace that can be consumed from this")] [SerializeField] private int sustenanceAmount;
 
@@ -153,12 +153,12 @@ namespace com.limphus.retro_survival_shooter
                     //switch statement to replenish either hunger or thirst
                     switch (sustenanceType)
                     {
-                        case SustenanceType.FOOD:
+                        case ConsumableType.FOOD:
                             //call the replenish hunger method on our player stats reference
                             playerStats.ReplenishHunger(i);
                             break;
 
-                        case SustenanceType.DRINK:
+                        case ConsumableType.DRINK:
                             //call the replenish thirst method on our player stats reference
                             playerStats.ReplenishThirst(i);
                             break;
@@ -177,12 +177,12 @@ namespace com.limphus.retro_survival_shooter
                     //switch statement to replenish either hunger or thirst
                     switch (sustenanceType)
                     {
-                        case SustenanceType.FOOD:
+                        case ConsumableType.FOOD:
                             //call the replenish hunger method on our player stats reference
                             playerStats.ReplenishHunger(remainingSustenanceAmount);
                             break;
 
-                        case SustenanceType.DRINK:
+                        case ConsumableType.DRINK:
                             //call the replenish thirst method on our player stats reference
                             playerStats.ReplenishThirst(remainingSustenanceAmount);
                             break;

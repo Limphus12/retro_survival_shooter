@@ -408,6 +408,18 @@ namespace com.limphus.retro_survival_shooter
 
         private float previousSpeed, speedI = 0f;
 
+        [Tooltip("Value between 0 and 1; 0 is no speed, 1 is full speed")]
+        [Range(0f, 1f)] private float speedPercentage = 1f;
+
+        public float GetSpeedPercentage()
+        {
+            return speedPercentage;
+        }
+
+        public void SetSpeedPercentage(int i) => speedPercentage = i;
+
+        public void ResetSpeedPercentage() => speedPercentage = 1;
+
         void ChangeSpeed(float speed)
         {
             //if our previous speed is not our current inputed speed, reset speedI to 0
@@ -417,7 +429,8 @@ namespace com.limphus.retro_survival_shooter
                 speedI = 0f;
             }
 
-            currentSpeed = Mathf.Lerp(currentSpeed, speed, (speedI + Time.deltaTime) * speedSmoothRate);
+            //calculate our current speed by lerping between the new speed and current speed, and divided by our speed %
+            currentSpeed = Mathf.Lerp(currentSpeed, speed, (speedI + Time.deltaTime) * speedSmoothRate) / speedPercentage;
         }
 
         #endregion
