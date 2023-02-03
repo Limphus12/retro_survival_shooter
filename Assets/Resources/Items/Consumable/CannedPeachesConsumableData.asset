@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07159347c5c8ccc4c9e0a185512cfa2f, type: 3}
-  m_Name: SustenanceData001
+  m_Script: {fileID: 11500000, guid: 80a1f82a116ad504288d5e2071cd74e6, type: 3}
+  m_Name: CannedPeachesConsumableData
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  prefab: {fileID: 0}
   itemName: Canned Peaches
   itemWeight: 0.8
-  consumeAmount: 4
-  consumeTime: 2
-  sustenanceType: 0
-  sustenanceAmount: 25
+  consumableType: 0
+  useAmount: 4
+  consumableAmount: 5
+  consumeTime: 3

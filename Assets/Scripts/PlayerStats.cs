@@ -88,10 +88,7 @@ namespace com.limphus.retro_survival_shooter
 
         //used to grab our current hunger
         //(maybe replace with events instead?)
-        public int GetCurrentHunger()
-        {
-            return currentHunger;
-        }
+        public int GetCurrentHunger() => currentHunger;
 
         //sets our current hunger
         public void SetCurrentHunger(int amount)
@@ -149,11 +146,8 @@ namespace com.limphus.retro_survival_shooter
 
         //used to grab our current thirst
         //(maybe replace with events instead?)
-        public int GetCurrentThirst()
-        {
-            return currentThirst;
-        }
-
+        public int GetCurrentThirst() => currentThirst;
+        
         //sets our current thirst
         public void SetCurrentThirst(int amount)
         {
@@ -210,10 +204,7 @@ namespace com.limphus.retro_survival_shooter
 
         //used to grab our current stamina
         //(maybe replace with events instead?)
-        public int GetCurrentStamina()
-        {
-            return currentStamina;
-        }
+        public int GetCurrentStamina() => currentStamina;
 
         //sets our current stamina
         public void SetCurrentStamina(int amount)
@@ -271,10 +262,7 @@ namespace com.limphus.retro_survival_shooter
 
         //used to grab our current temperature
         //(maybe replace with events instead?)
-        public Temperature GetCurrentTemperature()
-        {
-            return currentTemperature;
-        }
+        public Temperature GetCurrentTemperature() => currentTemperature;
 
         //sets our current temperature
         public void SetCurrentTemperature(Temperature temp)

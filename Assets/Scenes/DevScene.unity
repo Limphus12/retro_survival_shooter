@@ -176,12 +176,12 @@ MonoBehaviour:
   itemSound: {fileID: 0}
   itemSway: {fileID: 0}
   itemAnimation: {fileID: 0}
-  consumeAmount: 0
+  useAmount: 0
   consumeTime: 0
-  sustenanceData: {fileID: 11400000, guid: a50acf0429c95164dbc75dc255d3c599, type: 2}
-  sustenanceType: 0
-  sustenanceAmount: 0
-  sustenanceSound: {fileID: 1678010}
+  consumableData: {fileID: 0}
+  consumableType: 0
+  consumeableAmount: 0
+  consumableSound: {fileID: 1678010}
   weaponSway: {fileID: 1678009}
   playerStats: {fileID: 8899670893305495580}
 --- !u!114 &1678009
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1678006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86eeec10bfc40d146954b4183d7f4e6d, type: 3}
+  m_Script: {fileID: 11500000, guid: dc99ecdb2e03c174ba65d44507abb15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemSoundData: {fileID: 0}
@@ -1042,7 +1042,6 @@ MonoBehaviour:
   biomeGenerator: {fileID: 2058516405}
   firearmData: {fileID: 0}
   meleeData: {fileID: 0}
-  sustenanceData: {fileID: 0}
   debugtext: {fileID: 8899670892247041906}
 --- !u!1 &619233698
 GameObject:
@@ -4156,7 +4155,6 @@ MonoBehaviour:
   runKey: 304
   crouchKey: 306
   debug: 0
-  canMove: 1
 --- !u!143 &3592288758398078007
 CharacterController:
   m_ObjectHideFlags: 0

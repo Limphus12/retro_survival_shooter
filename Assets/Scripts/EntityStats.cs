@@ -18,10 +18,7 @@ namespace com.limphus.retro_survival_shooter
         //later down the line we should do this max stuff in scriptable objects instead...
         //then just load in the stats from that scriptable object...
 
-        private void Start()
-        {
-            InitVariables();
-        }
+        private void Awake() => InitVariables();
 
         protected virtual void InitVariables()
         {
@@ -32,10 +29,7 @@ namespace com.limphus.retro_survival_shooter
 
         //returns our current health
         //(maybe replace with events instead?)
-        public int GetCurrentHealth()
-        {
-            return currentHealth;
-        }
+        public int GetCurrentHealth() => currentHealth;
 
         //sets our current health
         public void SetCurrentHealth(int amount)

@@ -30,7 +30,7 @@ namespace com.limphus.retro_survival_shooter
         [Header("Test")]
         [SerializeField] private FirearmData firearmData;
         [SerializeField] private MeleeData meleeData;
-        [SerializeField] private SustenanceData sustenanceData;
+        //[SerializeField] private SustenanceData sustenanceData;
 
         [Space]
         public TextMeshProUGUI debugtext;
@@ -73,13 +73,12 @@ namespace com.limphus.retro_survival_shooter
                 //setting our firearm data
                 firearmData = (FirearmData)saveObject.itemDatas[0];
                 meleeData = (MeleeData)saveObject.itemDatas[1];
-                sustenanceData = (SustenanceData)saveObject.itemDatas[2];
+                //sustenanceData = (SustenanceData)saveObject.itemDatas[2];
 
                 //debug text - 1
                 //debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "...";
 
-
-                debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.attackRate + "..." + "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.attackRate + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
+                //debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.attackRate + "..." + "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.attackRate + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.useAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
 
                 //debugtext.text = "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.rateOfFire + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
 

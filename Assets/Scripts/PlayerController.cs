@@ -45,8 +45,12 @@ namespace com.limphus.retro_survival_shooter
         [Header("Debug Settings")]
         public bool debug;
 
-        [HideInInspector]
-        public bool canMove = true;
+        private bool canMove = true;
+
+        public void ToggleCanMove(bool b)
+        {
+            canMove = b;
+        }
 
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;

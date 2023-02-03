@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class SustenanceSound : ItemSound
+    public class ConsumableSound : ItemSound
     {
         [Header("Attributes - Firearm Sound")]
         [SerializeField] protected SustenanceSoundData sustenanceSoundData;
