@@ -9,34 +9,47 @@ namespace com.limphus.retro_survival_shooter
 
     public class Consumable : Item
     {
-        [Header("Attributes - Consumable")]
-        [SerializeField] private ConsumableData consumableData;
+        private ConsumableData consumableData;
 
-        [Space]
-        public ConsumableType consumableType;
+        private ConsumableType consumableType;
 
-        [Space]
-        [Tooltip("How many times you can Consume this item")] public int useAmount;
-        [Tooltip("The total amount of a stat that can be replenished from this")] public int consumableAmount;
-        [Tooltip("How long it takes to Consume this item, per amount")] public float consumeTime;
+        private int useAmount;
+        private int consumableAmount;
+        private float consumeTime;
 
-        [Space]
-        [SerializeField] private ConsumableSound consumableSound;
+        private ConsumableSound consumableSound;
 
-        [Space]
-        [SerializeField] private WeaponSway weaponSway;
-        [SerializeField] private PlayerStats playerStats;
+        private WeaponSway weaponSway;
+        private PlayerStats playerStats;
 
         protected bool isConsuming, leftMouseInput, rightMouseInput;
-
         protected int remainingUsageAmount = -1, remainingConsumableAmount = -1;
 
         protected override void Init()
         {
-            if (!consumableData)
+            InitStats(); InitEffects();
+
+            if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        }
+
+        private void InitStats()
+        {
+            //if we have no item data assigned
+            if (!itemData)
             {
-                Debug.LogWarning("No Consumable Data found for " + gameObject.name + "; Assign Consumable Data!");
+                Debug.LogWarning("No Item Data found for " + gameObject.name + "; Assign Item Data!");
                 return;
+            }
+
+            //if we have item data assigned
+            else if (itemData)
+            {
+                //if we have no consumable data
+                if (!consumableData)
+                {
+                    //then cast from our item data
+                    consumableData = (ConsumableData)itemData;
+                }
             }
 
             itemName = consumableData.itemName;
@@ -47,6 +60,37 @@ namespace com.limphus.retro_survival_shooter
             consumableType = consumableData.consumableType;
             consumableAmount = consumableData.consumableAmount;
             consumeTime = consumableData.consumeTime;
+        }
+
+        private void InitEffects()
+        {
+            //if we have no item sound assigned
+            if (!itemSound) Debug.LogWarning("No Item Sound found for " + gameObject.name + "; Assign Sound Reference!");
+
+            //if we have item sound assigned
+            else if (itemSound)
+            {
+                //if we have no consumable sound
+                if (!consumableSound)
+                {
+                    //then cast from our item sound
+                    consumableSound = (ConsumableSound)itemSound;
+                }
+            }
+
+            //if we have no item sway assigned
+            if (!itemSway) Debug.LogWarning("No Item Sway found for " + gameObject.name + "; Assign Sway Reference!");
+
+            //if we have item sway assigned
+            else if (itemSway)
+            {
+                //if we have no consumable sway
+                if (!weaponSway)
+                {
+                    //then cast from our item sway
+                    weaponSway = (WeaponSway)itemSway;
+                }
+            }
         }
 
         public override void ToggleEquip(bool b)

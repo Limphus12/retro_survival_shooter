@@ -169,21 +169,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3457cbe98ca89e84e89527c69c9f0450, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 0}
-  model: {fileID: 0}
-  itemName: 
-  itemWeight: 0
-  itemSound: {fileID: 0}
-  itemSway: {fileID: 0}
+  itemData: {fileID: 11400000, guid: a50acf0429c95164dbc75dc255d3c599, type: 2}
+  itemSound: {fileID: 1678010}
+  itemSway: {fileID: 1678009}
   itemAnimation: {fileID: 0}
-  useAmount: 0
-  consumeTime: 0
-  consumableData: {fileID: 0}
-  consumableType: 0
-  consumeableAmount: 0
-  consumableSound: {fileID: 1678010}
-  weaponSway: {fileID: 1678009}
-  playerStats: {fileID: 8899670893305495580}
 --- !u!114 &1678009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3302,33 +3291,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5bc1b9dcd8dcc47b4bc75c182fa65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 0}
-  model: {fileID: 0}
-  itemName: 
-  itemWeight: 0
-  itemSound: {fileID: 0}
-  itemSway: {fileID: 0}
-  itemAnimation: {fileID: 0}
-  weaponData: {fileID: 0}
-  damage: 0
-  attackRate: 0
+  itemData: {fileID: 11400000, guid: b6a0f23ddc5752243a4c496db5ad0c18, type: 2}
+  itemSound: {fileID: 1993654156743765313}
+  itemSway: {fileID: 1993654156743765310}
+  itemAnimation: {fileID: 1993654156743765312}
   playerCamera: {fileID: 7747800488256898210}
-  meleeData: {fileID: 11400000, guid: b6a0f23ddc5752243a4c496db5ad0c18, type: 2}
-  attackRange: 0
-  lightAttackTimeToHit: 0
-  lightAttackStaminaCost: 0
-  heavyAttackRate: 0
-  heavyAttackDamage: 0
-  chargeUpTime: 0
-  heavyAttackTimeToHit: 0
-  heavyAttackStaminaCost: 0
-  exhaustedAttackRate: 0
-  exhaustedAttackDamage: 0
-  exhaustedAttackTimeToHit: 0
-  playerStats: {fileID: 0}
-  meleeSound: {fileID: 1993654156743765313}
-  weaponSway: {fileID: 1993654156743765310}
-  meleeAnimation: {fileID: 1993654156743765312}
 --- !u!1 &1993654156743765309
 GameObject:
   m_ObjectHideFlags: 0
@@ -3446,27 +3413,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 0}
-  model: {fileID: 0}
-  itemName: 
-  itemWeight: 0
   itemSound: {fileID: 0}
   itemSway: {fileID: 0}
   itemAnimation: {fileID: 0}
-  weaponData: {fileID: 0}
-  damage: 0
-  attackRate: 0
   playerCamera: {fileID: 7747800488256898210}
-  firearmData: {fileID: 11400000, guid: bdbaad293f52bb04a986d6ec2f6b2274, type: 2}
-  magazineSize: 0
-  reloadTime: 0
-  fireType: 3
-  size: 0
-  shotType: 0
-  reloadType: 0
-  cockTime: 0
-  firearmSound: {fileID: 0}
-  firearmSway: {fileID: 0}
-  firearmAnimation: {fileID: 0}
   cameraRecoil: {fileID: 2679323338787957457}
   weaponRecoil: {fileID: 7903484292987666042}
 --- !u!1 &1993654157717485953
@@ -3895,9 +3845,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.25, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4973596881886235456}
-  - {fileID: 1993654156743765306}
   - {fileID: 7903484294919853396}
+  - {fileID: 1993654156743765306}
+  - {fileID: 4973596881886235456}
   m_Father: {fileID: 1688866701}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4620,7 +4570,7 @@ Transform:
   m_Children:
   - {fileID: 7903484292987666043}
   m_Father: {fileID: 2679323340789131563}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4973596881886235463
 GameObject:
@@ -5455,28 +5405,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c31564b5fc39f4eb4b8671abec9626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 0}
-  model: {fileID: 0}
-  itemName: SKS-49
-  itemWeight: 0
-  itemSound: {fileID: 0}
-  itemSway: {fileID: 0}
-  itemAnimation: {fileID: 0}
-  weaponData: {fileID: 0}
-  damage: 0
-  attackRate: 0
+  itemData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
+  itemSound: {fileID: 7903484294919853393}
+  itemSway: {fileID: 710292615919478500}
+  itemAnimation: {fileID: 5396567381787916686}
   playerCamera: {fileID: 7747800488256898210}
-  firearmData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
-  magazineSize: 0
-  reloadTime: 0
-  fireType: 3
-  size: 0
-  shotType: 0
-  reloadType: 0
-  cockTime: 1.3
-  firearmSound: {fileID: 7903484294919853393}
-  firearmSway: {fileID: 710292615919478500}
-  firearmAnimation: {fileID: 5396567381787916686}
   cameraRecoil: {fileID: 2679323338787957457}
   weaponRecoil: {fileID: 8899670892687232799}
 --- !u!4 &7903484294919853396
@@ -5492,7 +5425,7 @@ Transform:
   m_Children:
   - {fileID: 8899670892687232796}
   m_Father: {fileID: 2679323340789131563}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7903484294919853397
 GameObject:

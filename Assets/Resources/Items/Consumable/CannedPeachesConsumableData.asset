@@ -17,5 +17,5 @@ MonoBehaviour:
   itemWeight: 0.8
   consumableType: 0
   useAmount: 4
-  consumableAmount: 5
+  consumableAmount: 20
   consumeTime: 3

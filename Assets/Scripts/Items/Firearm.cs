@@ -19,31 +19,24 @@ namespace com.limphus.retro_survival_shooter
 
     public class Firearm : Weapon
     {
-        [Header("Attributes - Firearm")]
-        [SerializeField] private FirearmData firearmData;
+        private FirearmData firearmData;
 
-        [Space]
-        [SerializeField] private int magazineSize;
-        [SerializeField] private float reloadTime;
+        private int magazineSize;
+        private float reloadTime;
 
-        [Space]
-        [SerializeField] private FirearmFireType fireType;
-        [SerializeField] private FirearmSize size;
+        private FirearmFireType fireType;
+        private FirearmSize size;
 
-        [Space]
-        [SerializeField] private FirearmShotType shotType;
-        [SerializeField] private FirearmReloadType reloadType;
+        private FirearmShotType shotType;
+        private FirearmReloadType reloadType;
 
-        [Space]
-        [SerializeField] private float cockTime; //hah, cock
+        private float cockTime; //hah, cock
 
-        [Space]
-        [SerializeField] private FirearmSound firearmSound;
+        private FirearmSound firearmSound;
 
-        [Space]
-        [SerializeField] private FirearmSway firearmSway;
-        [SerializeField] private FirearmAnimation firearmAnimation;
-
+        private FirearmSway firearmSway;
+        private FirearmAnimation firearmAnimation;
+        
         [Space]
         [SerializeField] private WeaponRecoil cameraRecoil;
         [SerializeField] private WeaponRecoil weaponRecoil;
@@ -54,10 +47,27 @@ namespace com.limphus.retro_survival_shooter
         //initialization
         protected override void Init()
         {
-            if (!firearmData)
+            InitStats(); InitEffects();
+        }
+
+        private void InitStats()
+        {
+            //if we have no item data assigned
+            if (!itemData)
             {
-                Debug.LogWarning("No Firearm Data found for " + gameObject.name + "; Assign Firearm Data!");
+                Debug.LogWarning("No Item Data found for " + gameObject.name + "; Assign Item Data!");
                 return;
+            }
+
+            //if we have item data assigned
+            else if (itemData)
+            {
+                //if we have no firearm data
+                if (!firearmData)
+                {
+                    //then cast from our item data
+                    firearmData = (FirearmData)itemData;
+                }
             }
 
             itemName = firearmData.itemName;
@@ -76,6 +86,51 @@ namespace com.limphus.retro_survival_shooter
             reloadType = firearmData.reloadType;
 
             cockTime = firearmData.cockTime;
+        }
+
+        private void InitEffects()
+        {
+            //if we have no item sound assigned
+            if (!itemSound) Debug.LogWarning("No Item Sound found for " + gameObject.name + "; Assign Sound Reference!");
+
+            //if we have item sound assigned
+            else if (itemSound)
+            {
+                //if we have no firearm sound
+                if (!firearmSound)
+                {
+                    //then cast from our item sound
+                    firearmSound = (FirearmSound)itemSound;
+                }
+            }
+
+            //if we have no item sway assigned
+            if (!itemSway) Debug.LogWarning("No Item Sway found for " + gameObject.name + "; Assign Sway Reference!");
+
+            //if we have item sway assigned
+            else if (itemSway)
+            {
+                //if we have no firearm sway
+                if (!firearmSway)
+                {
+                    //then cast from our item sway
+                    firearmSway = (FirearmSway)itemSway;
+                }
+            }
+
+            //if we have no item animation assigned
+            if (!itemAnimation) Debug.LogWarning("No Item Animation found for " + gameObject.name + "; Assign Animation Reference!");
+
+            //if we have item animation assigned
+            else if (itemAnimation)
+            {
+                //if we have no firearm animation
+                if (!firearmAnimation)
+                {
+                    //then cast from our item animation
+                    firearmAnimation = (FirearmAnimation)itemAnimation;
+                }
+            }
         }
 
         public override void ToggleEquip(bool b)

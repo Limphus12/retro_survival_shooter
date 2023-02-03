@@ -10,20 +10,13 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Attributes - Item")]
         [SerializeField] protected ItemData itemData;
-
-        [Space]
-        [SerializeField] protected GameObject model;
-
-        [Space]
-        [SerializeField] protected string itemName;
-        [SerializeField] protected double itemWeight;
-
-        [Space]
         [SerializeField] protected ItemSound itemSound;
-
-        [Space]
         [SerializeField] protected ItemSway itemSway;
         [SerializeField] protected ItemAnimation itemAnimation;
+
+        protected GameObject model;
+        protected string itemName;
+        protected double itemWeight;
 
         private void Awake() => Init();
 

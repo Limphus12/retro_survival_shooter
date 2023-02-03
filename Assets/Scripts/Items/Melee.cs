@@ -6,44 +6,55 @@ namespace com.limphus.retro_survival_shooter
 {
     public class Melee : Weapon
     {
-        [Header("Attributes - Melee")]
-        [SerializeField] private MeleeData meleeData;
+        private MeleeData meleeData;
 
-        [Space]
-        [SerializeField] private float attackRange;
+        private float attackRange;
 
-        [Space]
-        [SerializeField] private float lightAttackTimeToHit;
-        [SerializeField] private int lightAttackStaminaCost;
+        private float lightAttackTimeToHit;
+        private int lightAttackStaminaCost;
 
-        [Space]
-        [SerializeField] private float heavyAttackRate;
-        [SerializeField] private float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
-        [SerializeField] private int heavyAttackStaminaCost;
+        private float heavyAttackRate;
+        private float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
+        private int heavyAttackStaminaCost;
 
-        [Space]
-        [SerializeField] private float exhaustedAttackRate;
-        [SerializeField] private float exhaustedAttackDamage, exhaustedAttackTimeToHit;
+        private float exhaustedAttackRate;
+        private float exhaustedAttackDamage, exhaustedAttackTimeToHit;
 
-        [Space]
-        [SerializeField] private PlayerStats playerStats;
+        private PlayerStats playerStats;
 
-        [Space]
-        [SerializeField] private MeleeSound meleeSound;
+        private MeleeSound meleeSound;
 
-        [Space]
-        [SerializeField] private WeaponSway weaponSway;
-        [SerializeField] private MeleeAnimation meleeAnimation;
+        private WeaponSway weaponSway;
+        private MeleeAnimation meleeAnimation;
 
         private bool isBlocking, isCharging, isCharged, previousLeftMouseInput;
 
         //initialization
         protected override void Init()
         {
-            if (!meleeData)
+            InitStats(); InitEffects();
+
+            if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        }
+
+        private void InitStats()
+        {
+            //if we have no item data assigned
+            if (!itemData)
             {
-                Debug.LogWarning("No Melee Data found for " + gameObject.name + "; Assign Melee Data!");
+                //then cast from our item data
+                Debug.LogWarning("No Item Data found for " + gameObject.name + "; Assign Item Data!");
                 return;
+            }
+
+            //if we have item data assigned
+            else if (itemData)
+            {
+                //if we have no melee data
+                if (!meleeData)
+                {
+                    meleeData = (MeleeData)itemData;
+                }
             }
 
             itemName = meleeData.itemName;
@@ -65,9 +76,53 @@ namespace com.limphus.retro_survival_shooter
             exhaustedAttackRate = meleeData.exhaustedAttackRate;
             exhaustedAttackDamage = meleeData.exhaustedAttackDamage;
             exhaustedAttackTimeToHit = meleeData.exhaustedAttackTimeToHit;
-
-            if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
         }
+
+        private void InitEffects()
+        {
+            //if we have no item sound assigned
+            if (!itemSound) Debug.LogWarning("No Item Sound found for " + gameObject.name + "; Assign Sound Reference!");
+
+            //if we have item sound assigned
+            else if (itemSound)
+            {
+                //if we have no melee sound
+                if (!meleeSound)
+                {
+                    //then cast from our item sound
+                    meleeSound = (MeleeSound)itemSound;
+                }
+            }
+
+            //if we have no item sway assigned
+            if (!itemSway) Debug.LogWarning("No Item Sway found for " + gameObject.name + "; Assign Sway Reference!");
+
+            //if we have item sway assigned
+            else if (itemSway)
+            {
+                //if we have no melee sway
+                if (!weaponSway)
+                {
+                    //then cast from our item sway
+                    weaponSway = (WeaponSway)itemSway;
+                }
+            }
+
+            //if we have no item animation assigned
+            if (!itemAnimation) Debug.LogWarning("No Item Animation found for " + gameObject.name + "; Assign Animation Reference!");
+
+            //if we have item animation assigned
+            else if (itemAnimation)
+            {
+                //if we have no melee animation
+                if (!meleeAnimation)
+                {
+                    //then cast from our item animation
+                    meleeAnimation = (MeleeAnimation)itemAnimation;
+                }
+            }
+        }
+
 
         public override void ToggleEquip(bool b)
         {
