@@ -20,7 +20,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private PlayerStats playerStats;
 
         [Space]
-        [SerializeField] private PlayerInventory playerInventory;
+        [SerializeField] private InventoryManager playerInventory;
 
         [Header("World Stuff")]
         [SerializeField] private WorldGenerator worldGenerator;

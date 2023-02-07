@@ -22,7 +22,7 @@ namespace com.limphus.retro_survival_shooter
 
         protected virtual void Awake()
         {
-            initialRotation = transform.localRotation;
+            initialRotation = defaultRotation;
         }
 
         protected virtual void Update() 

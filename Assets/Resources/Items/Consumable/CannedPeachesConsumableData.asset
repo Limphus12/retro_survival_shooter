@@ -16,6 +16,6 @@ MonoBehaviour:
   itemName: Canned Peaches
   itemWeight: 0.8
   consumableType: 0
-  useAmount: 4
-  consumableAmount: 20
-  consumeTime: 3
+  useAmount: 10
+  consumableAmount: 100
+  consumeTime: 1
