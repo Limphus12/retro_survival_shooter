@@ -12,9 +12,10 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private GameObject playerHand;
         [SerializeField] private GameObject playerInventory;
+        [SerializeField] private Transform playerCamera;
 
         [Space]
-        [SerializeField] private Transform playerCamera;
+        [SerializeField] private float interactionDistance = 5f;
 
         private int selectedItem;
 
@@ -101,7 +102,7 @@ namespace com.limphus.retro_survival_shooter
                     //do a raycast here
                     RaycastHit hit;
 
-                    if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, Mathf.Infinity))
+                    if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, interactionDistance))
                     {
                         Item item = hit.transform.GetComponent<Item>();
 
@@ -296,12 +297,14 @@ namespace com.limphus.retro_survival_shooter
             ItemSway sway = item.GetComponent<ItemSway>(); if (sway) sway.enabled = b;
 
             //attempt to grab the rigibody, collider and animator
-            //so we can toggle the kinematics and triggers, and enable anims
+            //so we can toggle the kinematics and triggers, and toggle anims
 
             Rigidbody rb = item.GetComponent<Rigidbody>();
             if (rb)
             {
                 rb.isKinematic = b;
+
+                if (!b) rb.AddForce(playerCamera.forward * 5f, ForceMode.Impulse);
             }
 
             Collider cl = item.GetComponent<Collider>(); if (cl) cl.isTrigger = b;

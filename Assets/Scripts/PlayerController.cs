@@ -263,7 +263,7 @@ namespace com.limphus.retro_survival_shooter
                 //camera lean, sets the camera's Z rotation based off horizontal input
                 else if (cameraLean)
                 {
-                    float currentX = Input.GetAxis("Horizontal");
+                    float currentX = Input.GetAxis("LeanHorizontal");
                     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, currentX * -cameraLeanAmount);
 
                     #region testing
