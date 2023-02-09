@@ -43,7 +43,9 @@ namespace com.limphus.retro_survival_shooter
             if (!isEquipped) return;
         }
 
-        protected virtual void Init()
+        protected virtual void Init() => InitStats();
+
+        protected virtual void InitStats()
         {
             if (!itemData)
             {
@@ -58,14 +60,14 @@ namespace com.limphus.retro_survival_shooter
             name = itemName;
         }
 
-        public virtual ItemData GetItemData()
+        public ItemData GetItemData()
         {
             if (itemData != null) return itemData;
 
             else return null;
         }
 
-        public virtual void SetItemData(ItemData itemData)
+        public void SetItemData(ItemData itemData)
         {
             this.itemData = itemData;
 

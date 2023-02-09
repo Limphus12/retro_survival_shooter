@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e47961c2d3fa445af0fc4c9a4d6a44, type: 3}
   m_Name: BaseballBatMeleeData
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  itemName: Baseball Bat
-  itemWeight: 2.4
-  damage: 50
-  attackRate: 1
   attackRange: 2
+  lightAttackRate: 1
+  lightAttackDamage: 20
   lightAttackTimeToHit: 0.5
   lightAttackStaminaCost: 10
   heavyAttackRate: 0.66

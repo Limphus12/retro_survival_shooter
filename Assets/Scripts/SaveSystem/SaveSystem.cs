@@ -71,8 +71,8 @@ namespace com.limphus.retro_survival_shooter
                 Test saveObject = JsonUtility.FromJson<Test>(saveString);
 
                 //setting our firearm data
-                firearmData = (FirearmData)saveObject.itemDatas[0];
-                meleeData = (MeleeData)saveObject.itemDatas[1];
+                //firearmData = (FirearmData)saveObject.itemDatas[0];
+                //meleeData = (MeleeData)saveObject.itemDatas[1];
                 //sustenanceData = (SustenanceData)saveObject.itemDatas[2];
 
                 //debug text - 1
@@ -110,7 +110,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
-            Inputs();
+            //Inputs();
         }
 
         private void Inputs()

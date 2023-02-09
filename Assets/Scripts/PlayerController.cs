@@ -10,7 +10,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Movement Settings")]
         [SerializeField] private float walkSpeed = 3.0f;
-        [SerializeField] private float runSpeed = 6.0f, crouchSpeed = 1.0f, crouchRunSpeed = 2.0f, jumpSpeed = 5.0f, gravity = 20.0f, antiBumpAmount = 40.0f;
+        [SerializeField] private float runSpeed = 6.0f, crouchSpeed = 1.0f, jumpSpeed = 5.0f, gravity = 20.0f, antiBumpAmount = 40.0f;
 
         [Space]
         [SerializeField] private float speedSmoothRate;
@@ -265,28 +265,6 @@ namespace com.limphus.retro_survival_shooter
                 {
                     float currentX = Input.GetAxis("LeanHorizontal");
                     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, currentX * -cameraLeanAmount);
-
-                    #region testing
-                    //if (Input.GetAxis("Mouse X") > 0.1f)
-                    {
-                        //zLean = Mathf.Lerp(zLean, -cameraLeanAmount, Time.deltaTime * 5f);
-                    }
-
-                    //else if (Input.GetAxis("Mouse X") < -0.1f)
-                    {
-                        //zLean = Mathf.Lerp(zLean, cameraLeanAmount, Time.deltaTime * 5f);
-                    }
-
-                    //else if (Input.GetAxis("Mouse X") < 0.1f && Input.GetAxis("Mouse X") > -0.1f)
-                    {
-                        //zLean = Mathf.Lerp(zLean, 0, Time.deltaTime * 2.5f);
-                    }
-
-                    //zLean = Mathf.Clamp(zLean, -1f, 1f);
-
-                    //playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, zLean);
-                    //transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-                    #endregion
                 }
 
                 transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
@@ -324,9 +302,13 @@ namespace com.limphus.retro_survival_shooter
             }
 
             //if we're crouching, use our crouch run speed (like project zomboid lmao).
+            //EDIT: No, we just gonna un-crouch and run
             else if (isCrouching)
             {
-                ChangeSpeed(crouchRunSpeed);
+                isCrouching = false;
+
+                ChangeStance(standingHeight, standingCenter, standingCameraPosition);
+                ChangeSpeed(runSpeed);
             }
         }
 

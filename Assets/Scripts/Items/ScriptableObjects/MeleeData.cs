@@ -4,16 +4,17 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    [CreateAssetMenu(fileName = "MeleeData", menuName = "Items/Weapon/Melee")]
+    [CreateAssetMenu(fileName = "MeleeData", menuName = "Items/Melee")]
 
     [System.Serializable]
-    public class MeleeData : WeaponData
+    public class MeleeData : ItemData
     {
         [Header("Attributes - Melee")]
         public float attackRange;
 
         [Space]
-        public float lightAttackTimeToHit;
+        public float lightAttackRate;
+        public float lightAttackDamage, lightAttackTimeToHit;
         public int lightAttackStaminaCost;
 
         [Space]

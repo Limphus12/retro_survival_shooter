@@ -9,7 +9,8 @@ namespace com.limphus.retro_survival_shooter
 
     public class Consumable : Item
     {
-        private ConsumableData consumableData;
+        [Header("Attributes - Consumable")]
+        [SerializeField] private ConsumableData consumableData;
 
         private ConsumableType consumableType;
 
@@ -32,29 +33,22 @@ namespace com.limphus.retro_survival_shooter
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
         }
 
-        private void InitStats()
+        protected override void InitStats()
         {
-            //if we have no item data assigned
-            if (!itemData)
-            {
-                Debug.LogWarning("No Item Data found for " + gameObject.name + "; Assign Item Data!");
-                return;
-            }
+            base.InitStats();
 
             //if we have item data assigned
-            else if (itemData)
+            if (itemData)
             {
-                //if we have no consumable data
+                //if we have no firearm data
                 if (!consumableData)
                 {
-                    //then cast from our item data
+                    //cast the consumable data from our item data
                     consumableData = (ConsumableData)itemData;
                 }
             }
 
-            itemName = consumableData.itemName;
-            itemWeight = consumableData.itemWeight;
-
+            //CONSUMABLE
             useAmount = consumableData.useAmount;
 
             consumableType = consumableData.consumableType;
@@ -293,16 +287,16 @@ namespace com.limphus.retro_survival_shooter
             if (weaponSway) weaponSway.Aim(b);
         }
 
-        public override ItemData GetItemData()
+        public ConsumableData GetConsumableData()
         {
             if (consumableData != null) return consumableData;
 
             else return null;
         }
 
-        public override void SetItemData(ItemData itemData)
+        public void SetConsumableData(ConsumableData consumableData)
         {
-            consumableData = (ConsumableData)itemData;
+            this.consumableData = consumableData;
 
             Init();
         }

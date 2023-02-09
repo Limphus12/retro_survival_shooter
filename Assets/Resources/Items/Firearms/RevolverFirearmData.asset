@@ -12,11 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc4c20617b5fac4aa3e96760d225ef9, type: 3}
   m_Name: RevolverFirearmData
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  itemName: Revolver
-  itemWeight: 1.6
-  damage: 20
-  attackRate: 1
+  firearmDamage: 20
+  firearmAttackRate: 1
   magazineSize: 6
   reloadTime: 1.5
   fireType: 3

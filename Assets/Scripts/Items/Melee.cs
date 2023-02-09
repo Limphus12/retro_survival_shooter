@@ -4,30 +4,31 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class Melee : Weapon
+    public class Melee : Item
     {
-        private MeleeData meleeData;
+        protected MeleeData meleeData;
 
-        private float attackRange;
+        protected float lightAttackRate;
+        protected float lightAttackDamage, attackRange, lightAttackTimeToHit;
+        protected int lightAttackStaminaCost;
 
-        private float lightAttackTimeToHit;
-        private int lightAttackStaminaCost;
+        protected float heavyAttackRate;
+        protected float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
+        protected int heavyAttackStaminaCost;
 
-        private float heavyAttackRate;
-        private float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
-        private int heavyAttackStaminaCost;
+        protected float exhaustedAttackRate;
+        protected float exhaustedAttackDamage, exhaustedAttackTimeToHit;
 
-        private float exhaustedAttackRate;
-        private float exhaustedAttackDamage, exhaustedAttackTimeToHit;
+        protected PlayerStats playerStats;
+        protected Transform playerCamera;
 
-        private PlayerStats playerStats;
+        protected MeleeSound meleeSound;
 
-        private MeleeSound meleeSound;
+        protected WeaponSway weaponSway;
+        protected MeleeAnimation meleeAnimation;
 
-        private WeaponSway weaponSway;
-        private MeleeAnimation meleeAnimation;
-
-        private bool isBlocking, isCharging, isCharged, previousLeftMouseInput;
+        protected bool meleeInput, leftMouseInput, rightMouseInput;
+        protected bool isAttacking, isBlocking, isCharging, isCharged, previousMeleeInput, meleeAttack;
 
         //initialization
         protected override void Init()
@@ -35,33 +36,27 @@ namespace com.limphus.retro_survival_shooter
             InitStats(); InitEffects();
 
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+            if (!playerCamera) playerCamera = Camera.main.transform;
         }
 
-        private void InitStats()
+        protected override void InitStats()
         {
-            //if we have no item data assigned
-            if (!itemData)
-            {
-                //then cast from our item data
-                Debug.LogWarning("No Item Data found for " + gameObject.name + "; Assign Item Data!");
-                return;
-            }
+            base.InitStats();
 
             //if we have item data assigned
-            else if (itemData)
+            if (itemData)
             {
                 //if we have no melee data
                 if (!meleeData)
                 {
+                    //cast the melee data from our item data
                     meleeData = (MeleeData)itemData;
                 }
             }
 
-            itemName = meleeData.itemName;
-            itemWeight = meleeData.itemWeight;
-
-            damage = meleeData.damage;
-            attackRate = meleeData.attackRate;
+            //MELEE
+            lightAttackDamage = meleeData.lightAttackDamage;
+            lightAttackRate = meleeData.lightAttackRate;
 
             attackRange = meleeData.attackRange;
             lightAttackTimeToHit = meleeData.lightAttackTimeToHit;
@@ -123,7 +118,6 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-
         public override void ToggleEquip(bool b)
         {
             isEquipped = b;
@@ -143,15 +137,18 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
+            //if this weapon is not equipped, then return;
+            if (!isEquipped) return;
+
             Inputs(); Animation();
         }
 
-        protected override void Inputs()
+        protected virtual void Inputs()
         {
-            previousLeftMouseInput = leftMouseInput;
+            previousMeleeInput = meleeInput;
 
-            if (Input.GetMouseButtonDown(0)) leftMouseInput = true;
-            else if (Input.GetMouseButtonUp(0)) leftMouseInput = false;
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.V)) meleeInput = true;
+            else if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.V)) meleeInput = false;
 
             if (Input.GetMouseButtonDown(1)) rightMouseInput = true;
             else if (Input.GetMouseButtonUp(1)) rightMouseInput = false;
@@ -159,7 +156,7 @@ namespace com.limphus.retro_survival_shooter
             CheckAttack();
         }
 
-        protected override void CheckAttack()
+        protected virtual void CheckAttack()
         {
             //if were attacking or blocking already, dont do anything
             if (isAttacking) return;
@@ -175,87 +172,82 @@ namespace com.limphus.retro_survival_shooter
                 //check for stamina
                 float stamina = playerStats.GetCurrentStamina();
 
-                //do exhausted attacks if we press the leftg mouse button and we have 0 stamina
-                if (stamina <= 0 && leftMouseInput)
+                //if were not attacking and we press the l-mouse button or melee input
+                if (meleeInput)
                 {
-                    //do an exhausted attack!
-                    Debug.Log("Exhausted Attack!");
-                    SetupAttack(exhaustedAttackTimeToHit, exhaustedAttackRate, exhaustedAttackDamage, 0);
-                }
+                    //So in code, ima have to check if we have mouse input, either start a timer or invoke some methods, then if we let go of the mouse before the specified time,
+                    //cancel the timer/invoke and do a light attack. However, if we go beyond the timer or we don't cancel the method invoke (because we held down the mouse),
+                    //then do a heavy attack. All before this, however, we need to check if we even have any stamina,
+                    //because if we don't, then we should perform an exhausted attack. Yeah, that sounds good…
 
-                //do normal attacks if we have more than 0 stamina
-                else if (stamina > 0)
-                {
-                    //if were not attacking and we press the l-mouse button
-                    if (leftMouseInput)
+                    //if we're already charged up/are charging up, just return out of this, since we can only attack when we release the mouse button
+                    if (isCharged || isCharging) return;
+
+                    //if we are invoking the charge function
+                    if (IsInvoking(nameof(Charge)))
                     {
-                        //So in code, ima have to check if we have mouse input, either start a timer or invoke some methods, then if we let go of the mouse before the specified time,
-                        //cancel the timer/invoke and do a light attack. However, if we go beyond the timer or we don't cancel the method invoke (because we held down the mouse),
-                        //then do a heavy attack. All before this, however, we need to check if we even have any stamina,
-                        //because if we don't, then we should perform an exhausted attack. Yeah, that sounds good…
-
-                        //if we're already charged up, just return out of this, since we can only attack when we release the mouse button
-                        if (isCharged) return;
-
-                        //if we are invoking the charge function
-                        if (IsInvoking(nameof(Charge)))
+                        //if we're not charged or not charging (which should be an impossibility
+                        if (!isCharged && !isCharging)
                         {
-                            //if we're not charged or not charging (which should be an impossibility
-                            if (!isCharged && !isCharging)
-                            {
-                                Debug.LogWarning("calling the Charge function, even though we are not charged or charging?! this may be a bug");
-                            }
-
-                            //else just return, since we should be charging
-                            else return;
+                            Debug.LogWarning("calling the Charge function, even though we are not charged or charging?! this may be a bug");
                         }
 
-                        //else if we're not invoking the charge, and we have not already charged
-                        else if (!IsInvoking(nameof(Charge)) && !isCharged && !isCharging)
-                        {
-                            StartCharge(); return;
-                        }
+                        //else just return, since we should be charging
+                        else return;
                     }
 
-                    //if we release the left mouse button
-                    else if (!leftMouseInput)
+                    //else if we're not invoking the charge, and we have not already charged, and we have stamina
+                    else if (!IsInvoking(nameof(Charge)) && !isCharged && !isCharging && stamina > 0)
                     {
-                        //if we we're have not been holding down the mouse
-                        if (previousLeftMouseInput == leftMouseInput)
+                        StartCharge(); return;
+                    }
+
+                    else if (stamina <= 0)
+                    {
+                        //do an exhausted attack!
+                        Debug.Log("Exhausted Attack!");
+                        SetupAttack(exhaustedAttackTimeToHit, exhaustedAttackRate, exhaustedAttackDamage, 0);
+                    }
+                }
+
+                //if we release the left mouse button or melee input
+                else if (!meleeInput)
+                {
+                    //if we we're have not been holding down the mouse
+                    if (previousMeleeInput == meleeInput)
+                    {
+                        //call the reset charge method, just in case
+                        ResetCharge();
+                    }
+
+                    //if we were holding down the mouse in teh last frame, and we have stamina
+                    else if (previousMeleeInput != meleeInput && stamina > 0)
+                    {
+                        //if we have charged
+                        if (isCharged)
                         {
-                            //call the reset charge method, just in case
-                            ResetCharge();
+                            //do a heavy attack!
+                            Debug.Log("Heavy Attack!");
+                            SetupAttack(heavyAttackTimeToHit, heavyAttackRate, heavyAttackDamage, heavyAttackStaminaCost);
                         }
 
-                        //if we were holding down the mouse in teh last frame
-                        else if (previousLeftMouseInput != leftMouseInput)
+                        //if we have not charged
+                        else if (!isCharged)
                         {
-                            //if we have charged
-                            if (isCharged)
+                            //if we are charging
+                            if (isCharging)
                             {
-                                //do a heavy attack!
-                                Debug.Log("Heavy Attack!");
-                                SetupAttack(heavyAttackTimeToHit, heavyAttackRate, heavyAttackDamage, heavyAttackStaminaCost);
+                                //cancel the charge
+                                CancelInvoke(nameof(Charge));
                             }
 
-                            //if we have not charged
-                            else if (!isCharged)
-                            {
-                                //if we are charging
-                                if (isCharging)
-                                {
-                                    //cancel the charge
-                                    CancelInvoke(nameof(Charge)); 
-                                }
-
-                                //do the light attack
-                                Debug.Log("Light Attack!");
-                                SetupAttack(lightAttackTimeToHit, attackRate, damage, lightAttackStaminaCost);
-                            }
-
-                            //and call the reset charge method
-                            ResetCharge();
+                            //do the light attack
+                            Debug.Log("Light Attack!");
+                            SetupAttack(lightAttackTimeToHit, lightAttackRate, lightAttackDamage, lightAttackStaminaCost);
                         }
+
+                        //and call the reset charge method
+                        ResetCharge();
                     }
                 }
             }
@@ -268,10 +260,10 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        private float currentTimeToHit, currentAttackRate, currentDamage;
+        protected float currentTimeToHit, currentAttackRate, currentDamage;
 
         //takes in a time to hit, attack rate & damage
-        private void SetupAttack(float hitTime, float attackRate, float damage, int staminaCost)
+        protected void SetupAttack(float hitTime, float attackRate, float damage, int staminaCost)
         {
             currentTimeToHit = hitTime;
             currentAttackRate = attackRate;
@@ -292,7 +284,7 @@ namespace com.limphus.retro_survival_shooter
             //attack sounds - if we have the melee sound reference
             if (meleeSound)
             {
-                if (currentDamage == this.damage)
+                if (currentDamage == lightAttackDamage)
                 {
                     //call the play light attack sound if we are dealing the light attack damage
                     meleeSound.PlayLightAttackSound();
@@ -311,32 +303,35 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
 
-            StartAttack();
+            MeleeStartAttack();
         }
 
         //starts attacking
-        protected override void StartAttack()
+        protected void MeleeStartAttack()
         {
-            isAttacking = true;
+            isAttacking = true; meleeAttack = true;
 
             //invoking attack after a delay to simulate the swinging of a melee weapon
-            Invoke(nameof(Attack), currentTimeToHit);
+            Invoke(nameof(MeleeAttack), currentTimeToHit);
 
             //invoke end attack after our rate of fire
-            Invoke(nameof(EndAttack), 1 / currentAttackRate);
+            Invoke(nameof(MeleeEndAttack), 1 / currentAttackRate);
         }
 
         //shoots!
-        protected override void Attack()
+        protected void MeleeAttack()
         {
             //call the hit function, passing through the player camera
-            Hit(playerCamera);
+            MeleeHit(playerCamera);
         }
 
         //ends shooting
-        protected override void EndAttack() => isAttacking = false;
+        protected void MeleeEndAttack()
+        {
+            isAttacking = false; meleeAttack = false;
+        }
 
-        protected override void Hit(Transform point)
+        protected void MeleeHit(Transform point)
         {
             bool hasHit = false;
 
@@ -366,7 +361,7 @@ namespace com.limphus.retro_survival_shooter
             //attack sounds - if we have the melee sound reference
             if (hasHit && meleeSound)
             {
-                if (currentDamage == this.damage)
+                if (currentDamage == lightAttackDamage)
                 {
                     //call the play light attack sound if we are dealing the light attack damage
                     meleeSound.PlayLightAttackHitSound();
@@ -387,27 +382,27 @@ namespace com.limphus.retro_survival_shooter
         }
 
         //we're gonna call this after ending a heavy attack!
-        private void ResetCharge()
+        protected void ResetCharge()
         {
             isCharged = false; isCharging = false;
         }
 
-        private void StartCharge()
+        protected void StartCharge()
         {
             isCharging = true; Invoke(nameof(Charge), chargeUpTime);
         }
 
-        private void Charge()
+        protected void Charge()
         {
             isCharged = true; EndCharge();
         }
 
-        private void EndCharge()
+        protected void EndCharge()
         {
             isCharging = false;
         }
 
-        private void Block(bool b)
+        protected void Block(bool b)
         {
             isBlocking = b;
 
@@ -415,7 +410,7 @@ namespace com.limphus.retro_survival_shooter
             if (weaponSway) weaponSway.Aim(b);
         }
 
-        private void Animation()
+        protected virtual void Animation()
         {
             //if we have the animation reference
             if (meleeAnimation)
@@ -440,7 +435,7 @@ namespace com.limphus.retro_survival_shooter
                 else if (isAttacking)
                 {
                     //if our damage is the light attack damage, play this anim
-                    if (currentDamage == damage)
+                    if (currentDamage == lightAttackDamage)
                     {
                         meleeAnimation.PlayMeleeLightAttack();
                         return;
@@ -461,25 +456,25 @@ namespace com.limphus.retro_survival_shooter
                     }
                 }
 
-                //if we're not shooting, play this anim
+                //if we're not attacking, play this anim
                 else if (!isAttacking)
                 {
-                    meleeAnimation.PlayMeleeIdle();
+                    meleeAnimation.PlayIdle();
                     return;
                 }
             }
         }
 
-        public override ItemData GetItemData()
+        public MeleeData GetMeleeData()
         {
             if (meleeData != null) return meleeData;
 
             else return null;
         }
 
-        public override void SetItemData(ItemData itemData)
+        public void SetMeleeData(MeleeData meleeData)
         {
-            meleeData = (MeleeData)itemData;
+            this.meleeData = meleeData;
 
             Init();
         }

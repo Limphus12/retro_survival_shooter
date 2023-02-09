@@ -4,12 +4,16 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    [CreateAssetMenu(fileName = "FirearmData", menuName = "Items/Weapon/Firearm")]
+    [CreateAssetMenu(fileName = "FirearmData", menuName = "Items/Firearm")]
 
     [System.Serializable]
-    public class FirearmData : WeaponData
+    public class FirearmData : MeleeData
     {
         [Header("Attributes - Firearm")]
+        public float firearmDamage;
+        public float firearmAttackRate;
+
+        [Space]
         public int magazineSize;
         public float reloadTime;
 

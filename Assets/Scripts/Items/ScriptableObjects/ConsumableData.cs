@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
 
     [System.Serializable]
     [CreateAssetMenu(fileName = "ConsumableData", menuName = "Items/Consumable")]
-    public class ConsumableData : ItemData
+    public class ConsumableData : MeleeData
     {
         [Header("Attributes - Consumable")]
         public ConsumableType consumableType;

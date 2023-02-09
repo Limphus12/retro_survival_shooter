@@ -12,11 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc4c20617b5fac4aa3e96760d225ef9, type: 3}
   m_Name: SKS49FirearmData
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4745835920928684933, guid: 2147ebcdc6aa41b4eb058a4650f6360a, type: 3}
+  prefab: {fileID: 0}
   itemName: SKS-49
-  itemWeight: 3.2
-  damage: 20
-  attackRate: 1.2
+  itemWeight: 6
+  attackRange: 2
+  lightAttackRate: 1
+  lightAttackDamage: 10
+  lightAttackTimeToHit: 0.5
+  lightAttackStaminaCost: 10
+  heavyAttackRate: 0.66
+  heavyAttackDamage: 25
+  chargeUpTime: 1
+  heavyAttackTimeToHit: 0.5
+  heavyAttackStaminaCost: 25
+  exhaustedAttackRate: 0.33
+  exhaustedAttackDamage: 5
+  exhaustedAttackTimeToHit: 1.5
+  firearmDamage: 100
+  firearmAttackRate: 1
   magazineSize: 6
   reloadTime: 1.5
   fireType: 3

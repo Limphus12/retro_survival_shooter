@@ -11,6 +11,10 @@ namespace com.limphus.retro_survival_shooter
 
         protected string currentState;
 
+        const string IDLE = "idle";
+
+        public void PlayIdle() => PlayAnimation(IDLE);
+
         protected void PlayAnimation(string newState)
         {
             //stops the same animation from interrupting itself.
