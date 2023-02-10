@@ -9,8 +9,7 @@ namespace com.limphus.retro_survival_shooter
 
     public class Consumable : Item
     {
-        [Header("Attributes - Consumable")]
-        [SerializeField] private ConsumableData consumableData;
+        private ConsumableData consumableData;
 
         private ConsumableType consumableType;
 
