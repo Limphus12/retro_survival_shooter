@@ -10,10 +10,14 @@ namespace com.limphus.retro_survival_shooter
 
         [SerializeField] private string assetTag;
 
+        [SerializeField] private bool debug;
+
+        public Vector3 GetBoxExtents() => boxExtents;
+
         // Start is called before the first frame update
         void Start()
         {
-            Collider[] collisions = Physics.OverlapBox(transform.position, boxExtents);
+            Collider[] collisions = Physics.OverlapBox(transform.position, boxExtents, transform.localRotation);
 
             if (collisions.Length != 0)
             {
@@ -29,6 +33,15 @@ namespace com.limphus.retro_survival_shooter
                 }
 
                 Debug.Log("Removed " + i + " " + assetTag + "s");
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (debug)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(transform.position, boxExtents);
             }
         }
     }

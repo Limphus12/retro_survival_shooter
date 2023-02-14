@@ -43,8 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7798404b4e8e9b94ba1fc560c747f5fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 10, y: 18, z: 12}
+  boxExtents: {x: 20, y: 18, z: 24}
   assetTag: EnvAsset
+  debug: 1
 --- !u!1 &859790831969048716
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    [CreateAssetMenu(fileName = "BiomeData", menuName = "World Generation/Biome")]
-    public class BiomeData : ScriptableObject
+    [CreateAssetMenu(fileName = "StructureData", menuName = "World Generation/Structures")]
+    public class StructureData : ScriptableObject
     {
         [Header("Assets")]
         public GameObject[] assets;

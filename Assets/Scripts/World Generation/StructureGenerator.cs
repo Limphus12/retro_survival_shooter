@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class BiomeGenerator : MonoBehaviour
+    public class StructureGenerator : MonoBehaviour
     {
-        [Header("Attributes - Biome Data")]
-        [SerializeField] private BiomeData biomeData;
+        [Header("Attributes - Structure Data")]
+        [SerializeField] private StructureData structureData;
 
         [Space]
         [SerializeField] private float raycastHeight;
@@ -21,54 +21,34 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector2Int gridSize;
         [SerializeField] private int gridMultiplier, gridOffset;
 
+        [Space]
+        [SerializeField] StructureAreaStruct structureAreaStruct = new StructureAreaStruct();
+
         int i = 0;
 
         //used for initial generation
-        public void GenerateRuntimeBiome()
+        public void GenerateRuntimeStructures()
         {
-            //when generating our biome, always get rid of any previous assets
-            ClearBiome();
+            //when generating our structures, always get rid of any previous assets
+            ClearStructures();
 
             //then generate the new assets
             GenerateAssets();
         }
 
-        //for use with the save system
-        public void GenerateRuntimeBiome(BiomeData biomeData)
-        {
-            //when generating our biome, always get rid of any previous assets
-            ClearBiome();
-
-            //then generate the new assets
-            GenerateAssets(biomeData);
-        }
-
-        public void ClearBiome() => ClearAssets();
-        public void EditorClearBiome() => EditorClearAssets();
+        public void ClearStructures() => ClearAssets();
+        public void EditorClearStructures() => EditorClearAssets();
 
         private void GenerateAssets()
         {
-            if (!biomeData)
+            if (!structureData)
             {
-                Debug.Log("We have no Biome assigned!");
+                Debug.Log("We have no Structures assigned!");
                 return;
             }
 
-            AssetLoop(gridSize, gridMultiplier, gridOffset, biomeData.assets, placementChance, heightPlacementOffset);
-            Debug.Log("Spawned " + i + " Envionmental Assets");
-        }
-
-        //for use with the save system
-        private void GenerateAssets(BiomeData biomeData)
-        {
-            if (!biomeData)
-            {
-                Debug.Log("We have no Biome assigned!");
-                return;
-            }
-
-            AssetLoop(gridSize, gridMultiplier, gridOffset, biomeData.assets, placementChance, heightPlacementOffset);
-            Debug.Log("Spawned " + i + " Biome Assets");
+            AssetLoop(gridSize, gridMultiplier, gridOffset, structureData.assets, placementChance, heightPlacementOffset);
+            Debug.Log("Spawned " + i + " Structure Assets");
         }
 
         private void ClearAssets()
@@ -82,6 +62,9 @@ namespace com.limphus.retro_survival_shooter
                     Destroy(transform.GetChild(i).gameObject);
                 }
             }
+
+            structureAreaStruct.structurePositions.Clear();
+            structureAreaStruct.structureAreas.Clear();
         }
 
         private void EditorClearAssets()
@@ -94,6 +77,9 @@ namespace com.limphus.retro_survival_shooter
 
                 if (transform.childCount == 0) break;
             }
+
+            structureAreaStruct.structurePositions.Clear();
+            structureAreaStruct.structureAreas.Clear();
         }
 
         private void AssetLoop(Vector2Int gridSize, int gridMultiplier, int gridOffset, GameObject[] assets, float assetPlacementChance, float placementOffset)
@@ -128,10 +114,20 @@ namespace com.limphus.retro_survival_shooter
                             Vector3 placementPoint = new Vector3(hit.point.x, hit.point.y + randomOffset.y, hit.point.z);
 
                             //calculate a random rotation on the y axis
-                            Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+                            //Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
                             //...placing down a random asset from the placeable asset array!
-                            Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, placementRotation, gameObject.transform);
+                            //GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, placementRotation, gameObject.transform);
+                            GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, Quaternion.identity, gameObject.transform);
+
+                            //grabs the asset remover script and chucks the extents in the structureAreas list
+                            AssetRemover ar = asset.GetComponentInChildren<AssetRemover>(); 
+                            
+                            if (ar)
+                            {
+                                structureAreaStruct.structurePositions.Add(asset.transform.position);
+                                structureAreaStruct.structureAreas.Add(ar.GetBoxExtents());
+                            }
 
                             //increment i (for debug log)
                             i++;
@@ -140,5 +136,12 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
         }
+    }
+
+    [System.Serializable]
+    public struct StructureAreaStruct
+    {
+        public List<Vector3> structurePositions;
+        public List<Vector3> structureAreas;
     }
 }

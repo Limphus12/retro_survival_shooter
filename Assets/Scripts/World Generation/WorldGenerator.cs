@@ -20,6 +20,8 @@ namespace com.limphus.retro_survival_shooter
 
         [SerializeField] private BiomeGenerator biomeGenerator;
 
+        [SerializeField] private StructureGenerator structureGenerator;
+
         void Awake() => InitializeWorld();
 
         public void InitializeWorld()
@@ -44,25 +46,45 @@ namespace com.limphus.retro_survival_shooter
             //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
             if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
 
+            if (structureGenerator) structureGenerator.GenerateRuntimeStructures();
+
             Debug.Log("Generating World");
         }
 
         public void ClearWorld()
         {
+            Debug.Log("Clearing World");
+
             //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
             if (terrainGenerator) terrainGenerator.ClearTerrain();
 
 #if UNITY_EDITOR
 
-            //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
-            if (biomeGenerator) biomeGenerator.EditorClearBiome();
+            //Non-Runtime Functions are Called Here
+
+            bool b = false;
+
+            if (biomeGenerator)
+            {
+                biomeGenerator.EditorClearBiome();
+
+                b = true;
+            }
+
+            if (structureGenerator)
+            {
+                structureGenerator.EditorClearStructures();
+
+                b = true;
+            }
+
+            if (b) return;
 #endif
 
             if (biomeGenerator) biomeGenerator.ClearBiome();
 
-            Debug.Log("Clearing World");
+            if (structureGenerator) structureGenerator.ClearStructures();
         }
-
 
         //we're prolly gonna call this from the borders around our world.
         public void MoveChunk(int i)
