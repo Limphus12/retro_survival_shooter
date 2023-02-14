@@ -62,8 +62,8 @@ namespace com.limphus.retro_survival_shooter
             //create a new mesh
             mesh = new Mesh();
 
-            //set the mesh filter's mesh
-            GetComponent<MeshFilter>().sharedMesh = mesh;
+            //set the mesh filter's mesh and name
+            GetComponent<MeshFilter>().sharedMesh = mesh; mesh.name = "Terrain";
 
             //ensure we have a clean mesh
             mesh.Clear();
@@ -84,8 +84,8 @@ namespace com.limphus.retro_survival_shooter
             //create a new mesh
             mesh = new Mesh();
 
-            //set the mesh filter's mesh
-            GetComponent<MeshFilter>().sharedMesh = mesh;
+            //set the mesh filter's mesh and name
+            GetComponent<MeshFilter>().sharedMesh = mesh; mesh.name = "Terrain";
 
             //ensure we have a clean mesh
             mesh.Clear();
@@ -113,8 +113,8 @@ namespace com.limphus.retro_survival_shooter
             //create a new mesh
             mesh = new Mesh();
 
-            //set the mesh filter's mesh
-            GetComponent<MeshFilter>().sharedMesh = mesh;
+            //set the mesh filter's mesh and name
+            GetComponent<MeshFilter>().sharedMesh = mesh; mesh.name = "Terrain";
 
             //ensure we have a clean mesh
             mesh.Clear();
@@ -142,8 +142,8 @@ namespace com.limphus.retro_survival_shooter
             //create a new mesh
             mesh = new Mesh();
 
-            //set the mesh filter's mesh
-            GetComponent<MeshFilter>().sharedMesh = mesh;
+            //set the mesh filter's mesh and name
+            GetComponent<MeshFilter>().sharedMesh = mesh; mesh.name = "Terrain";
 
             //ensure we have a clean mesh
             mesh.Clear();
@@ -299,7 +299,7 @@ namespace com.limphus.retro_survival_shooter
             //for loop to run through each vertice in our vertices array
             for (int i = 0; i < vertices.Length; i++)
             {
-                //loop through each area and see if the vertice lands in that area
+                //loop through each area and see if the vertex lands in that area
                 for (int j = 0; j < sas.structureAreas.Count; j++)
                 {
                     //create a min position vector
@@ -314,7 +314,7 @@ namespace com.limphus.retro_survival_shooter
                         sas.structurePositions[j].y + sas.structureAreas[j].y,
                         sas.structurePositions[j].z + sas.structureAreas[j].z);
 
-                    //check if the vertice is not within the 
+                    //check if the vertex is not within the min/max positions
                     if (vertices[i].x < minPos.x || vertices[i].x > maxPos.x ||
                         vertices[i].y < minPos.y || vertices[i].y > maxPos.y ||
                         vertices[i].z < minPos.z || vertices[i].z > maxPos.z)
@@ -326,13 +326,14 @@ namespace com.limphus.retro_survival_shooter
                     {
                         float yPos = sas.structurePositions[j].y;
 
-                        Debug.Log("vertice " + i + "is within a structure area; moving it vertically to y - " + yPos);
+                        Debug.Log("vertex " + i + "is within a structure area; moving it vertically to y - " + yPos);
 
                         vertices[i].y = yPos;
                     }
                 }
             }
 
+            //regen the mesh, based on these new vertices
             GenerateMesh(vertices);
         }
     }
@@ -345,7 +346,4 @@ namespace com.limphus.retro_survival_shooter
         public Vector2[] uvs; //array of uvs
         public Color[] colors; //array of colors
     }
-
-
-
 }

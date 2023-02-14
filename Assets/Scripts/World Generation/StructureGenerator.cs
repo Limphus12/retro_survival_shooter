@@ -21,8 +21,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector2Int gridSize;
         [SerializeField] private int gridMultiplier, gridOffset;
 
-        [Space]
-        [SerializeField] private StructureAreaStruct structureAreaStruct = new StructureAreaStruct();
+        private StructureAreaStruct structureAreaStruct = new StructureAreaStruct{ structureAreas = new List<Vector3>(), structurePositions = new List<Vector3>() };
 
         [Space]
         [SerializeField] private TerrainGenerator terrainGenerator;
@@ -117,11 +116,11 @@ namespace com.limphus.retro_survival_shooter
                             Vector3 placementPoint = new Vector3(hit.point.x, hit.point.y + randomOffset.y, hit.point.z);
 
                             //calculate a random rotation on the y axis
-                            //Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+                            Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
                             //...placing down a random asset from the placeable asset array!
-                            //GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, placementRotation, gameObject.transform);
-                            GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, Quaternion.identity, gameObject.transform);
+                            GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, placementRotation, gameObject.transform);
+                            //GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, Quaternion.identity, gameObject.transform);
 
                             //grabs the asset remover script and chucks the extents in the structureAreas list
                             AssetRemover ar = asset.GetComponentInChildren<AssetRemover>(); 
@@ -139,6 +138,7 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
 
+            //if we hav the terrain generator, we can modify teh vertices via this method
             if (terrainGenerator) terrainGenerator.ModifyVertices(structureAreaStruct);
         }
     }
