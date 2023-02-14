@@ -12,12 +12,10 @@ namespace com.limphus.retro_survival_shooter
 
         [SerializeField] private bool debug;
 
-        public Vector3 GetBoxExtents() => boxExtents;
-
         // Start is called before the first frame update
         void Start()
         {
-            Collider[] collisions = Physics.OverlapBox(transform.position, boxExtents, transform.localRotation);
+            Collider[] collisions = Physics.OverlapBox(transform.position, boxExtents);
 
             if (collisions.Length != 0)
             {
@@ -35,6 +33,8 @@ namespace com.limphus.retro_survival_shooter
                 Debug.Log("Removed " + i + " " + assetTag + "s");
             }
         }
+
+        public Vector3 GetBoxExtents() => boxExtents;
 
         private void OnDrawGizmos()
         {

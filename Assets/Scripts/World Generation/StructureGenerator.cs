@@ -22,7 +22,10 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private int gridMultiplier, gridOffset;
 
         [Space]
-        [SerializeField] StructureAreaStruct structureAreaStruct = new StructureAreaStruct();
+        [SerializeField] private StructureAreaStruct structureAreaStruct = new StructureAreaStruct();
+
+        [Space]
+        [SerializeField] private TerrainGenerator terrainGenerator;
 
         int i = 0;
 
@@ -135,6 +138,8 @@ namespace com.limphus.retro_survival_shooter
                     }
                 }
             }
+
+            if (terrainGenerator) terrainGenerator.ModifyVertices(structureAreaStruct);
         }
     }
 

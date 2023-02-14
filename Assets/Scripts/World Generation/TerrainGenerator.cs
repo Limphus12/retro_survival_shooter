@@ -136,6 +136,35 @@ namespace com.limphus.retro_survival_shooter
             meshCollider.sharedMesh = mesh;
         }
 
+        //when we want to generate a mesh with a pre-determined vertice array
+        private void GenerateMesh(Vector3[] vertices)
+        {
+            //create a new mesh
+            mesh = new Mesh();
+
+            //set the mesh filter's mesh
+            GetComponent<MeshFilter>().sharedMesh = mesh;
+
+            //ensure we have a clean mesh
+            mesh.Clear();
+
+            //generate the vertices, triangles, UVs and colours
+            mesh.vertices = vertices; //we dont have to regenerate the vertices, just assign them
+            mesh.triangles = CreateTriangles();
+            mesh.uv = GenerateUVs();
+            mesh.colors = colors; //don't need to regenerate the colors
+
+            //recalculate normals on the mesh
+            mesh.RecalculateNormals();
+
+            // optionally, add a mesh collider (As suggested by Franku Kek via Youtube comments).
+            // To use this, your MeshGenerator GameObject needs to have a mesh collider
+            // component added to it.  Then, just re-enable the code below.
+            mesh.RecalculateBounds();
+            MeshCollider meshCollider = GetComponent<MeshCollider>();
+            meshCollider.sharedMesh = mesh;
+        }
+
         public MeshData GetMeshData()
         {
             MeshData meshData = new MeshData
@@ -254,7 +283,7 @@ namespace com.limphus.retro_survival_shooter
                     else if (j > colorChance.x && j <= colorChance.y) colors[i] = Color.green;
                     else if (j > colorChance.y && j <= colorChance.z) colors[i] = Color.blue;
                     else if (j > colorChance.z && j <= 100) colors[i] = Color.black;
-                    
+
                     i++;
                 }
             }
@@ -263,6 +292,48 @@ namespace com.limphus.retro_survival_shooter
             this.colors = colors;
 
             return colors;
+        }
+
+        public void ModifyVertices(StructureAreaStruct sas)
+        {
+            //for loop to run through each vertice in our vertices array
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                //loop through each area and see if the vertice lands in that area
+                for (int j = 0; j < sas.structureAreas.Count; j++)
+                {
+                    //create a min position vector
+                    Vector3 minPos = new Vector3(
+                        sas.structurePositions[j].x - sas.structureAreas[j].x,
+                        sas.structurePositions[j].y - sas.structureAreas[j].y,
+                        sas.structurePositions[j].z - sas.structureAreas[j].z);
+
+                    //create a max position vector
+                    Vector3 maxPos = new Vector3(
+                        sas.structurePositions[j].x + sas.structureAreas[j].x,
+                        sas.structurePositions[j].y + sas.structureAreas[j].y,
+                        sas.structurePositions[j].z + sas.structureAreas[j].z);
+
+                    //check if the vertice is not within the 
+                    if (vertices[i].x < minPos.x || vertices[i].x > maxPos.x ||
+                        vertices[i].y < minPos.y || vertices[i].y > maxPos.y ||
+                        vertices[i].z < minPos.z || vertices[i].z > maxPos.z)
+                    {
+                        //do nothing
+                    }
+
+                    else
+                    {
+                        float yPos = sas.structurePositions[j].y;
+
+                        Debug.Log("vertice " + i + "is within a structure area; moving it vertically to y - " + yPos);
+
+                        vertices[i].y = yPos;
+                    }
+                }
+            }
+
+            GenerateMesh(vertices);
         }
     }
 
@@ -274,5 +345,7 @@ namespace com.limphus.retro_survival_shooter
         public Vector2[] uvs; //array of uvs
         public Color[] colors; //array of colors
     }
+
+
 
 }
