@@ -119,7 +119,7 @@ namespace com.limphus.retro_survival_shooter
                             Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
                             //...placing down a random asset from the placeable asset array!
-                            GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, placementRotation, gameObject.transform);
+                            GameObject asset = Instantiate(assets[Random.Range(0, assets.Length)], placementPoint, placementRotation, gameObject.transform);
                             //GameObject asset = Instantiate(assets[Random.Range(0, assets.Length - 1)], placementPoint, Quaternion.identity, gameObject.transform);
 
                             //grabs the asset remover script and chucks the extents in the structureAreas list
