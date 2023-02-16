@@ -41,16 +41,14 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
         [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
-
         [Header("Debug Settings")]
         public bool debug;
 
-        private bool canMove = true;
+        private bool canMove = true, canRotate = true;
 
-        public void ToggleCanMove(bool b)
-        {
-            canMove = b;
-        }
+        public void ToggleCanMove(bool b) => canMove = b;
+        public void ToggleCanRotate(bool b) => canRotate = b;
+
 
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
@@ -191,8 +189,8 @@ namespace com.limphus.retro_survival_shooter
             Vector3 right = transform.TransformDirection(Vector3.right);
 
             //calculate current speed in the Horizontal and Vertical directions (WASD)
-            curSpeedX = canMove ? currentSpeed * Input.GetAxis("Horizontal") : 0;
-            curSpeedZ = canMove ? currentSpeed * Input.GetAxis("Vertical") : 0;
+            curSpeedX = currentSpeed * Input.GetAxis("Horizontal");
+            curSpeedZ = currentSpeed * Input.GetAxis("Vertical");
 
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedZ) + (right * curSpeedX);
@@ -247,10 +245,10 @@ namespace com.limphus.retro_survival_shooter
         void Move()
         {
             //Move the controller
-            characterController.Move(moveDirection * Time.deltaTime);
+            if (canMove) characterController.Move(moveDirection * Time.deltaTime);
 
             //Player and Camera rotation
-            if (canMove)
+            if (canRotate)
             {
                 rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
                 rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
@@ -261,7 +259,7 @@ namespace com.limphus.retro_survival_shooter
                 }
 
                 //camera lean, sets the camera's Z rotation based off horizontal input
-                else if (cameraLean)
+                else if (cameraLean && canMove)
                 {
                     float currentX = Input.GetAxis("LeanHorizontal");
                     playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, currentX * -cameraLeanAmount);
@@ -357,8 +355,8 @@ namespace com.limphus.retro_survival_shooter
 
             else if (isCrouching)
             {
-                currentCeilingRaycast = standingHeight / 2 + 0.1f;
-                currentGroundRaycast = standingHeight / 2 + 0.25f;
+                currentCeilingRaycast = crouchingHeight / 2 + 0.1f;
+                currentGroundRaycast = crouchingHeight / 2 + 0.25f;
             }
         }
 

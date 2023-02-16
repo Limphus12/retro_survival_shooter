@@ -135,37 +135,6 @@ namespace com.limphus.retro_survival_shooter
         {
             if (playerStats)
             {
-                //if we're not consuming atm
-                if (!isConsuming)
-                {
-                    //and we are holding our right mouse button
-                    if (rightMouseInput && remainingUsageAmount > 0)
-                    {
-                        //start consuming
-                        StartConsume();
-                    }
-
-                    //if we are holding the right mouse button but we cannot consume it
-                    else if (rightMouseInput && remainingUsageAmount == 0)
-                    {
-                        Debug.Log("We cannot consume this consumable, we've already consumed it all!");
-                    }
-                }
-
-                //if we're currently consuming
-                else if (isConsuming)
-                {
-                    //if we release our right mouse input
-                    if (!rightMouseInput)
-                    {
-                        //stop the invoke of the Consume method
-                        CancelInvoke(nameof(Consume));
-
-                        //and end our consuming
-                        EndConsume();
-                    }
-                }
-
                 //check for stamina
                 float stamina = playerStats.GetCurrentStamina();
 
@@ -251,6 +220,37 @@ namespace com.limphus.retro_survival_shooter
                         ResetCharge();
                     }
                 }
+
+                //if we're not consuming atm
+                if (!isConsuming)
+                {
+                    //and we are holding our right mouse button
+                    if (rightMouseInput && remainingUsageAmount > 0)
+                    {
+                        //start consuming
+                        StartConsume();
+                    }
+
+                    //if we are holding the right mouse button but we cannot consume it
+                    else if (rightMouseInput && remainingUsageAmount == 0)
+                    {
+                        Debug.Log("We cannot consume this consumable, we've already consumed it all!");
+                    }
+                }
+
+                //if we're currently consuming
+                else if (isConsuming)
+                {
+                    //if we release our right mouse input
+                    if (!rightMouseInput)
+                    {
+                        //stop the invoke of the Consume method
+                        CancelInvoke(nameof(Consume));
+
+                        //and end our consuming
+                        EndConsume();
+                    }
+                }
             }
 
             //if we dont have the player stats reference
@@ -285,7 +285,7 @@ namespace com.limphus.retro_survival_shooter
                 //if we're not on the final consume, do the maths
                 if (remainingUsageAmount > 1)
                 {
-                    //round to an int how much hunger we're gonna consume
+                    //round to an int how much consumableAmount we're gonna use
                     int i = Mathf.RoundToInt(consumableAmount / useAmount);
 
                     //switch statement to replenish either hunger or thirst

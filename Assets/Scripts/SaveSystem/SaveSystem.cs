@@ -20,7 +20,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private PlayerStats playerStats;
 
         [Space]
-        [SerializeField] private InventoryManager playerInventory;
+        [SerializeField] private PlayerInventory playerInventory;
 
         [Header("World Stuff")]
         [SerializeField] private WorldGenerator worldGenerator;
@@ -34,30 +34,6 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         public TextMeshProUGUI debugtext;
-
-        private void Test()
-        {
-            List<GameObject> items = playerInventory.GetInventoryItems();
-
-            List<ItemData> itemDatas = new List<ItemData>();
-
-            foreach(GameObject item in items)
-            {
-                ItemData data = item.GetComponent<Item>().GetItemData();
-
-                if (data == null) return;
-
-                itemDatas.Add(data);
-            }
-
-            Test test = new Test
-            {
-                itemDatas = itemDatas
-            };
-
-            string str = JsonUtility.ToJson(test, true);
-            System.IO.File.WriteAllText(Application.persistentDataPath + "/Saves/" + "/Test_002.json", str);
-        }
 
         private void Test2()
         {
