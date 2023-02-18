@@ -88,6 +88,7 @@ namespace com.limphus.retro_survival_shooter
                 itemScript.ToggleEquip(b);
                 itemScript.enabled = b;
             }
+
             ItemSway sway = item.GetComponent<ItemSway>(); if (sway) sway.enabled = b;
             Animator anim = item.GetComponent<Animator>(); if (anim) anim.enabled = b;
 

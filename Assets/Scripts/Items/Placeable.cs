@@ -4,8 +4,12 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class Tool : Melee
+    public class Placeable : MonoBehaviour
     {
 
+        public void CheckInputs()
+        {
+
+        }
     }
 }

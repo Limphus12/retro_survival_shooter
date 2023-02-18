@@ -4,12 +4,10 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public enum InventorySlotType { WEAPON, TOOL, CONSUMABLE }
-
     public class PlayerInventorySlot : MonoBehaviour
     {
         [Header("Attributes - Inventory Slot")]
-        [SerializeField] private InventorySlotType slotType;
+        [SerializeField] private ItemType slotType;
 
         [Space]
         [SerializeField] private GameObject slotItem;
@@ -19,8 +17,6 @@ namespace com.limphus.retro_survival_shooter
             //grab the child for our slot item
             if (gameObject.transform.childCount > 0) slotItem = gameObject.transform.GetChild(0).gameObject;
         }
-
-
 
         public GameObject GetSlotItem()
         {

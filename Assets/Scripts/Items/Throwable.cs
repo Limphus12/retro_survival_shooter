@@ -4,8 +4,14 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class MeleeSway : WeaponSway
+    public class Throwable : MonoBehaviour
     {
-        //dont think we need to use this? but i'll just keep this here just in case...
+
+
+
+        public void CheckInputs()
+        {
+
+        }
     }
 }

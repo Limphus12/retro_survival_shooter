@@ -4,34 +4,42 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class Melee : Item
+    public class Melee : MonoBehaviour
     {
-        protected MeleeData meleeData;
+        [Header("Attributes - Melee")]
+        [SerializeField] private MeleeData meleeData;
 
-        protected float lightAttackRate;
-        protected float lightAttackDamage, attackRange, lightAttackTimeToHit;
-        protected int lightAttackStaminaCost;
+        private float lightAttackRate;
+        private float lightAttackDamage, attackRange, lightAttackTimeToHit;
+        private int lightAttackStaminaCost;
 
-        protected float heavyAttackRate;
-        protected float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
-        protected int heavyAttackStaminaCost;
+        private float heavyAttackRate;
+        private float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
+        private int heavyAttackStaminaCost;
 
-        protected float exhaustedAttackRate;
-        protected float exhaustedAttackDamage, exhaustedAttackTimeToHit;
+        private float exhaustedAttackRate;
+        private float exhaustedAttackDamage, exhaustedAttackTimeToHit;
 
-        protected PlayerStats playerStats;
-        protected Transform playerCamera;
+        private PlayerStats playerStats;
+        private Transform playerCamera;
 
-        protected MeleeSound meleeSound;
+        private MeleeSound meleeSound;
+        private WeaponSway weaponSway;
+        private MeleeAnimation meleeAnimation;
 
-        protected WeaponSway weaponSway;
-        protected MeleeAnimation meleeAnimation;
+        protected bool isEquipped, isAttacking, isBlocking, isCharging, isCharged, meleeAttack;
 
-        protected bool meleeInput, leftMouseInput, rightMouseInput;
-        protected bool isAttacking, isBlocking, isCharging, isCharged, previousMeleeInput, meleeAttack;
+        private void Awake() => Init();
+
+        public bool InUse()
+        {
+            if (isAttacking || isBlocking || isCharging) return true;
+
+            else return false;
+        }
 
         //initialization
-        protected override void Init()
+        protected void Init()
         {
             InitStats(); InitEffects();
 
@@ -39,21 +47,8 @@ namespace com.limphus.retro_survival_shooter
             if (!playerCamera) playerCamera = Camera.main.transform;
         }
 
-        protected override void InitStats()
+        protected void InitStats()
         {
-            base.InitStats();
-
-            //if we have item data assigned
-            if (itemData)
-            {
-                //if we have no melee data
-                if (!meleeData)
-                {
-                    //cast the melee data from our item data
-                    meleeData = (MeleeData)itemData;
-                }
-            }
-
             //MELEE
             lightAttackDamage = meleeData.lightAttackDamage;
             lightAttackRate = meleeData.lightAttackRate;
@@ -71,62 +66,17 @@ namespace com.limphus.retro_survival_shooter
             exhaustedAttackRate = meleeData.exhaustedAttackRate;
             exhaustedAttackDamage = meleeData.exhaustedAttackDamage;
             exhaustedAttackTimeToHit = meleeData.exhaustedAttackTimeToHit;
+
+            if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
         }
 
         private void InitEffects()
         {
-            //if we have no item sound assigned
-            if (!itemSound) Debug.LogWarning("No Item Sound found for " + gameObject.name + "; Assign Sound Reference!");
+            if (!meleeSound) meleeSound = gameObject.GetComponent<MeleeSound>();
 
-            //if we have item sound assigned
-            else if (itemSound)
-            {
-                //if we have no melee sound
-                if (!meleeSound)
-                {
-                    //then cast from our item sound
-                    meleeSound = (MeleeSound)itemSound;
-                }
-            }
+            if (!weaponSway) weaponSway = gameObject.GetComponent<WeaponSway>();
 
-            //if we have no item sway assigned
-            if (!itemSway) Debug.LogWarning("No Item Sway found for " + gameObject.name + "; Assign Sway Reference!");
-
-            //if we have item sway assigned
-            else if (itemSway)
-            {
-                //if we have no melee sway
-                if (!weaponSway)
-                {
-                    //then cast from our item sway
-                    weaponSway = (WeaponSway)itemSway;
-                }
-            }
-
-            //if we have no item animation assigned
-            if (!itemAnimation) Debug.LogWarning("No Item Animation found for " + gameObject.name + "; Assign Animation Reference!");
-
-            //if we have item animation assigned
-            else if (itemAnimation)
-            {
-                //if we have no melee animation
-                if (!meleeAnimation)
-                {
-                    //then cast from our item animation
-                    meleeAnimation = (MeleeAnimation)itemAnimation;
-                }
-            }
-        }
-
-        public override void ToggleEquip(bool b)
-        {
-            isEquipped = b;
-
-            //if we have equipped the weapon, play the equip sound.
-            if (isEquipped && meleeSound)
-            {
-                meleeSound.PlayEquipSound();
-            }
+            if (!meleeAnimation) meleeAnimation = gameObject.GetComponent<MeleeAnimation>();
         }
 
         private void Start()
@@ -138,25 +88,10 @@ namespace com.limphus.retro_survival_shooter
         private void Update()
         {
             //if this weapon is not equipped, then return;
-            if (!isEquipped) return;
-
-            Inputs(); Animation();
+            if (!isEquipped) return; Animation();
         }
 
-        protected virtual void Inputs()
-        {
-            previousMeleeInput = meleeInput;
-
-            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.V)) meleeInput = true;
-            else if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.V)) meleeInput = false;
-
-            if (Input.GetMouseButtonDown(1)) rightMouseInput = true;
-            else if (Input.GetMouseButtonUp(1)) rightMouseInput = false;
-
-            CheckAttack();
-        }
-
-        protected virtual void CheckAttack()
+        public void CheckInputs(bool meleeInput, bool previousMeleeInput, bool rightMouseInput)
         {
             //if were attacking or blocking already, dont do anything
             if (isAttacking) return;

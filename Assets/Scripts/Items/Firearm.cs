@@ -6,20 +6,21 @@ using UnityEngine;
 namespace com.limphus.retro_survival_shooter
 {
     [Serializable]
-    public enum FirearmSize { SMALL, LARGE } //prolly gonna be used to determine if we can put the gun in a holster or have to lug it on our back.
+    public enum FirearmSize { SMALL, MEDIUM, LARGE } //prolly gonna be used to determine if we can put the gun in a holster or have to lug it on our back.
     
     [Serializable]
-    public enum FirearmFireType { SEMI, BURST, AUTO, COCK } //mostly gonna be using the bolt and semi fire types, as we're using older weapons in this game.
-
+    public enum FirearmFireType { SEMI, BURST, AUTO, COCK } //mostly gonna be using the cock and semi fire types, as we're using older weapons in this game.
+    
     [Serializable]
     public enum FirearmShotType { BULLET, BUCKSHOT, EXPLOSIVE } //will mostly use bullet and buckshot shot types, as we are using older weapons in the game.
 
     [Serializable]
     public enum FirearmReloadType { CYLINDER, BOLT, MAGAZINE } //will mostly use cylinder and bolt reload types, as we are using older weapons in the game.
 
-    public class Firearm : Melee
+    public class Firearm : MonoBehaviour
     {
-        private FirearmData firearmData;
+        [Header("Attributes - Firearm")]
+        [SerializeField] private FirearmData firearmData;
 
         private float firearmDamage, firearmAttackRate;
 
@@ -28,7 +29,7 @@ namespace com.limphus.retro_survival_shooter
 
         private FirearmFireType fireType;
         private FirearmSize size;
-
+         
         private FirearmShotType shotType;
         private FirearmReloadType reloadType;
 
@@ -43,34 +44,24 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private WeaponRecoil cameraRecoil;
         [SerializeField] private WeaponRecoil weaponRecoil;
 
-        private bool isAiming, isReloading, reloadInput, isCocked, isCocking, firearmAttack;
+        private Transform playerCamera;
+
+        private bool isAttacking, isAiming, isReloading, isCocked, isCocking, firearmAttack;
         private int currentAmmo;
 
-        //initialization
-        protected override void Init()
+        private void Awake() => Init();
+
+        private void Init()
         {
             InitStats(); InitEffects();
 
-            if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
             if (!playerCamera) playerCamera = Camera.main.transform;
         }
 
-        protected override void InitStats()
+        private void InitStats()
         {
-            base.InitStats();
+            if (!firearmData) Debug.LogError("No Firearm Data Found!");
 
-            //if we have item data assigned
-            if (itemData)
-            {
-                //if we have no firearm data
-                if (!firearmData)
-                {
-                    //cast the firearm data from our item data
-                    firearmData = (FirearmData)itemData;
-                }
-            }
-
-            //FIREARM
             firearmDamage = firearmData.firearmDamage;
             firearmAttackRate = firearmData.firearmAttackRate;
 
@@ -88,115 +79,23 @@ namespace com.limphus.retro_survival_shooter
 
         private void InitEffects()
         {
-            //if we have no item sound assigned
-            if (!itemSound) Debug.LogWarning("No Item Sound found for " + gameObject.name + "; Assign Sound Reference!");
+            if (!firearmSway) firearmSway = gameObject.GetComponent<FirearmSway>();
 
-            //if we have item sound assigned
-            else if (itemSound)
-            {
-                //if we have no firearm sound
-                if (!firearmSound)
-                {
-                    //then cast from our item sound
-                    firearmSound = (FirearmSound)itemSound;
-                }
-            }
+            if (!firearmAnimation) firearmAnimation = gameObject.GetComponent<FirearmAnimation>();
 
-            //if we have no melee sound
-            if (!meleeSound)
-            {
-                //then grab from our object
-                meleeSound = gameObject.GetComponent<MeleeSound>();
-            }
-
-            //if we have no item sway assigned
-            if (!itemSway) Debug.LogWarning("No Item Sway found for " + gameObject.name + "; Assign Sway Reference!");
-
-            //if we have item sway assigned
-            else if (itemSway)
-            {
-                //if we have no weapon sway
-                if (!weaponSway)
-                {
-                    //then cast from our item sway
-                    weaponSway = (WeaponSway)itemSway;
-                }
-
-                //if we have no firearm sway
-                if (!firearmSway)
-                {
-                    //then cast from our item sway
-                    firearmSway = (FirearmSway)itemSway;
-                }
-            }
-
-            //if we have no item animation assigned
-            if (!itemAnimation) Debug.LogWarning("No Item Animation found for " + gameObject.name + "; Assign Animation Reference!");
-
-            //if we have item animation assigned
-            else if (itemAnimation)
-            {
-                //if we have no melee animation
-                if (!meleeAnimation)
-                {
-                    //then cast from our item animation
-                    meleeAnimation = (MeleeAnimation)itemAnimation;
-                }
-
-                //if we have no firearm animation
-                if (!firearmAnimation)
-                {
-                    //then cast from our item animation
-                    firearmAnimation = (FirearmAnimation)itemAnimation;
-                }
-            }
+            if (!firearmSound) firearmSound = gameObject.GetComponent<FirearmSound>();
         }
 
-        public override void ToggleEquip(bool b)
+        public bool InUse()
         {
-            isEquipped = b;
+            if (isAttacking || isReloading || isCocking) return true;
 
-            //if we have equipped the weapon, play the equip sound.
-            if (isEquipped && firearmSound)
-            {
-                firearmSound.PlayEquipSound();
-            }
+            else return false;
         }
 
-        private void Start()
-        {
-            //if this weapon is not equipped, then return;
-            if (!isEquipped) return;
-        }
+        private void Update() => Animation();
 
-        private void Update()
-        {
-            //if this weapon is not equipped, then return;
-            if (!isEquipped) return;
-
-            Inputs(); Animation();
-        }
-
-        protected override void Inputs()
-        {
-            previousMeleeInput = meleeInput;
-
-            if (Input.GetMouseButtonDown(0)) leftMouseInput = true;
-            else if (Input.GetMouseButtonUp(0)) leftMouseInput = false;
-
-            if (Input.GetMouseButtonDown(1)) rightMouseInput = true;
-            else if (Input.GetMouseButtonUp(1)) rightMouseInput = false;
-
-            if (Input.GetKeyDown(KeyCode.R)) reloadInput = true;
-            else if (Input.GetKeyUp(KeyCode.R)) reloadInput = false;
-
-            if (Input.GetKeyDown(KeyCode.V)) meleeInput = true;
-            else if (Input.GetKeyUp(KeyCode.V)) meleeInput = false;
-
-            CheckAttack();
-        }
-
-        protected override void CheckAttack()
+        public void CheckInputs(bool leftMouseInput, bool rightMouseInput, bool reloadInput)
         {
             //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
             if (reloadInput && !isReloading && !isAttacking && (CheckReload() == 0 || CheckReload() == 1))
@@ -235,7 +134,7 @@ namespace com.limphus.retro_survival_shooter
                         return;
                     }
 
-                    if (leftMouseInput) FirearmStartAttack();
+                    if (leftMouseInput) StartAttack();
 
                     break;
 
@@ -257,7 +156,7 @@ namespace com.limphus.retro_survival_shooter
                         return;
                     }
 
-                    if (leftMouseInput) FirearmStartAttack();
+                    if (leftMouseInput) StartAttack();
 
                     break;
                 case FirearmFireType.COCK:
@@ -297,129 +196,33 @@ namespace com.limphus.retro_survival_shooter
                     {
                         isCocked = false;
 
-                        FirearmStartAttack();
+                        StartAttack();
                     }
 
                     break;
             }
-
-            if (playerStats)
-            {
-                //check for stamina
-                float stamina = playerStats.GetCurrentStamina();
-
-                //if were not attacking and we press the l-mouse button or melee input
-                if (meleeInput)
-                {
-                    //So in code, ima have to check if we have mouse input, either start a timer or invoke some methods, then if we let go of the mouse before the specified time,
-                    //cancel the timer/invoke and do a light attack. However, if we go beyond the timer or we don't cancel the method invoke (because we held down the mouse),
-                    //then do a heavy attack. All before this, however, we need to check if we even have any stamina,
-                    //because if we don't, then we should perform an exhausted attack. Yeah, that sounds good…
-
-                    //if we're already charged up/are charging up, just return out of this, since we can only attack when we release the mouse button
-                    if (isCharged || isCharging) return;
-
-                    //if we are invoking the charge function
-                    if (IsInvoking(nameof(Charge)))
-                    {
-                        //if we're not charged or not charging (which should be an impossibility
-                        if (!isCharged && !isCharging)
-                        {
-                            Debug.LogWarning("calling the Charge function, even though we are not charged or charging?! this may be a bug");
-                        }
-
-                        //else just return, since we should be charging
-                        else return;
-                    }
-
-                    //else if we're not invoking the charge, and we have not already charged, and we have stamina
-                    else if (!IsInvoking(nameof(Charge)) && !isCharged && !isCharging && stamina > 0)
-                    {
-                        StartCharge(); return;
-                    }
-
-                    else if (stamina <= 0)
-                    {
-                        //do an exhausted attack!
-                        Debug.Log("Exhausted Attack!");
-                        SetupAttack(exhaustedAttackTimeToHit, exhaustedAttackRate, exhaustedAttackDamage, 0);
-                    }
-                }
-
-                //if we release the left mouse button or melee input
-                else if (!meleeInput)
-                {
-                    //if we we're have not been holding down the mouse
-                    if (previousMeleeInput == meleeInput)
-                    {
-                        //call the reset charge method, just in case
-                        ResetCharge();
-                    }
-
-                    //if we were holding down the mouse in teh last frame
-                    else if (previousMeleeInput != meleeInput)
-                    {
-                        //if we have charged
-                        if (isCharged)
-                        {
-                            //do a heavy attack!
-                            Debug.Log("Heavy Attack!");
-                            SetupAttack(heavyAttackTimeToHit, heavyAttackRate, heavyAttackDamage, heavyAttackStaminaCost);
-                        }
-
-                        //if we have not charged
-                        else if (!isCharged)
-                        {
-                            //if we are charging
-                            if (isCharging)
-                            {
-                                //cancel the charge
-                                CancelInvoke(nameof(Charge));
-                            }
-
-                            //if we have stamina
-                            if (stamina > 0)
-                            {
-                                //do the light attack
-                                Debug.Log("Light Attack!");
-                                SetupAttack(lightAttackTimeToHit, lightAttackRate, lightAttackDamage, lightAttackStaminaCost);
-                            }
-                        }
-
-                        //and call the reset charge method
-                        ResetCharge();
-                    }
-                }
-            }
-
-            //if we dont have the player stats reference
-            else if (!playerStats)
-            {
-                Debug.LogWarning("No Player Stats Detected! Please Assign the Player Stats!");
-                return;
-            }
         }
 
         //starts shooting
-        private void FirearmStartAttack()
+        private void StartAttack()
         {
             isAttacking = true; firearmAttack = true;
 
             //shoot immedietly, as this is a gun
-            FirearmAttack();
+            Attack();
 
             //if we have the firearm sound reference, call the play firing sound
             if (firearmSound) firearmSound.PlayFiringSound();
 
             //invoke end shoot after our rate of fire
-            Invoke(nameof(FirearmEndAttack), 1 / firearmAttackRate);
+            Invoke(nameof(EndAttack), 1 / firearmAttackRate);
         }
 
         //shoots!
-        private void FirearmAttack()
+        private void Attack()
         {
             //call the hit function, passing through the player camera
-            FirearmHit(playerCamera);
+            Hit(playerCamera);
 
             //i think i wanna add an ammo usage variable in teh future, but idk yet.
             currentAmmo -= 1;
@@ -433,12 +236,12 @@ namespace com.limphus.retro_survival_shooter
         }
 
         //ends shooting
-        private void FirearmEndAttack()
+        private void EndAttack()
         {
             isAttacking = false; firearmAttack = false;
         }
 
-        private void FirearmHit(Transform point)
+        private void Hit(Transform point)
         {
             //TO DO: implement different bullet types e.g. bullet, buckshot, explosive etc.
 
@@ -465,7 +268,7 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        protected override void Animation()
+        protected void Animation()
         {
             //if we have the animation reference
             if (firearmAnimation)
@@ -505,40 +308,6 @@ namespace com.limphus.retro_survival_shooter
                 {
                     firearmAnimation.PlayFirearmFire();
                     return;
-                }
-
-                //MELEE
-
-                //if we're charging our heavy attack, then play this anim
-                else if (isCharged || isCharging)
-                {
-                    meleeAnimation.PlayMeleeChargeAttack();
-                    return;
-                }
-
-                //if we're attacking in melee
-                else if (isAttacking && meleeAttack)
-                {
-                    //if our damage is the light attack damage, play this anim
-                    if (currentDamage == lightAttackDamage)
-                    {
-                        meleeAnimation.PlayMeleeLightAttack();
-                        return;
-                    }
-
-                    //if our damage is the heavy attack damage, play this anim
-                    else if (currentDamage == heavyAttackDamage)
-                    {
-                        meleeAnimation.PlayMeleeHeavyAttack();
-                        return;
-                    }
-
-                    //if our damage is the exhausted attack damage, play this anim
-                    else if (currentDamage == exhaustedAttackDamage)
-                    {
-                        meleeAnimation.PlayMeleeExhaustedAttack();
-                        return;
-                    }
                 }
 
                 //ITEM
@@ -645,20 +414,6 @@ namespace com.limphus.retro_survival_shooter
 
             //if we have the weapon sway reference, call the cock method on it too
             if (firearmSway) firearmSway.Cock(isCocking);
-        }
-
-        public FirearmData GetFirearmData()
-        {
-            if (firearmData != null) return firearmData;
-
-            else return null;
-        }
-
-        public void SetFirearmData(FirearmData firearmData)
-        {
-            this.firearmData = firearmData;
-
-            Init();
         }
     }
 }
