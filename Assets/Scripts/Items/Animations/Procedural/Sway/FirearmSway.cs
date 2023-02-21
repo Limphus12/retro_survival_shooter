@@ -6,7 +6,7 @@ namespace com.limphus.retro_survival_shooter
 {
     public class FirearmSway : WeaponSway
     {
-        [Header("Firearm - Reloading Settings")]
+        [Header("Attributes - Firearm Reloading Settings")]
         [SerializeField] protected Vector3 reloadingPosition;
         [SerializeField] protected Quaternion reloadingRotation;
 
@@ -18,7 +18,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected float reloadingTiltSmooth = 8.0f;
         [SerializeField] protected float reloadingTiltAmount = 2.0f, reloadingTiltMaximum = 2.0f;
 
-        [Header("Firearm - Cocking Settings")]
+        [Header("Attributes - Firearm Cocking Settings")]
         [SerializeField] protected Vector3 cockingPosition;
         [SerializeField] protected Quaternion cockingRotation;
 
@@ -38,7 +38,12 @@ namespace com.limphus.retro_survival_shooter
 
         protected override void CheckSway()
         {
-            if (isReloading) Sway(reloadingSwayAmount, reloadingSwayMaximum, reloadingSwaySmooth, reloadingPosition);
+            if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+            {
+                Sway(runningSwayAmount, runningSwayMaximum, runningSwaySmooth, runningPosition);
+            }
+            
+            else if (isReloading) Sway(reloadingSwayAmount, reloadingSwayMaximum, reloadingSwaySmooth, reloadingPosition);
 
             else if (isCocking) Sway(cockingSwayAmount, cockingSwayMaximum, cockingSwaySmooth, cockingPosition);
 
@@ -49,7 +54,12 @@ namespace com.limphus.retro_survival_shooter
 
         protected override void CheckTilt()
         {
-            if (isReloading) Tilt(reloadingTiltAmount, reloadingTiltMaximum, reloadingTiltSmooth, reloadingRotation);
+            if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+            {
+                Tilt(runningTiltAmount, runningTiltMaximum, runningTiltSmooth, runningRotation);
+            }
+
+            else if (isReloading) Tilt(reloadingTiltAmount, reloadingTiltMaximum, reloadingTiltSmooth, reloadingRotation);
 
             else if (isCocking) Tilt(cockingTiltAmount, cockingTiltMaximum, cockingTiltSmooth, cockingRotation);
 

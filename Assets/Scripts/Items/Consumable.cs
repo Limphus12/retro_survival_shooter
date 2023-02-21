@@ -8,6 +8,8 @@ namespace com.limphus.retro_survival_shooter
     [System.Serializable]
     public enum ConsumableType { FOOD, DRINK, MEDICINE, DRUG }
 
+    public enum ConsumableState { IDLE, CONSUMING }
+
     public class Consumable : MonoBehaviour
     {
         [Header("Attributes - Consumable")]
@@ -110,6 +112,8 @@ namespace com.limphus.retro_survival_shooter
 
             //invoke the consume method after the consume time
             Invoke(nameof(Consume), consumeTime);
+
+            if (consumableSound) consumableSound.PlayConsumingSound();
 
             Debug.Log("Started Consuming");
         }
@@ -221,6 +225,12 @@ namespace com.limphus.retro_survival_shooter
         {
             //if we have the weapon sway reference, call the aim method on it too
             if (weaponSway) weaponSway.Aim(b);
+        }
+
+        public ConsumableState GetConsumableState()
+        {
+            if (isConsuming) return ConsumableState.CONSUMING;
+            else return ConsumableState.IDLE;
         }
 
         public ConsumableData GetConsumableData()

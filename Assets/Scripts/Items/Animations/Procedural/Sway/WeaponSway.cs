@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
 {
     public class WeaponSway : ItemSway
     {
-        [Header("Weapon - Aiming Settings")]
+        [Header("Attributes - Weapon Aiming Settings")]
         [SerializeField] protected Vector3 aimingPosition;
         [SerializeField] protected Quaternion aimingRotation;
 
@@ -25,14 +25,24 @@ namespace com.limphus.retro_survival_shooter
 
         protected override void CheckSway()
         {
-            if (isAiming) Sway(aimingSwayAmount, aimingSwayMaximum, aimingSwaySmooth, aimingPosition);
+            if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+            {
+                Sway(runningSwayAmount, runningSwayMaximum, runningSwaySmooth, runningPosition);
+            }
+
+            else if (isAiming) Sway(aimingSwayAmount, aimingSwayMaximum, aimingSwaySmooth, aimingPosition);
 
             else Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
         }
 
         protected override void CheckTilt()
         {
-            if (isAiming) Tilt(aimingTiltAmount, aimingTiltMaximum, aimingTiltSmooth, aimingRotation);
+            if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+            {
+                Tilt(runningTiltAmount, runningTiltMaximum, runningTiltSmooth, runningRotation);
+            }
+
+            else if (isAiming) Tilt(aimingTiltAmount, aimingTiltMaximum, aimingTiltSmooth, aimingRotation);
 
             else Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
         }

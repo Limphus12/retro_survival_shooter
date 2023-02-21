@@ -5,6 +5,8 @@ using TMPro;
 
 namespace com.limphus.retro_survival_shooter
 {
+    public enum PlayerMovementState { WALKING, RUNNING, CROUCHING }
+
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
@@ -42,13 +44,12 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
         [Header("Debug Settings")]
-        public bool debug;
+        [SerializeField] private bool debug;
 
         private bool canMove = true, canRotate = true;
 
         public void ToggleCanMove(bool b) => canMove = b;
         public void ToggleCanRotate(bool b) => canRotate = b;
-
 
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
@@ -272,6 +273,15 @@ namespace com.limphus.retro_survival_shooter
         #endregion
 
         #region Stance Methods
+
+        public PlayerMovementState GetMovementState()
+        {
+            if (isRunning) return PlayerMovementState.RUNNING;
+
+            else if (isCrouching) return PlayerMovementState.CROUCHING;
+
+            else return PlayerMovementState.WALKING;
+        }
 
         void Crouch()
         {

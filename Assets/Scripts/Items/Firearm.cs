@@ -17,6 +17,8 @@ namespace com.limphus.retro_survival_shooter
     [Serializable]
     public enum FirearmReloadType { CYLINDER, BOLT, MAGAZINE } //will mostly use cylinder and bolt reload types, as we are using older weapons in the game.
 
+    public enum FirearmState { IDLE, ATTACKING, AIMING, AIMATTACK, RELOADING, COCKING }
+
     public class Firearm : MonoBehaviour
     {
         [Header("Attributes - Firearm")]
@@ -46,7 +48,7 @@ namespace com.limphus.retro_survival_shooter
 
         private Transform playerCamera;
 
-        private bool isAttacking, isAiming, isReloading, isCocked, isCocking, firearmAttack;
+        private bool isAttacking, isAiming, isReloading, isCocked, isCocking;
         private int currentAmmo;
 
         private void Awake() => Init();
@@ -92,8 +94,6 @@ namespace com.limphus.retro_survival_shooter
 
             else return false;
         }
-
-        private void Update() => Animation();
 
         public void CheckInputs(bool leftMouseInput, bool rightMouseInput, bool reloadInput)
         {
@@ -206,7 +206,7 @@ namespace com.limphus.retro_survival_shooter
         //starts shooting
         private void StartAttack()
         {
-            isAttacking = true; firearmAttack = true;
+            isAttacking = true;
 
             //shoot immedietly, as this is a gun
             Attack();
@@ -238,7 +238,7 @@ namespace com.limphus.retro_survival_shooter
         //ends shooting
         private void EndAttack()
         {
-            isAttacking = false; firearmAttack = false;
+            isAttacking = false;
         }
 
         private void Hit(Transform point)
@@ -268,57 +268,14 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        protected void Animation()
+        public FirearmState GetFirearmState()
         {
-            //if we have the animation reference
-            if (firearmAnimation)
-            {
-                //FIREARM
-
-                //if we're cocking the gun, then play this anim
-                if (isCocking)
-                {
-                    firearmAnimation.PlayFirearmCock();
-                    return;
-                }
-
-                //if we're reloading the gun, then play this anim
-                else if (isReloading) 
-                {
-                    firearmAnimation.PlayFirearmReload();
-                    return;
-                }
-
-                //if we're aiming the gun and we're not shooting, play this anim
-                else if (isAiming && !isAttacking) 
-                {
-                    firearmAnimation.PlayFirearmAim();
-                    return;
-                }
-
-                //if we're aiming the gun and we're shooting, play this anim
-                else if (isAiming && isAttacking) 
-                {
-                    firearmAnimation.PlayFirearmAimFire();
-                    return;
-                }
-
-                //if we're shooting, play this anim
-                else if (isAttacking && firearmAttack) 
-                {
-                    firearmAnimation.PlayFirearmFire();
-                    return;
-                }
-
-                //ITEM
-
-                //if we're not attacking, play this anim
-                else if (!isAttacking)
-                {
-                    firearmAnimation.PlayIdle();
-                    return;
-                }
-            }
+            if (isCocking) return FirearmState.COCKING;
+            else if (isReloading) return FirearmState.RELOADING;
+            else if (isAiming && !isAttacking) return FirearmState.AIMING;
+            if (isAttacking && isAiming) return FirearmState.AIMATTACK;
+            else if (isAttacking) return FirearmState.ATTACKING;
+            else return FirearmState.IDLE;
         }
 
         private int CheckReload()

@@ -6,7 +6,10 @@ namespace com.limphus.retro_survival_shooter
 {
     public class ItemSway : MonoBehaviour
     {
-        [Header("Attributes - Item Position Settings")]
+        [Header("Attributes - Item Default Settings")]
+        [SerializeField] protected PlayerController playerController;
+
+        [Space]
         [SerializeField] protected Vector3 defaultPosition;
         [SerializeField] protected Quaternion defaultRotation;
 
@@ -18,11 +21,26 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected float defaultTiltSmooth = 8.0f;
         [SerializeField] protected float defaultTiltAmount = 2.0f, defaultTiltMaximum = 2.0f;
 
+
+        [Header("Attributes - Item Running Settings")]
+        [SerializeField] protected Vector3 runningPosition;
+        [SerializeField] protected Quaternion runningRotation;
+
+        [Space]
+        [SerializeField] protected float runningSwaySmooth = 8.0f;
+        [SerializeField] protected float runningSwayAmount = 2.0f, runningSwayMaximum = 2.0f;
+
+        [Space]
+        [SerializeField] protected float runningTiltSmooth = 8.0f;
+        [SerializeField] protected float runningTiltAmount = 2.0f, runningTiltMaximum = 2.0f;
+
         protected Quaternion initialRotation;
 
         protected virtual void Awake()
         {
             initialRotation = defaultRotation;
+
+            if (!playerController) playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         }
 
         protected virtual void Update() 
@@ -33,12 +51,22 @@ namespace com.limphus.retro_survival_shooter
 
         protected virtual void CheckSway()
         {
-            Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
+            if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+            {
+                Sway(runningSwayAmount, runningSwayMaximum, runningSwaySmooth, runningPosition);
+            }
+
+            else Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
         }
 
         protected virtual void CheckTilt()
         {
-            Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
+            if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+            {
+                Tilt(runningTiltAmount, runningTiltMaximum, runningTiltSmooth, runningRotation);
+            }
+
+            else Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
         }
 
         protected void Sway(float amount, float maximum, float smooth, Vector3 position)

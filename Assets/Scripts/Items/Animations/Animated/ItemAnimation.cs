@@ -12,8 +12,10 @@ namespace com.limphus.retro_survival_shooter
         protected string currentState;
 
         const string IDLE = "idle";
+        const string RUNNING = "running";
 
         public void PlayIdle() => PlayAnimation(IDLE);
+        public void PlayRunning() => PlayAnimation(RUNNING);
 
         protected void PlayAnimation(string newState)
         {

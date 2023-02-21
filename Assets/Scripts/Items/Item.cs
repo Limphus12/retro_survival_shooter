@@ -35,6 +35,11 @@ namespace com.limphus.retro_survival_shooter
 
         private Transform playerCamera;
         private PlayerStats playerStats;
+        private PlayerController playerController;
+
+        private FirearmAnimation firearmAnimation;
+        private MeleeAnimation meleeAnimation;
+        private ConsumableAnimation consumableAnimation;
 
         private void Awake() => Init();
 
@@ -62,7 +67,7 @@ namespace com.limphus.retro_survival_shooter
 
         protected virtual void Init()
         {
-            InitStats(); InitReferences();
+            InitStats(); InitReferences(); InitEffects();
         }
 
         protected virtual void InitStats()
@@ -80,7 +85,32 @@ namespace com.limphus.retro_survival_shooter
         private void InitReferences()
         {
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+            if (!playerController) playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
             if (!playerCamera) playerCamera = Camera.main.transform;
+        }
+
+        private void InitEffects()
+        {
+            if (itemAnimation)
+            {
+                if (firearm && !firearmAnimation)
+                {
+                    //attempt to cast from the item animation
+                    firearmAnimation = (FirearmAnimation)itemAnimation;
+                }
+
+                if (melee && !meleeAnimation)
+                {
+                    //attempt to cast from the item animation
+                    meleeAnimation = (MeleeAnimation)itemAnimation;
+                }
+
+                if (consumable && !consumableAnimation)
+                {
+                    //attempt to cast from the item animation
+                    consumableAnimation = (ConsumableAnimation)itemAnimation;
+                }
+            }
         }
 
         public ItemData GetItemData()
@@ -132,7 +162,16 @@ namespace com.limphus.retro_survival_shooter
                 {
                     if (meleeInput) { melee.CheckInputs(meleeInput, previousMeleeInput, rightMouseInput); return; }
 
-                    if (firearm) firearm.CheckInputs(leftMouseInput, rightMouseInput, reloadInput);
+                    if (firearm)
+                    {
+                        //if we're running, only check for reload input, so that we cannot aim or gun on the run
+                        if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+                        {
+                            firearm.CheckInputs(false, false, reloadInput);
+                        }
+
+                        else firearm.CheckInputs(leftMouseInput, rightMouseInput, reloadInput);
+                    }
 
                     else if (consumable) consumable.CheckInputs(rightMouseInput);
 
@@ -144,13 +183,143 @@ namespace com.limphus.retro_survival_shooter
 
             else if (!melee)
             {
-                if (firearm) firearm.CheckInputs(leftMouseInput, rightMouseInput, reloadInput);
+                if (firearm)
+                {
+                    //if we're running, only check for reload input, so that we cannot aim or gun on the run
+                    if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+                    {
+                        firearm.CheckInputs(false, false, reloadInput);
+                    }
+
+                    else firearm.CheckInputs(leftMouseInput, rightMouseInput, reloadInput);
+                }
 
                 else if (consumable) consumable.CheckInputs(rightMouseInput);
 
                 else if (throwable) throwable.CheckInputs();
 
                 else if (placeable) placeable.CheckInputs();
+            }
+
+            Animation();
+        }
+
+        protected void Animation()
+        {
+            if (itemAnimation)
+            {
+                //if we're running, do the running animations
+                if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
+                {
+                    itemAnimation.PlayRunning();
+                    return;
+                }
+
+                //MELEE
+                if (melee && meleeAnimation)
+                {
+                    if (melee.GetMeleeState() == MeleeState.CHARGING)
+                    {
+                        meleeAnimation.PlayMeleeChargeAttack();
+                        return;
+                    }
+
+                    //if we're blocking and we're not attacking, play this anim
+                    else if (melee.GetMeleeState() == MeleeState.BLOCKING)
+                    {
+                        meleeAnimation.PlayMeleeBlock();
+                        return;
+                    }
+
+                    //if our damage is the light attack damage, play this anim
+                    if (melee.GetMeleeState() == MeleeState.LIGHTATTACKING)
+                    {
+                        meleeAnimation.PlayMeleeLightAttack();
+                        return;
+                    }
+
+                    //if our damage is the heavy attack damage, play this anim
+                    else if (melee.GetMeleeState() == MeleeState.HEAVYATTACKING)
+                    {
+                        meleeAnimation.PlayMeleeHeavyAttack();
+                        return;
+                    }
+
+                    //if our damage is the exhausted attack damage, play this anim
+                    else if (melee.GetMeleeState() == MeleeState.EXHAUSTEDATTACKING)
+                    {
+                        meleeAnimation.PlayMeleeExhaustedAttack();
+                        return;
+                    }
+
+                    //if we're not attacking, play this anim
+                    else if (melee.GetMeleeState() == MeleeState.IDLE)
+                    {
+                        meleeAnimation.PlayIdle();
+                        return;
+                    }
+                }
+
+                //FIREARM
+                if (firearm && firearmAnimation)
+                {
+                    //if we're cocking the gun, then play this anim
+                    if (firearm.GetFirearmState() == FirearmState.COCKING)
+                    {
+                        firearmAnimation.PlayFirearmCock();
+                        return;
+                    }
+
+                    //if we're reloading the gun, then play this anim
+                    else if (firearm.GetFirearmState() == FirearmState.RELOADING)
+                    {
+                        firearmAnimation.PlayFirearmReload();
+                        return;
+                    }
+
+                    //if we're aiming the gun and we're not shooting, play this anim
+                    else if (firearm.GetFirearmState() == FirearmState.AIMING)
+                    {
+                        firearmAnimation.PlayFirearmAim();
+                        return;
+                    }
+
+                    //if we're aiming the gun and we're shooting, play this anim
+                    else if (firearm.GetFirearmState() == FirearmState.AIMATTACK)
+                    {
+                        firearmAnimation.PlayFirearmAimFire();
+                        return;
+                    }
+
+                    //if we're shooting, play this anim
+                    else if (firearm.GetFirearmState() == FirearmState.ATTACKING)
+                    {
+                        firearmAnimation.PlayFirearmFire();
+                        return;
+                    }
+
+                    //ITEM
+                    //if we're not attacking, play this anim
+                    else if (firearm.GetFirearmState() == FirearmState.IDLE)
+                    {
+                        firearmAnimation.PlayIdle();
+                        return;
+                    }
+                }
+
+                //CONSUMABLE
+                if (consumable && consumableAnimation)
+                {
+                    if (consumable.GetConsumableState() == ConsumableState.CONSUMING)
+                    {
+                        consumableAnimation.PlayConsumableConsuming();
+                    }
+
+                    else if (consumable.GetConsumableState() == ConsumableState.IDLE)
+                    {
+                        consumableAnimation.PlayIdle();
+                    }
+                }
             }
         }
     }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+    public enum MeleeState { IDLE, LIGHTATTACKING, HEAVYATTACKING, EXHAUSTEDATTACKING, BLOCKING, CHARGING }
+
     public class Melee : MonoBehaviour
     {
         [Header("Attributes - Melee")]
@@ -27,7 +29,7 @@ namespace com.limphus.retro_survival_shooter
         private WeaponSway weaponSway;
         private MeleeAnimation meleeAnimation;
 
-        protected bool isEquipped, isAttacking, isBlocking, isCharging, isCharged, meleeAttack;
+        protected bool isEquipped, isAttacking, isBlocking, isCharging, isCharged;
 
         private void Awake() => Init();
 
@@ -77,18 +79,6 @@ namespace com.limphus.retro_survival_shooter
             if (!weaponSway) weaponSway = gameObject.GetComponent<WeaponSway>();
 
             if (!meleeAnimation) meleeAnimation = gameObject.GetComponent<MeleeAnimation>();
-        }
-
-        private void Start()
-        {
-            //if this weapon is not equipped, then return;
-            if (!isEquipped) return;
-        }
-
-        private void Update()
-        {
-            //if this weapon is not equipped, then return;
-            if (!isEquipped) return; Animation();
         }
 
         public void CheckInputs(bool meleeInput, bool previousMeleeInput, bool rightMouseInput)
@@ -244,7 +234,7 @@ namespace com.limphus.retro_survival_shooter
         //starts attacking
         protected void MeleeStartAttack()
         {
-            isAttacking = true; meleeAttack = true;
+            isAttacking = true;
 
             //invoking attack after a delay to simulate the swinging of a melee weapon
             Invoke(nameof(MeleeAttack), currentTimeToHit);
@@ -263,7 +253,7 @@ namespace com.limphus.retro_survival_shooter
         //ends shooting
         protected void MeleeEndAttack()
         {
-            isAttacking = false; meleeAttack = false;
+            isAttacking = false;
         }
 
         protected void MeleeHit(Transform point)
@@ -345,59 +335,38 @@ namespace com.limphus.retro_survival_shooter
             if (weaponSway) weaponSway.Aim(b);
         }
 
-        protected virtual void Animation()
+        public MeleeState GetMeleeState()
         {
-            //if we have the animation reference
-            if (meleeAnimation)
+            if (isCharged || isCharging) return MeleeState.CHARGING;
+
+            //TODO - Add block_hit animation
+
+            else if (isBlocking && !isAttacking) return MeleeState.BLOCKING;
+
+            else if (isAttacking)
             {
-                //if we're charging our heavy attack, then play this anim
-                if (isCharged || isCharging)
+                //if our damage is the light attack damage, play this anim
+                if (currentDamage == lightAttackDamage)
                 {
-                    meleeAnimation.PlayMeleeChargeAttack();
-                    return;
+                    return MeleeState.LIGHTATTACKING;
                 }
 
-                //TODO - Add block_hit animation
-
-                //if we're blocking and we're not attacking, play this anim
-                else if (isBlocking && !isAttacking)
+                //if our damage is the heavy attack damage, play this anim
+                else if (currentDamage == heavyAttackDamage)
                 {
-                    meleeAnimation.PlayMeleeBlock();
-                    return;
+                    return MeleeState.HEAVYATTACKING;
                 }
 
-                //if we're attacking
-                else if (isAttacking)
+                //if our damage is the exhausted attack damage, play this anim
+                else if (currentDamage == exhaustedAttackDamage)
                 {
-                    //if our damage is the light attack damage, play this anim
-                    if (currentDamage == lightAttackDamage)
-                    {
-                        meleeAnimation.PlayMeleeLightAttack();
-                        return;
-                    }
-
-                    //if our damage is the heavy attack damage, play this anim
-                    else if (currentDamage == heavyAttackDamage)
-                    {
-                        meleeAnimation.PlayMeleeHeavyAttack();
-                        return;
-                    }
-
-                    //if our damage is the exhausted attack damage, play this anim
-                    else if (currentDamage == exhaustedAttackDamage)
-                    {
-                        meleeAnimation.PlayMeleeExhaustedAttack();
-                        return;
-                    }
+                    return MeleeState.EXHAUSTEDATTACKING;
                 }
 
-                //if we're not attacking, play this anim
-                else if (!isAttacking)
-                {
-                    meleeAnimation.PlayIdle();
-                    return;
-                }
+                else return MeleeState.IDLE;
             }
+
+            else return MeleeState.IDLE;
         }
 
         public MeleeData GetMeleeData()

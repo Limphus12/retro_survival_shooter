@@ -10,5 +10,6 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Attributes - Sustenance")]
         public AudioClip consumeClip;
+        public AudioClip consumingClip;
     }
 }

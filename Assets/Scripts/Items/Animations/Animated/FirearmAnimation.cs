@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class FirearmAnimation : MeleeAnimation
+    public class FirearmAnimation : ItemAnimation
     {
         const string FIREARM_AIM = "firearm_aim";
         const string FIREARM_FIRE = "firearm_fire";

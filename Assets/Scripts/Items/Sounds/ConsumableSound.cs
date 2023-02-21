@@ -11,6 +11,7 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] protected AudioClip consumeClip;
+        [SerializeField] protected AudioClip consumingClip;
 
         protected override void Init()
         {
@@ -24,8 +25,10 @@ namespace com.limphus.retro_survival_shooter
             audioMixerGroup = sustenanceSoundData.audioMixerGroup;
 
             consumeClip = sustenanceSoundData.consumeClip;
+            consumingClip = sustenanceSoundData.consumingClip;
         }
 
         public void PlayConsumeSound() => PlaySound(consumeClip);
+        public void PlayConsumingSound() => PlaySound(consumingClip);
     }
 }

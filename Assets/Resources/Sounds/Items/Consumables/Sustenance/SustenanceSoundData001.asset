@@ -15,3 +15,4 @@ MonoBehaviour:
   equipClip: {fileID: 8300000, guid: 5d965a7520c053a41bcfb99d47c3682f, type: 3}
   audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
   consumeClip: {fileID: 8300000, guid: cc36698f3558b304e9ee37feb2d60eea, type: 3}
+  consumingClip: {fileID: 8300000, guid: 7ea1e076b5e7b5c4ab345e125b0e8ed4, type: 3}
