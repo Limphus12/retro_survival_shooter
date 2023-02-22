@@ -9,10 +9,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI hungerText;
-        [SerializeField] private TextMeshProUGUI thirstText, staminaText, temperatureText;
-        
-        
-        
+        [SerializeField] private TextMeshProUGUI thirstText, staminaText, meleeStaminaText, temperatureText;
         
         private PlayerStats playerStats;
         
@@ -26,6 +23,7 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnHungerChanged += PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged += PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged += PlayerStatsOnStaminaChanged;
+            playerStats.OnMeleeStaminaChanged += PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged += PlayerStatsOnTemperatureChanged;
         }
 
@@ -38,6 +36,7 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnHungerChanged += PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged += PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged += PlayerStatsOnStaminaChanged;
+            playerStats.OnMeleeStaminaChanged += PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged += PlayerStatsOnTemperatureChanged;
         }
 
@@ -50,6 +49,7 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnHungerChanged -= PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged -= PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
+            playerStats.OnMeleeStaminaChanged -= PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged -= PlayerStatsOnTemperatureChanged;
         }
 
@@ -62,6 +62,7 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnHungerChanged -= PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged -= PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
+            playerStats.OnMeleeStaminaChanged -= PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged -= PlayerStatsOnTemperatureChanged;
         }
 
@@ -80,6 +81,11 @@ namespace com.limphus.retro_survival_shooter
         private void PlayerStatsOnStaminaChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {
             if (staminaText) staminaText.text = "Stamina - " + e.i + "/100";
+        }
+
+        private void PlayerStatsOnMeleeStaminaChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        {
+            if (meleeStaminaText) meleeStaminaText.text = "Melee Stamina - " + e.i + "/100";
         }
 
         private void PlayerStatsOnTemperatureChanged(object sender, PlayerStats.OnTemperatureChangedEventArgs e)

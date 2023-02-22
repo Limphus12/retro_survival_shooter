@@ -12,14 +12,14 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Variables - Player Survival - Initial Stats")]
         [SerializeField] private int maxHunger;
-        [SerializeField] private int maxThirst, maxStamina;
+        [SerializeField] private int maxThirst, maxStamina, maxMeleeStamina;
 
         [Space]
         [SerializeField] private Temperature startingTemperature;
 
         [Header("Variables - Player Survival - Current Stats")]
         [SerializeField] private int currentHunger;
-        [SerializeField] private int currentThirst, currentStamina;
+        [SerializeField] private int currentThirst, currentStamina, currentMeleeStamina;
 
         [Space]
         [SerializeField] private Temperature currentTemperature;
@@ -57,11 +57,23 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float staminaReplenishTime;
 
+        [Header("Variables - Player Survival - Melee Stamina")]
+        [Tooltip("[WHEN MELEE IS NOT BEING USED] How much Stamina is replenished")] [SerializeField] private int meleeStaminaReplenishRate;
+
+        [Space]
+        [Tooltip("[IN SECONDS] - How quickly Stamina replenishes")] [SerializeField] private float meleeStaminaReplenishTickRate;
+
+        [Space]
+        [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float meleeStaminaReplenishTime;
+
+
         public class OnIntChangedEventArgs : EventArgs { public int i; }
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
 
-        public event EventHandler<OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged;
+        public event EventHandler<OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged, OnMeleeStaminaChanged;
         public event EventHandler<OnTemperatureChangedEventArgs> OnTemperatureChanged;
+
+        #region Initialization
 
         private void Start()
         {
@@ -81,8 +93,13 @@ namespace com.limphus.retro_survival_shooter
             SetCurrentHunger(maxHunger);
             SetCurrentThirst(maxThirst);
             SetCurrentStamina(maxStamina);
+            SetCurrentMeleeStamina(maxMeleeStamina);
             SetCurrentTemperature(startingTemperature);
         }
+
+        #endregion
+
+        #region Stats
 
         #region Hunger
 
@@ -258,6 +275,56 @@ namespace com.limphus.retro_survival_shooter
 
         #endregion
 
+        #region Melee Stamina
+
+        public int GetCurrentMeleeStamina() => currentMeleeStamina;
+
+        //sets our current stamina
+        public void SetCurrentMeleeStamina(int amount)
+        {
+            currentMeleeStamina = amount;
+
+            //doing our clamping in here
+            currentMeleeStamina = Mathf.Clamp(currentMeleeStamina, 0, maxMeleeStamina);
+
+            //firing off our event here
+            OnMeleeStaminaChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentMeleeStamina });
+        }
+
+        //a method to deplete stamina
+        public void DepleteMeleeStamina(int amount)
+        {
+            //decreases current stamina
+            SetCurrentMeleeStamina(GetCurrentMeleeStamina() - amount);
+
+            //checking if our stamina is 0
+            if (GetCurrentMeleeStamina() <= 0)
+            {
+                Debug.Log("Character (" + gameObject.name + ") Has no Melee Stamina!");
+            }
+        }
+
+        //a method to replenish stamina, calling the stamina replenish tick after a certain amount of time
+        public void ReplenishMeleeStamina()
+        {
+            InvokeRepeating(nameof(MeleeStaminaReplenishTick), meleeStaminaReplenishTime, meleeStaminaReplenishTickRate);
+        }
+
+        //a method to replenish stamina
+        public void ReplenishMeleeStamina(int amount)
+        {
+            //increases current stamina
+            SetCurrentMeleeStamina(GetCurrentMeleeStamina() + amount);
+
+            if (currentMeleeStamina >= maxMeleeStamina) //if we have full stamina
+            {
+                //then debug log that we have full stamina
+                Debug.Log("Character (" + gameObject.name + ") is at Full Stamina");
+            }
+        }
+
+        #endregion
+
         #region Temperature
 
         //used to grab our current temperature
@@ -275,6 +342,8 @@ namespace com.limphus.retro_survival_shooter
 
         #endregion
 
+        #endregion
+
         #region Ticks
 
         private void HungerTick()
@@ -286,6 +355,19 @@ namespace com.limphus.retro_survival_shooter
         {
             DepleteThirst(thirstDepletionRate);
         }
+
+        //damage ticks - when hunger and thirst are depleted
+        private void HungerDepletedTick()
+        {
+            DepleteHealth(hungerDepletedDamage);
+        }
+
+        private void ThirstDepletedTick()
+        {
+            DepleteHealth(thirstDepletedDamage);
+        }
+
+        //STAMINA
 
         public void StaminaReplenishTick()
         {
@@ -314,15 +396,22 @@ namespace com.limphus.retro_survival_shooter
             StaminaReplenishTick();
         }
 
-        //damage ticks - when hunger and thirst are depleted
-        private void HungerDepletedTick()
+        //MELEE STAMINA
+        public void MeleeStaminaReplenishTick()
         {
-            DepleteHealth(hungerDepletedDamage);
+            ReplenishMeleeStamina(meleeStaminaReplenishRate);
         }
 
-        private void ThirstDepletedTick()
+        public void CancelMeleeStaminaReplenishTick()
         {
-            DepleteHealth(thirstDepletedDamage);
+            CancelInvoke(nameof(MeleeStaminaReplenishTick));
+        }
+        
+        //a method to reset the melee stamina replenish tick
+        public void ResetMeleeStaminaReplenishTick()
+        {
+            CancelMeleeStaminaReplenishTick();
+            MeleeStaminaReplenishTick();
         }
 
         #endregion

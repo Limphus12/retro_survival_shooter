@@ -211,6 +211,48 @@ namespace com.limphus.retro_survival_shooter
                 //if we're running, do the running animations
                 if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
                 {
+                    //for melee
+                    if (melee && meleeAnimation)
+                    {
+                        //we need to check if we're attacking or charging an attack
+                        //so that way we can do melee attacks whilst on the run...
+
+                        //if we're charging or are charged, play this anim
+                        if (melee.GetMeleeState() == MeleeState.CHARGING)
+                        {
+                            meleeAnimation.PlayMeleeChargeAttack();
+                            return;
+                        }
+
+                        //if we're blocking and we're not attacking, play this anim
+                        else if (melee.GetMeleeState() == MeleeState.BLOCKING)
+                        {
+                            meleeAnimation.PlayMeleeBlock();
+                            return;
+                        }
+
+                        //if our damage is the light attack damage, play this anim
+                        if (melee.GetMeleeState() == MeleeState.LIGHTATTACKING)
+                        {
+                            meleeAnimation.PlayMeleeLightAttack();
+                            return;
+                        }
+
+                        //if our damage is the heavy attack damage, play this anim
+                        else if (melee.GetMeleeState() == MeleeState.HEAVYATTACKING)
+                        {
+                            meleeAnimation.PlayMeleeHeavyAttack();
+                            return;
+                        }
+
+                        //if our damage is the exhausted attack damage, play this anim
+                        else if (melee.GetMeleeState() == MeleeState.EXHAUSTEDATTACKING)
+                        {
+                            meleeAnimation.PlayMeleeExhaustedAttack();
+                            return;
+                        }
+                    }
+
                     itemAnimation.PlayRunning();
                     return;
                 }

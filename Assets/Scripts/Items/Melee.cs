@@ -95,7 +95,7 @@ namespace com.limphus.retro_survival_shooter
             if (playerStats)
             {
                 //check for stamina
-                float stamina = playerStats.GetCurrentStamina();
+                float stamina = playerStats.GetCurrentMeleeStamina();
 
                 //if were not attacking and we press the l-mouse button or melee input
                 if (meleeInput)
@@ -194,16 +194,16 @@ namespace com.limphus.retro_survival_shooter
             currentAttackRate = attackRate;
             currentDamage = damage;
 
-            if (playerStats.GetCurrentStamina() <= staminaCost)
+            if (playerStats.GetCurrentMeleeStamina() <= staminaCost)
             {
                 //reset the stamina replenishment tick & deplete all stamina
-                playerStats.ResetStaminaReplenishTick(); playerStats.SetCurrentStamina(0);
+                playerStats.ResetMeleeStaminaReplenishTick(); playerStats.SetCurrentMeleeStamina(0);
             }
 
-            else if (playerStats.GetCurrentStamina() > staminaCost)
+            else if (playerStats.GetCurrentMeleeStamina() > staminaCost)
             {
                 //reset the stamina replenishment tick & deplete a certain amount of stamina
-                playerStats.ResetStaminaReplenishTick(); playerStats.DepleteStamina(staminaCost);
+                playerStats.ResetMeleeStaminaReplenishTick(); playerStats.DepleteMeleeStamina(staminaCost);
             }
 
             //attack sounds - if we have the melee sound reference

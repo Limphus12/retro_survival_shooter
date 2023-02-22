@@ -213,7 +213,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1703589045165432264}
-  - component: {fileID: 3566637141192987051}
   m_Layer: 0
   m_Name: PROPS_GRP
   m_TagString: Untagged
@@ -237,21 +236,6 @@ Transform:
   m_Father: {fileID: 1379855301752015125}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3566637141192987051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9092021848702002798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89bb2d34ac1461f4da6e40ebee4cb254, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propGenerationPoints:
-  - {fileID: 6685990165364790723}
-  - {fileID: 4450882213568740486}
 --- !u!1001 &1379855301552596525
 PrefabInstance:
   m_ObjectHideFlags: 0

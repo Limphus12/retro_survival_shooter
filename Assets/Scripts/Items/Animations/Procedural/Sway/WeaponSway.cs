@@ -19,6 +19,9 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected float aimingTiltSmooth = 8.0f;
         [SerializeField] protected float aimingTiltAmount = 2.0f, aimingTiltMaximum = 2.0f;
 
+        [Space]
+        [SerializeField] protected Melee melee;
+
         protected bool isAiming;
 
         public void Aim(bool b) => isAiming = b;
@@ -27,6 +30,18 @@ namespace com.limphus.retro_survival_shooter
         {
             if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
             {
+                //if we're currently attacking or charging
+                if (melee && melee.GetMeleeState() != MeleeState.IDLE)
+                {
+                    //if we're blocking
+                    if (melee.GetMeleeState() == MeleeState.BLOCKING)
+                    {
+                        Sway(aimingSwayAmount, aimingSwayMaximum, aimingSwaySmooth, aimingPosition);
+                    }
+
+                    else Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
+                }
+
                 Sway(runningSwayAmount, runningSwayMaximum, runningSwaySmooth, runningPosition);
             }
 
@@ -39,6 +54,18 @@ namespace com.limphus.retro_survival_shooter
         {
             if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
             {
+                //if we're currently attacking or charging
+                if (melee && melee.GetMeleeState() != MeleeState.IDLE)
+                {
+                    //if we're blocking
+                    if (melee.GetMeleeState() == MeleeState.BLOCKING)
+                    {
+                        Tilt(aimingTiltAmount, aimingTiltMaximum, aimingTiltSmooth, aimingRotation);
+                    }
+
+                    else Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
+                }
+
                 Tilt(runningTiltAmount, runningTiltMaximum, runningTiltSmooth, runningRotation);
             }
 
