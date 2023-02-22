@@ -153,14 +153,14 @@ namespace com.limphus.retro_survival_shooter
             if (melee)
             {
                 //if we have no other function types, and we have melee input
-                if (!firearm && !throwable && !consumable && !placeable && meleeInput)
+                if (!firearm && !throwable && !consumable && !placeable)
                 {
                     melee.CheckInputs(meleeInput, previousMeleeInput, rightMouseInput);
                 }
 
                 else
                 {
-                    if (meleeInput) { melee.CheckInputs(meleeInput, previousMeleeInput, rightMouseInput); return; }
+                    melee.CheckInputs(meleeInput, previousMeleeInput, rightMouseInput);
 
                     if (firearm)
                     {
@@ -218,6 +218,7 @@ namespace com.limphus.retro_survival_shooter
                 //MELEE
                 if (melee && meleeAnimation)
                 {
+                    //if we're charging or are charged, play this anim
                     if (melee.GetMeleeState() == MeleeState.CHARGING)
                     {
                         meleeAnimation.PlayMeleeChargeAttack();
