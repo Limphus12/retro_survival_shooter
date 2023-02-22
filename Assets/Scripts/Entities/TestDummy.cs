@@ -8,7 +8,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [SerializeField] private double health;
 
-        public void Damage(double amount)
+        public void Damage(float amount)
         {
             health -= amount;
 

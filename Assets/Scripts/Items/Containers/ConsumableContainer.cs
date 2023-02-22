@@ -9,19 +9,17 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Consumable")]
         [SerializeField] private ConsumableContainerData data;
 
-        private void Update() => CheckLoot();
+        public override void StartInteract() => isInteracting = true;
 
-        protected override void CheckLoot()
-        {
-            if (!isLooting)
-            {
+        public override void StopInteract() => isInteracting = false;
 
-            }
-        }
+        public override bool IsLooting() => isLooting;
 
-        protected override void StartLoot()
+        public override void StartLoot()
         {
             isLooting = true;
+
+            Debug.Log("Started Looting the Consumable Containter!");
 
             Invoke(nameof(Loot), lootTime);
         }
@@ -35,12 +33,27 @@ namespace com.limphus.retro_survival_shooter
             //if we have the player inventory reference, add the item to their inventory.
             //if (playerInventory) playerInventory.AddInventoryItem(data.lootables[i]);
 
+            //we're gonna need to find a clear slot, or a slot with the same item
+            //and we're gonna need to compare the slot type to the item type
+            //e.g. WEAPON, TOOL, CONSUMABLE
+
             EndLoot();
         }
 
         protected override void EndLoot()
         {
+            Debug.Log("Ended Looting the Consumable Containter!");
+
             isLooting = false;
+        }
+
+        public override void StopLoot()
+        {
+            EndLoot();
+
+            Debug.Log("Stopped Looting the Consumable Containter!");
+
+            CancelInvoke(nameof(Loot));
         }
     }
 }

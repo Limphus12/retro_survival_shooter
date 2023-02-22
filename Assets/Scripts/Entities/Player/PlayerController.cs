@@ -43,6 +43,16 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private KeyCode runKey = KeyCode.LeftShift;
         [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
+        [Header("Interaction Settings")]
+        [SerializeField] private KeyCode interactKey = KeyCode.E;
+        [SerializeField] private float interactionDistance = 2.0f;
+
+        [Space]
+        [SerializeField] private GameObject interactionUI;
+        [SerializeField] private GameObject interactingUI;
+
+        private GameObject currentInteractableObject;
+
         [Header("Debug Settings")]
         [SerializeField] private bool debug;
 
@@ -55,6 +65,9 @@ namespace com.limphus.retro_survival_shooter
         private Vector3 moveDirection = Vector3.zero;
         private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
         private bool isCrouching, isRunning, isJumping, isCoyoteTime;
+        private bool isInteracting;
+
+        private IInteractable interactable;
 
         private PlayerStats playerStats;
 
@@ -81,11 +94,15 @@ namespace com.limphus.retro_survival_shooter
         //Update is called once per frame
         void Update()
         {
-            if (canMove) Inputs();
+            Inputs();
+            Interactions();
         }
 
         void Inputs()
         {
+            //check if we're attempting to interact
+            isInteracting = Input.GetKey(interactKey); 
+
             //if were not pressing the crouch key, and we have the room to stand
             if (!Input.GetKey(crouchKey) && !HitCeiling(currentCeilingRaycast))
             {
@@ -396,9 +413,150 @@ namespace com.limphus.retro_survival_shooter
             else return false;
         }
 
+        void Interactions()
+        {
+            //if we have no interactable
+            if (interactable == null && currentInteractableObject == null)
+            {
+                //do a raycast to find interactable objects
+                RaycastHit hit;
+                if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, interactionDistance))
+                {
+                    IInteractable interactable = hit.transform.GetComponent<IInteractable>();
+
+                    //if we manage to grab the interactable
+                    if (interactable != null)
+                    {
+                        interactionUI.SetActive(true);
+
+                        //if we're holding down the interact key - 'E'
+                        if (isInteracting)
+                        {
+                            //call the interact method and set our current interactable 
+                            interactable.StartInteract(); this.interactable = interactable;
+
+                            //and interactable obj
+                            currentInteractableObject = hit.transform.gameObject;
+                        }
+                    }
+
+                    else interactionUI.SetActive(false);
+                }
+
+                else interactionUI.SetActive(false);
+            }
+
+            //if we have an interactable and we're holding down the interact key - 'E'
+            else if (interactable != null && currentInteractableObject != null && isInteracting)
+            {
+                interactionUI.SetActive(false);
+                interactingUI.SetActive(true);
+
+                //attempt to grab the container script from our interactable
+                Container container = currentInteractableObject.GetComponent<Container>();
+
+                if (container)
+                {
+                    //make sure we cannot move whilst interacting with the container
+                    canMove = false;
+
+                    //attempt to cast this container to the different types
+
+                    //ammo
+                    AmmoContainer ammo = container as AmmoContainer;
+
+                    //if we grab the reference
+                    if (ammo)
+                    {
+                        //if we're not looting
+                        if (!ammo.IsLooting())
+                        {
+                            //then start looting!
+                            ammo.StartLoot();
+                        }
+                    }
+
+                    //consumable
+                    ConsumableContainer consumable = container as ConsumableContainer;
+
+                    //if we grab the reference
+                    if (consumable)
+                    {
+                        //if we're not looting
+                        if (!consumable.IsLooting())
+                        {
+                            consumable.StartLoot();
+                        }
+                    }
+                }
+            }
+
+            //if we have an interactable and we're not holding down the interact key - 'E'
+            else if (interactable != null && currentInteractableObject != null && !isInteracting)
+            {
+                interactingUI.SetActive(false);
+
+                //stop interacting with the interactable
+                interactable.StopInteract();
+
+                //make sure we can move again
+                canMove = true;
+
+                //attempt to grab the container script from our interactable
+                Container container = currentInteractableObject.GetComponent<Container>();
+
+                if (container)
+                {
+                    //attempt to cast this container to the different types
+
+                    //ammo
+                    //AmmoContainer ammo = (AmmoContainer)container; //old cast, threw invalid cast 
+                    AmmoContainer ammo = container as AmmoContainer; //new cast, works!
+
+                    //if we grab the reference
+                    if (ammo)
+                    {
+                        //if we're looting
+                        if (ammo.IsLooting())
+                        {
+                            //stop looting!
+                            ammo.StopLoot();
+                        }
+                    }
+
+                    //consumable
+                    ConsumableContainer consumable = container as ConsumableContainer;
+
+                    //if we grab the reference
+                    if (consumable)
+                    {
+                        //if we're looting
+                        if (consumable.IsLooting())
+                        {
+                            consumable.StopLoot();
+                        }
+                    }
+                }
+
+                //set our interactable to null
+                interactable = null;
+                currentInteractableObject = null;
+            }
+
+            else
+            {
+                //make sure we can move again
+                canMove = true;
+
+                //set our UI to inactive
+                interactionUI.SetActive(false);
+                interactingUI.SetActive(false);
+            }
+        }
+
         #endregion
 
-        #region Speed Methods
+            #region Speed Methods
 
         private float previousSpeed, speedI = 0f;
 

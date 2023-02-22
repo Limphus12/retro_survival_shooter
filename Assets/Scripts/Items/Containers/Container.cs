@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public abstract class Container : MonoBehaviour
+    public abstract class Container : MonoBehaviour, IInteractable
     {
         [Header("Attributes - Container")]
         [SerializeField] protected int lootAmount; //How many times this container can be looted
@@ -13,8 +13,11 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] protected PlayerInventory playerInventory;
 
-        protected bool isLooting;
+        protected bool isLooting, isInteracting;
         protected int remainingLootAmount = -1;
+
+        public abstract void StartInteract();
+        public abstract void StopInteract();
 
         protected void Awake() => Init();
 
@@ -25,10 +28,10 @@ namespace com.limphus.retro_survival_shooter
             if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerInventory>();
         }
 
-
-        protected abstract void CheckLoot();
-        protected abstract void StartLoot();
+        public abstract bool IsLooting();
+        public abstract void StartLoot();
         protected abstract void Loot();
         protected abstract void EndLoot();
+        public abstract void StopLoot();
     }
 }

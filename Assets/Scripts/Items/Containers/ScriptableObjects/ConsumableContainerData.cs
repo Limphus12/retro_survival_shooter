@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+
+    [CreateAssetMenu(fileName = "ConsumableContainerData", menuName = "Containers/Consumable")]
     public class ConsumableContainerData : ScriptableObject
     {
         [Header("Attributes - Consumable Loot")]

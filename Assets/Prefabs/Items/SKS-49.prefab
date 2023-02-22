@@ -321,18 +321,19 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4745835920928684932}
+  - component: {fileID: 561186970382688648}
   - component: {fileID: 4745835920928684930}
   - component: {fileID: 4745835920928684929}
-  - component: {fileID: 4745835920928684931}
-  - component: {fileID: 4745835920928684928}
+  - component: {fileID: 7186648629163708986}
   - component: {fileID: 7392162661057697630}
+  - component: {fileID: 4745835920928684928}
   m_Layer: 0
   m_Name: SKS-49
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4745835920928684932
 Transform:
   m_ObjectHideFlags: 0
@@ -348,6 +349,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &561186970382688648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4745835920928684933}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c055abacdefead438b6f96eee19598b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemType: 0
+  itemData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
+  itemSound: {fileID: 4745835920928684929}
+  itemSway: {fileID: 7186648629163708986}
+  itemAnimation: {fileID: 7392162661057697630}
+  melee: {fileID: 0}
+  firearm: {fileID: 4745835920928684930}
+  throwable: {fileID: 0}
+  placeable: {fileID: 0}
+  consumable: {fileID: 0}
 --- !u!114 &4745835920928684930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,27 +383,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c31564b5fc39f4eb4b8671abec9626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 0}
-  model: {fileID: 0}
-  itemName: SKS-49
-  itemWeight: 0
-  weaponData: {fileID: 0}
-  damage: 0
-  rateOfFire: 0
-  playerCamera: {fileID: 0}
   firearmData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
-  magazineSize: 0
-  reloadTime: 0
   cameraRecoil: {fileID: 0}
   weaponRecoil: {fileID: 4745835921807592169}
-  weaponSway: {fileID: 4745835920928684931}
-  fireType: 3
-  size: 0
-  shotType: 0
-  reloadType: 0
-  cockTime: 1.3
-  firearmSound: {fileID: 4745835920928684929}
-  firearmAnimation: {fileID: 7392162661057697630}
 --- !u!114 &4745835920928684929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,7 +406,7 @@ MonoBehaviour:
   dryFiringClip: {fileID: 0}
   reloadingClip: {fileID: 0}
   cockingClip: {fileID: 0}
---- !u!114 &4745835920928684931
+--- !u!114 &7186648629163708986
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -410,41 +415,64 @@ MonoBehaviour:
   m_GameObject: {fileID: 4745835920928684933}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a1ba6a047849c458c73399db544b31, type: 3}
+  m_Script: {fileID: 11500000, guid: 956665d636ddb1542a6ceb0ce0e73fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hipPosition: {x: 0.1, y: -0.1, z: 0.15}
-  hipRotation: {x: 0, y: 0, z: 0, w: 1}
-  hipSwaySmooth: 4
-  hipSwayAmount: 0
-  hipSwayMaximum: 2
-  hipTiltSmooth: 8
-  hipTiltAmount: 4
-  hipTiltMaximum: 8
+  playerController: {fileID: 0}
+  defaultPosition: {x: 0.1, y: -0.1, z: 0.15}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 1}
+  defaultSwaySmooth: 8
+  defaultSwayAmount: 0
+  defaultSwayMaximum: 2
+  defaultTiltSmooth: 5
+  defaultTiltAmount: 5
+  defaultTiltMaximum: 10
+  runningPosition: {x: 0, y: -0.15, z: 0.2}
+  runningRotation: {x: -0.18023995, y: 0.37533033, z: -0.07465784, w: -0.9061274}
+  runningSwaySmooth: 8
+  runningSwayAmount: 0
+  runningSwayMaximum: 2
+  runningTiltSmooth: 5
+  runningTiltAmount: 5
+  runningTiltMaximum: 10
   aimingPosition: {x: 0, y: -0.06, z: 0.05}
   aimingRotation: {x: 0, y: 0, z: 0, w: 1}
   aimingSwaySmooth: 8
   aimingSwayAmount: 0
   aimingSwayMaximum: 2
-  aimingTiltSmooth: 8
-  aimingTiltAmount: 0.5
-  aimingTiltMaximum: 1
+  aimingTiltSmooth: 5
+  aimingTiltAmount: 5
+  aimingTiltMaximum: 2
+  melee: {fileID: 0}
   reloadingPosition: {x: 0, y: -0.125, z: 0.15}
-  reloadingRotation: {x: -0.13655807, y: 0.37848005, z: -0.056564216, w: -0.9137315}
+  reloadingRotation: {x: -0.14054368, y: 0.37822965, z: -0.05821511, w: -0.91312695}
   reloadingSwaySmooth: 4
   reloadingSwayAmount: 0
   reloadingSwayMaximum: 2
-  reloadingTiltSmooth: 8
-  reloadingTiltAmount: 4
-  reloadingTiltMaximum: 8
+  reloadingTiltSmooth: 5
+  reloadingTiltAmount: 5
+  reloadingTiltMaximum: 10
   cockingPosition: {x: 0, y: -0.1, z: 0.2}
-  cockingRotation: {x: 0.07301947, y: 0.3756525, z: -0.17628452, w: -0.90690523}
+  cockingRotation: {x: 0.07301945, y: 0.3756525, z: -0.17628452, w: -0.90690523}
   cockingSwaySmooth: 4
   cockingSwayAmount: 0
   cockingSwayMaximum: 2
-  cockingTiltSmooth: 8
-  cockingTiltAmount: 4
-  cockingTiltMaximum: 8
+  cockingTiltSmooth: 5
+  cockingTiltAmount: 5
+  cockingTiltMaximum: 10
+--- !u!114 &7392162661057697630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4745835920928684933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c1ff17d2b6f344f9a79cae329f8bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 4745835920928684928}
 --- !u!95 &4745835920928684928
 Animator:
   serializedVersion: 3
@@ -464,19 +492,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7392162661057697630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4745835920928684933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6c1ff17d2b6f344f9a79cae329f8bc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 4745835920928684928}
 --- !u!1 &4745835921053682292
 GameObject:
   m_ObjectHideFlags: 0
