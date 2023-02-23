@@ -100,5 +100,48 @@ namespace com.limphus.retro_survival_shooter
 
             //TODO: add layer functions when we get the proper fps rendering implemented.
         }
+
+        public bool CanAddItem(ItemType itemType)
+        {
+            foreach(PlayerInventorySlot slot in playerInventorySlots)
+            {
+                GameObject item = slot.GetSlotItem();
+
+                //if we have no item on the player inventory slot
+                if (!item)
+                {
+                    //check if the slot can take the same item type
+                    if (slot.GetItemType() == itemType)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void AddItem(GameObject item, ItemType itemType)
+        {
+            if (itemType == ItemType.WEAPON)
+            {
+
+            }
+
+            else if (itemType == ItemType.TOOL)
+            {
+
+            }
+
+            else if (itemType == ItemType.CONSUMABLE)
+            {
+
+            }
+
+            else if (itemType == ItemType.AMMO)
+            {
+
+            }
+        }
     }
 }

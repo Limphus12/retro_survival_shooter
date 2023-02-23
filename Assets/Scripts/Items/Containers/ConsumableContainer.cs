@@ -12,6 +12,13 @@ namespace com.limphus.retro_survival_shooter
         public override void StartInteract() => isInteracting = true;
 
         public override void StopInteract() => isInteracting = false;
+        
+        public override bool CanLoot()
+        {
+            if (remainingLootAmount > 0) return true;
+
+            else return false;
+        }
 
         public override bool IsLooting() => isLooting;
 
@@ -36,6 +43,8 @@ namespace com.limphus.retro_survival_shooter
             //we're gonna need to find a clear slot, or a slot with the same item
             //and we're gonna need to compare the slot type to the item type
             //e.g. WEAPON, TOOL, CONSUMABLE
+
+            remainingLootAmount--;
 
             EndLoot();
         }

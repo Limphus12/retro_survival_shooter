@@ -19,6 +19,13 @@ namespace com.limphus.retro_survival_shooter
             isInteracting = false;
         }
 
+        public override bool CanLoot()
+        {
+            if (remainingLootAmount > 0) return true;
+
+            else return false;
+        }
+
         public override bool IsLooting() => isLooting;
 
         public override void StartLoot()
@@ -43,6 +50,8 @@ namespace com.limphus.retro_survival_shooter
 
             //essentially the ammo will be a 'stat' of the firearm itself.
             //similar to the player stats...
+
+            remainingLootAmount--;
 
             EndLoot();
         }

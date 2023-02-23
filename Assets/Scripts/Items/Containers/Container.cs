@@ -12,12 +12,18 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] protected PlayerInventory playerInventory;
+        [SerializeField] protected ItemType containerType;
 
+        [Space]
         protected bool isLooting, isInteracting;
-        protected int remainingLootAmount = -1;
+        [SerializeField] protected int remainingLootAmount = -1;
 
         public abstract void StartInteract();
         public abstract void StopInteract();
+
+        public ItemType GetItemType() => containerType;
+
+        public void SetItemType(ItemType containerType) => this.containerType = containerType;
 
         protected void Awake() => Init();
 
@@ -25,9 +31,10 @@ namespace com.limphus.retro_survival_shooter
         {
             if (remainingLootAmount == -1) remainingLootAmount = lootAmount; //if we haven't initialized the loot amount remaining, do it here.
 
-            if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerInventory>();
+            if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
         }
 
+        public abstract bool CanLoot();
         public abstract bool IsLooting();
         public abstract void StartLoot();
         protected abstract void Loot();

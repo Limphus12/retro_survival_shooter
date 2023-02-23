@@ -12,6 +12,10 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private GameObject slotItem;
 
+        public ItemType GetItemType() => slotType;
+
+        public void SetItemType(ItemType slotType) => this.slotType = slotType;
+
         private void Start()
         {
             //grab the child for our slot item
