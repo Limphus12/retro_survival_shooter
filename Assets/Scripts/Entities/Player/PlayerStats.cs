@@ -319,7 +319,7 @@ namespace com.limphus.retro_survival_shooter
             if (currentMeleeStamina >= maxMeleeStamina) //if we have full stamina
             {
                 //then debug log that we have full stamina
-                Debug.Log("Character (" + gameObject.name + ") is at Full Stamina");
+                Debug.Log("Character (" + gameObject.name + ") is at Full Melee Stamina");
             }
         }
 
@@ -411,7 +411,7 @@ namespace com.limphus.retro_survival_shooter
         public void ResetMeleeStaminaReplenishTick()
         {
             CancelMeleeStaminaReplenishTick();
-            MeleeStaminaReplenishTick();
+            ReplenishMeleeStamina();
         }
 
         #endregion
