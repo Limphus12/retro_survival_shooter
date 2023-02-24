@@ -59,12 +59,6 @@ namespace com.limphus.retro_survival_shooter
             if (isEquipped && itemSound) itemSound.PlayEquipSound();
         }
 
-        private void Start()
-        {
-            //if this item is not equipped, then return;
-            if (!isEquipped) return;
-        }
-
         protected virtual void Init()
         {
             InitStats(); InitReferences(); InitEffects();
@@ -131,6 +125,12 @@ namespace com.limphus.retro_survival_shooter
 
         public void SetItemType(ItemType itemType) => this.itemType = itemType;
 
+        private void Start()
+        {
+            //if this item is not equipped, then return;
+            if (!isEquipped) return;
+        }
+
         private void Update() => Inputs();
 
         private void Inputs()
@@ -154,11 +154,18 @@ namespace com.limphus.retro_survival_shooter
 
         private void Functions()
         {
-            //if we're running, dont do anything, just move onto the animation function
+            //if we're running, cancel functions and move onto the animation function
             if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
             {
-                Animation();
-                return;
+                //cancel any functions we have
+                if (melee) melee.Interrupt();
+                if (firearm) firearm.Interrupt();
+                if (consumable) consumable.Interrupt();
+                //if (throwable) throwable.
+                //if (placeable) placeable.
+
+                //move onto the animations instead, and return;
+                Animation(); return;
             }
 
             if (melee)
@@ -201,7 +208,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (itemAnimation)
             {
-                //if we're running, do the running animations
+                //if we're running, do the running animation only
                 if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
                 {
                     itemAnimation.PlayRunning();

@@ -29,6 +29,8 @@ namespace com.limphus.retro_survival_shooter
 
         private PlayerStats playerStats;
 
+        public bool InUse() => isConsuming;
+
         private void Awake() => Init();
 
         private void Init()
@@ -221,6 +223,13 @@ namespace com.limphus.retro_survival_shooter
             Debug.Log("Ended Consuming");
         }
 
+        private void InterruptConsume()
+        {
+            CancelInvoke(nameof(Consume));
+
+            EndConsume();
+        }
+
         private void Aim(bool b)
         {
             //if we have the weapon sway reference, call the aim method on it too
@@ -245,6 +254,11 @@ namespace com.limphus.retro_survival_shooter
             this.consumableData = consumableData;
 
             Init();
+        }
+
+        public void Interrupt()
+        {
+            if (InUse()) InterruptConsume();
         }
     }
 }

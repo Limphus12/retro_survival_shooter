@@ -39,8 +39,18 @@ namespace com.limphus.retro_survival_shooter
 
             slotItem = item;
 
-            //grab the item component and toggle the isEquipped bool
-            slotItem.GetComponent<Item>().ToggleEquip(true);
+            //set the parent and position
+            slotItem.transform.parent = gameObject.transform;
+            slotItem.transform.position = gameObject.transform.position;
+
+            Item itemScript = slotItem.GetComponent<Item>();
+
+            if (itemScript)
+            {
+                itemScript.ToggleEquip(false);
+                itemScript.enabled = false;
+                slotItem.SetActive(false);
+            }
         }
 
         public void RemoveSlotItem()

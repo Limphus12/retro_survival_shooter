@@ -327,6 +327,13 @@ namespace com.limphus.retro_survival_shooter
             isCharging = false;
         }
 
+        private void InterruptCharge()
+        {
+            CancelInvoke(nameof(Charge));
+
+            ResetCharge();
+        }
+
         protected void Block(bool b)
         {
             isBlocking = b;
@@ -381,6 +388,17 @@ namespace com.limphus.retro_survival_shooter
             this.meleeData = meleeData;
 
             Init();
+        }
+
+        public void Interrupt()
+        {
+            if (!InUse()) return;
+
+            else
+            {
+                if (isBlocking) Block(false);
+                if (isCharging) InterruptCharge();
+            }
         }
     }
 }

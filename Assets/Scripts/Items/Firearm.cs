@@ -338,6 +338,13 @@ namespace com.limphus.retro_survival_shooter
             if (firearmSway) firearmSway.Reload(isReloading);
         }
 
+        private void InterruptReload()
+        {
+            CancelInvoke(nameof(Reload));
+
+            EndReload();
+        }
+
         //starts cocking
         private void StartCock()
         {
@@ -371,6 +378,27 @@ namespace com.limphus.retro_survival_shooter
 
             //if we have the weapon sway reference, call the cock method on it too
             if (firearmSway) firearmSway.Cock(isCocking);
+        }
+
+        //heh
+        private void InterruptCock()
+        {
+            CancelInvoke(nameof(Cock));
+
+            EndCock();
+        }
+
+        //a method to interrupt the firearm functions
+        public void Interrupt()
+        {
+            if (!InUse()) return;
+
+            else
+            {
+                if (isReloading) InterruptReload();
+
+                if (isCocking) InterruptCock();
+            }
         }
     }
 }

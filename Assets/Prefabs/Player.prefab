@@ -8138,8 +8138,8 @@ MonoBehaviour:
   - {fileID: 4690853977642445386}
   - {fileID: 4690853976747584050}
   slotKeys: 310000003200000033000000340000003500000036000000370000003800000039000000300000002d0000003d000000
-  selectedItem: 6
-  previousSelectedItem: 6
+  selectedItem: 0
+  previousSelectedItem: 0
 --- !u!1 &5358056577461103855
 GameObject:
   m_ObjectHideFlags: 0

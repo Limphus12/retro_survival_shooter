@@ -14,9 +14,9 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected PlayerInventory playerInventory;
         [SerializeField] protected ItemType containerType;
 
-        [Space]
+        
         protected bool isLooting, isInteracting;
-        [SerializeField] protected int remainingLootAmount = -1;
+        [Space, SerializeField] protected int remainingLootAmount = -1;
 
         public abstract void StartInteract();
         public abstract void StopInteract();

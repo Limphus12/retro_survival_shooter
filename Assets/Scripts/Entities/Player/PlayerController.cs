@@ -442,7 +442,7 @@ namespace com.limphus.retro_survival_shooter
                             //or if the container can be looted...
 
                             //if we cannot
-                            if (!playerInventory.CanAddItem(container.GetItemType()) || !container.CanLoot())
+                            if (!container.CanLoot() || !playerInventory.CanAddItem(container.GetItemType()))
                             {
                                 //tell us that we cannot interact with this item
                                 cannotInteractUI.SetActive(true);
@@ -475,19 +475,80 @@ namespace com.limphus.retro_survival_shooter
             //else if we managed to find an interactable (and we started interacting with it)
             else if (interactable != null && currentInteractableObject != null)
             {
+                //attempt to grab the container script from our interactable
+                Container container = currentInteractableObject.GetComponent<Container>();
+
+                //if we have a container
+                if (container)
+                {
+                    //if we cannot loot (either no more remaining loot or inventory slots)
+                    if (!container.CanLoot() || !playerInventory.CanAddItem(container.GetItemType()))
+                    {
+                        //force us out of the looting
+
+                        //make sure we can move again
+                        canMove = true;
+
+                        interactionUI.SetActive(false);
+                        interactingUI.SetActive(false);
+
+                        //if we had an interactable
+                        if (interactable != null && currentInteractableObject != null)
+                        {
+                            //stop interacting with the interactable
+                            interactable.StopInteract();
+
+                            if (container)
+                            {
+                                //attempt to cast this container to the different types
+
+                                //ammo
+                                //AmmoContainer ammo = (AmmoContainer)container; //old cast, threw invalid cast 
+                                AmmoContainer ammo = container as AmmoContainer; //new cast, works!
+
+                                //if we grab the reference
+                                if (ammo)
+                                {
+                                    //if we're looting
+                                    if (ammo.IsLooting())
+                                    {
+                                        //stop looting!
+                                        ammo.StopLoot();
+                                    }
+                                }
+
+                                //consumable
+                                ConsumableContainer consumable = container as ConsumableContainer;
+
+                                //if we grab the reference
+                                if (consumable)
+                                {
+                                    //if we're looting
+                                    if (consumable.IsLooting())
+                                    {
+                                        consumable.StopLoot();
+                                    }
+                                }
+                            }
+
+                            //set our interactable to null
+                            interactable = null;
+                            currentInteractableObject = null;
+                            return;
+                        }
+                    }
+                }
+
                 //if we're still holding down the interact key - 'E'
                 if (isInteracting)
                 {
                     interactionUI.SetActive(false);
                     interactingUI.SetActive(true);
 
-                    //attempt to grab the container script from our interactable
-                    Container container = currentInteractableObject.GetComponent<Container>();
-
                     if (container)
                     {
                         //if we cannot loot the container
-                        if (!container.CanLoot())
+                        if (!container.CanLoot() || !playerInventory.CanAddItem(container.GetItemType()))
                         {
                             //make sure we can move again
                             canMove = true;
@@ -551,9 +612,6 @@ namespace com.limphus.retro_survival_shooter
                     {
                         //stop interacting with the interactable
                         interactable.StopInteract();
-
-                        //attempt to grab the container script from our interactable
-                        Container container = currentInteractableObject.GetComponent<Container>();
 
                         if (container)
                         {

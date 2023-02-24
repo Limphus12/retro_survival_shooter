@@ -49,14 +49,14 @@ namespace com.limphus.retro_survival_shooter
 
                 scrollInput = Input.GetAxis("Mouse ScrollWheel");
 
-                if (scrollInput > 0)
+                if (scrollInput < 0)
                 {
                     if (selectedItem >= playerInventorySlots.Length - 1) selectedItem = 0;
 
                     else selectedItem++;
                 }
 
-                else if (scrollInput < 0)
+                else if (scrollInput > 0)
                 {
                     if (selectedItem <= 0) selectedItem = playerInventorySlots.Length - 1;
 
@@ -123,24 +123,25 @@ namespace com.limphus.retro_survival_shooter
 
         public void AddItem(GameObject item, ItemType itemType)
         {
-            if (itemType == ItemType.WEAPON)
+            if (itemType == ItemType.AMMO)
             {
-
+                Debug.Log("Attempting to add ammo to inventory!");
+                return;
             }
 
-            else if (itemType == ItemType.TOOL)
+            foreach (PlayerInventorySlot slot in playerInventorySlots)
             {
+                GameObject slotItem = slot.GetSlotItem();
 
-            }
-
-            else if (itemType == ItemType.CONSUMABLE)
-            {
-
-            }
-
-            else if (itemType == ItemType.AMMO)
-            {
-
+                //if we have no item on the player inventory slot
+                if (!slotItem)
+                {
+                    //check if the slot can take the same item type
+                    if (slot.GetItemType() == itemType)
+                    {
+                        slot.SetSlotItem(item); return;
+                    }
+                }
             }
         }
     }
