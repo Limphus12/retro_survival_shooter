@@ -16,6 +16,7 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         public int magazineSize;
         public float reloadTime;
+        public int maxAmmoReserves;
 
         [Space]
         public FirearmFireType fireType;

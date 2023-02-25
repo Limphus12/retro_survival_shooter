@@ -45,11 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d06377e51a54c4ab756efd593656d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootAmount: 1
-  lootTime: 10
+  lootAmount: 8
+  lootTime: 2
   playerInventory: {fileID: 0}
   containerType: 3
-  ammoPercentage: 25
+  remainingLootAmount: -1
+  ammoPercentage: 0.25
 --- !u!65 &8637004370864856106
 BoxCollider:
   m_ObjectHideFlags: 0

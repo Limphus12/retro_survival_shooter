@@ -144,5 +144,29 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
         }
+
+        public List <Firearm> GetFirearms()
+        {
+            List<Firearm> firearms = new List<Firearm>();
+
+            foreach (PlayerInventorySlot slot in playerInventorySlots)
+            {
+                if (slot.GetItemType() == ItemType.WEAPON)
+                {
+                    GameObject slotItem = slot.GetSlotItem();
+
+                    if (slotItem)
+                    {
+                        Firearm firearm = slotItem.GetComponent<Firearm>();
+
+                        if (firearm) firearms.Add(firearm);
+                    }
+                }
+            }
+
+            if (firearms.Count > 0) return firearms;
+
+            else return null;
+        }
     }
 }

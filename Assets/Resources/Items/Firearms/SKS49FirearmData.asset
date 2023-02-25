@@ -32,6 +32,7 @@ MonoBehaviour:
   firearmAttackRate: 1
   magazineSize: 6
   reloadTime: 1.5
+  maxAmmoReserves: 18
   fireType: 3
   size: 1
   shotType: 0

@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
     public class AmmoContainer : Container
     {
         [Header("Attributes - Ammo")]
-        [SerializeField] private float ammoPercentage; //A certain percent of ammo that is restored
+        [Range(0f, 1f), SerializeField] private float ammoPercentage; //A certain percent of ammo that is restored
 
         public override void StartInteract()
         {
@@ -50,6 +50,26 @@ namespace com.limphus.retro_survival_shooter
 
             //essentially the ammo will be a 'stat' of the firearm itself.
             //similar to the player stats...
+
+            if (playerInventory)
+            {
+                List<Firearm> firearms = playerInventory.GetFirearms();
+
+                if (firearms != null)
+                {
+                    foreach(Firearm firearm in firearms)
+                    {
+                        //calculate how much ammo we need to replenish
+
+                        //by getting the max ammo reserves, and multiplying it by our ammo percentage
+                        //and rounding it to the nearest int
+                        int k = Mathf.RoundToInt(firearm.GetMaxAmmoReserves() * ammoPercentage);
+
+                        //then set our current ammo reserves
+                        firearm.SetCurrentAmmoReserves(firearm.GetCurrentAmmoReserves() + k);
+                    }
+                }
+            }
 
             remainingLootAmount--;
 

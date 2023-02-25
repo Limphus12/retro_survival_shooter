@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +28,7 @@ namespace com.limphus.retro_survival_shooter
 
         private int magazineSize;
         private float reloadTime;
+        private int maxAmmoReserves;
 
         private FirearmFireType fireType;
         private FirearmSize size;
@@ -49,7 +50,7 @@ namespace com.limphus.retro_survival_shooter
         private Transform playerCamera;
 
         private bool isAttacking, isAiming, isReloading, isCocked, isCocking;
-        private int currentAmmo;
+        [Space, SerializeField] private int currentAmmo = -1, currentAmmoReserves = -1;
 
         private void Awake() => Init();
 
@@ -69,6 +70,7 @@ namespace com.limphus.retro_survival_shooter
 
             magazineSize = firearmData.magazineSize;
             reloadTime = firearmData.reloadTime;
+            maxAmmoReserves = firearmData.maxAmmoReserves;
 
             fireType = firearmData.fireType;
             size = firearmData.size;
@@ -77,6 +79,10 @@ namespace com.limphus.retro_survival_shooter
             reloadType = firearmData.reloadType;
 
             cockTime = firearmData.cockTime;
+
+            //initialize ammo and ammo reserves
+            if (currentAmmo == -1) currentAmmo = magazineSize;
+            if (currentAmmoReserves == -1) currentAmmoReserves = maxAmmoReserves;
         }
 
         private void InitEffects()
@@ -100,10 +106,12 @@ namespace com.limphus.retro_survival_shooter
             //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
             if (reloadInput && !isReloading && !isAttacking && (CheckReload() == 0 || CheckReload() == 1))
             {
-                //TODO: need to add extra functionality i.e. single bullet at-a-time reloads
-
-                //make sure to stop aiming lmao.
-                StartReload(); Aim(false); return;
+                //we also need to check if we have ammo reserves
+                if (CheckAmmoReserves() != 0)
+                {
+                    //make sure to stop aiming lmao.
+                    StartReload(); Aim(false); return;
+                }
             }
 
             //if we're already reloading, dont do anything else here.
@@ -280,26 +288,11 @@ namespace com.limphus.retro_survival_shooter
 
         private int CheckReload()
         {
-            if (currentAmmo <= 0)
-            {
-                //Debug.Log("Cannot Shoot, we have no ammo!");
+            if (currentAmmo <= 0) return 0; //if we have no ammo in the mag
 
-                return 0; //if we have no ammo in the mag
-            }
+            else if (currentAmmo < magazineSize) return 1; //if we dont have the full amount
 
-            else if (currentAmmo < magazineSize)
-            {
-                //Debug.Log("We have ammo, but not a full mag!");
-
-                return 1; //if we dont have the full amount
-            }
-
-            else if (currentAmmo == magazineSize)
-            {
-                //Debug.Log("We got a full mag, let 'em loose!");
-
-                return 2; //if we are full
-            }
+            else if (currentAmmo == magazineSize) return 2; //if we are full
 
             else return 3;
         }
@@ -323,8 +316,43 @@ namespace com.limphus.retro_survival_shooter
 
         private void Reload()
         {
-            //set our current ammo equal to our magazine size, and end the reload
-            currentAmmo = magazineSize; EndReload();
+            //TODO: need to add extra functionality i.e. single bullet at-a-time reloads
+
+            //if we dont have enough for a full mag
+            if (CheckAmmoReserves() == 1)
+            {
+                //just add our remaining ammo reserves
+                currentAmmo += currentAmmoReserves;
+
+                //deplete our ammo reserves
+                currentAmmoReserves = 0;
+
+                EndReload();
+            }
+
+            //if we have exactly enough for a full mag
+            else if (CheckAmmoReserves() == 2)
+            {
+                //set our current ammo equal to our magazine size
+                currentAmmo = magazineSize;
+
+                //deplete our ammo reserves
+                currentAmmoReserves = 0;
+
+                EndReload();
+            }
+
+            //if we have more than enough for a full mag
+            else if (CheckAmmoReserves() == 3)
+            {
+                //deplete some of our ammo reserves
+                currentAmmoReserves -= magazineSize - currentAmmo;
+
+                //set our current ammo equal to our magazine size
+                currentAmmo = magazineSize;
+
+                EndReload();
+            }
         }
 
         //ends reloading
@@ -386,6 +414,31 @@ namespace com.limphus.retro_survival_shooter
             CancelInvoke(nameof(Cock));
 
             EndCock();
+        }
+
+        //a method to compare ammo reserves to magazineSize
+        private int CheckAmmoReserves()
+        {
+            if (currentAmmoReserves <= 0) return 0; //if we have no reserve ammo
+
+            else if (currentAmmoReserves < magazineSize - currentAmmo) return 1; //if we dont have enough to get to a full mag
+
+            else if (currentAmmoReserves == magazineSize - currentAmmo) return 2; //if we have exactly enough to get a full mag
+
+            else if (currentAmmoReserves > magazineSize - currentAmmo) return 3; //if we have more than enough to get a full mag
+
+            else return 4;
+        }
+
+        public int GetCurrentAmmoReserves() => currentAmmoReserves; //get our current ammo reserves
+        public int GetMaxAmmoReserves() => maxAmmoReserves; //get our max ammo reserves
+
+        public void SetCurrentAmmoReserves(int amount)
+        {
+            currentAmmoReserves = amount;
+
+            //clamp between 0 and our 'max' ammoReserves
+            currentAmmoReserves = Mathf.Clamp(currentAmmoReserves, 0, maxAmmoReserves);
         }
 
         //a method to interrupt the firearm functions
