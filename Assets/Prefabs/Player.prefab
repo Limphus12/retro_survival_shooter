@@ -7989,6 +7989,7 @@ GameObject:
   - component: {fileID: 5358056577268887823}
   - component: {fileID: 891780389}
   - component: {fileID: 6681498346489753713}
+  - component: {fileID: 2354598227764923201}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -8065,11 +8066,6 @@ MonoBehaviour:
   cameraSmoothRate: 5
   runKey: 304
   crouchKey: 306
-  interactKey: 101
-  interactionDistance: 2
-  interactionUI: {fileID: 6822713637372667610}
-  interactingUI: {fileID: 5212085644782834584}
-  cannotInteractUI: {fileID: 4958182815339429738}
   debug: 0
 --- !u!114 &891780389
 MonoBehaviour:
@@ -8140,6 +8136,23 @@ MonoBehaviour:
   slotKeys: 310000003200000033000000340000003500000036000000370000003800000039000000300000002d0000003d000000
   selectedItem: 0
   previousSelectedItem: 0
+--- !u!114 &2354598227764923201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5358056577268887821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80bbb77490a973d4fbb1dd55de310dff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactKey: 101
+  interactionDistance: 2
+  interactionUI: {fileID: 6822713637372667610}
+  interactingUI: {fileID: 5212085644782834584}
+  cannotInteractUI: {fileID: 4958182815339429738}
 --- !u!1 &5358056577461103855
 GameObject:
   m_ObjectHideFlags: 0
@@ -8849,6 +8862,8 @@ MonoBehaviour:
   firearmData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
   cameraRecoil: {fileID: 6822713638158227432}
   weaponRecoil: {fileID: 7683906165423809614}
+  currentAmmo: -1
+  currentAmmoReserves: -1
 --- !u!114 &7683906165215483174
 MonoBehaviour:
   m_ObjectHideFlags: 0
