@@ -79,7 +79,7 @@ MonoBehaviour:
   propData: {fileID: 11400000, guid: 9a6f04cfad20a28409566afc65eb45a3, type: 2}
   propSpawnPoints:
   - {fileID: 4393984877760873135}
-  placementChance: 0.5
+  placementChance: 1
 --- !u!1 &6301421664063416259
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +203,7 @@ MonoBehaviour:
   propData: {fileID: 11400000, guid: 762c79e10a9e00a41a2abc79ea2d6ac1, type: 2}
   propSpawnPoints:
   - {fileID: 4106270347076675447}
-  placementChance: 0.5
+  placementChance: 1
 --- !u!1 &9092021848702002798
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,10 +9,22 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Consumable")]
         [SerializeField] private ConsumableContainerData data;
 
-        public override void StartInteract() => isInteracting = true;
+        public override void StartInteract()
+        {
+            isInteracting = true;
 
-        public override void StopInteract() => isInteracting = false;
-        
+            if (containerAnimation) containerAnimation.PlayLooting();
+            if (containerSound) containerSound.PlayLootingSound();
+        }
+
+        public override void StopInteract()
+        {
+            isInteracting = false;
+
+            if (containerAnimation) containerAnimation.PlayIdle();
+            if (containerSound) containerSound.PlayLootingStopSound();
+        }
+
         public override bool CanLoot()
         {
             if (remainingLootAmount > 0) return true;

@@ -12,11 +12,17 @@ namespace com.limphus.retro_survival_shooter
         public override void StartInteract()
         {
             isInteracting = true;
+
+            if (containerAnimation) containerAnimation.PlayLooting();
+            if (containerSound) containerSound.PlayLootingSound();
         }
 
         public override void StopInteract()
         {
             isInteracting = false;
+
+            if (containerAnimation) containerAnimation.PlayIdle();
+            if (containerSound) containerSound.PlayLootingStopSound();
         }
 
         public override bool CanLoot()

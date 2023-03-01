@@ -10,7 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4838342941535795940}
   - component: {fileID: 7053524072639057542}
+  - component: {fileID: 7149015101110186884}
+  - component: {fileID: 7813032361074652392}
   - component: {fileID: 8637004370864856106}
+  - component: {fileID: 3717534062421742642}
   m_Layer: 0
   m_Name: AmmoBox
   m_TagString: Untagged
@@ -49,8 +52,37 @@ MonoBehaviour:
   lootTime: 2
   playerInventory: {fileID: 0}
   containerType: 3
-  remainingLootAmount: -1
+  containerAnimation: {fileID: 7149015101110186884}
+  containerSound: {fileID: 7813032361074652392}
   ammoPercentage: 0.25
+--- !u!114 &7149015101110186884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2516890068559395848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11c4fba253c2844ba563716e85a1738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3717534062421742642}
+--- !u!114 &7813032361074652392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2516890068559395848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e963d48dc96b040a369fadc67e69f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
+  lootClip: {fileID: 0}
+  lootStopClip: {fileID: 0}
 --- !u!65 &8637004370864856106
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -64,6 +96,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.25, z: 0.8}
   m_Center: {x: 0, y: 0.06, z: 0}
+--- !u!95 &3717534062421742642
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2516890068559395848}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: acaa9edb8d4daa94ab8031c78ef507b3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4341372762518561905
 GameObject:
   m_ObjectHideFlags: 0

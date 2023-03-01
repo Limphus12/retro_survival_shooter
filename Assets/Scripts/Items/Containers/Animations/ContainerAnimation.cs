@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class ItemAnimation : AnimationHandler
+    public class ContainerAnimation : AnimationHandler
     {
         const string IDLE = "idle";
-        const string RUNNING = "running";
+        const string LOOTING = "looting";
 
         public void PlayIdle() => PlayAnimation(IDLE);
-        public void PlayRunning() => PlayAnimation(RUNNING);
-
+        public void PlayLooting() => PlayAnimation(LOOTING);
     }
 }
