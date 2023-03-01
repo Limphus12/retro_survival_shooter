@@ -104,10 +104,13 @@ namespace com.limphus.retro_survival_shooter
             else if (i >= 3) currentChunk.x--;
 
             //tell the terrain generator to generate our terrain!
-            if (terrainGenerator) terrainGenerator.GenerateTerrain(seed, currentChunk * 128);
+            if (terrainGenerator) terrainGenerator.GenerateTerrain();
 
             //tell the biome generator to place assets!
             if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
+
+            //tell the structure generator to place assets!
+            if (structureGenerator) structureGenerator.GenerateRuntimeStructures();
         }
 
         public Vector2Int GetCurrentChunk()

@@ -50,6 +50,9 @@ namespace com.limphus.retro_survival_shooter
         //just generates the mesh!
         public void GenerateTerrain()
         {
+            //RANDOM SEED
+            seed = Random.Range(-256000, 256000);
+
             //make sure to clear the current terrain first!
             ClearTerrain();
 

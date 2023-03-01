@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -8,11 +9,19 @@ namespace com.limphus.retro_survival_shooter
     {
         [SerializeField] private GameObject[] mainMenuUI, optionsUI, audioUI, videoUI, playUI, newUI;
 
+        [Space]
+        [SerializeField] private int playSceneIndex;
+
         private void Start()
         {
             //We'll set up the mouse to be visible, and confined
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
+        }
+
+        public void Play()
+        {
+            SceneManager.LoadSceneAsync(playSceneIndex);
         }
 
         public void StartButton()

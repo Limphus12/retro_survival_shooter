@@ -32,6 +32,9 @@ namespace com.limphus.retro_survival_shooter
 
                 Debug.Log("Removed " + i + " " + assetTag + "s");
             }
+
+            //destroy this object after removing shit
+            Destroy(gameObject);
         }
 
         public Vector3 GetBoxExtents() => boxExtents;

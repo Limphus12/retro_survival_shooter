@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -10,6 +11,9 @@ namespace com.limphus.retro_survival_shooter
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI hungerText;
         [SerializeField] private TextMeshProUGUI thirstText, staminaText, meleeStaminaText, temperatureText;
+
+        [Space]
+        [SerializeField] private GameObject worldBorderUI, travellingUI; 
         
         private PlayerStats playerStats;
         
@@ -64,6 +68,23 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
             playerStats.OnMeleeStaminaChanged -= PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged -= PlayerStatsOnTemperatureChanged;
+        }
+
+        private void Update()
+        {
+            CheckUI();
+        }
+
+        private void CheckUI()
+        {
+            if (worldBorderUI)
+            {
+                if (!WorldBorder.IsTravelling) worldBorderUI.SetActive(WorldBorder.IsInBorder);
+
+                else worldBorderUI.SetActive(false);
+            }
+
+            if (travellingUI) travellingUI.SetActive(WorldBorder.IsTravelling);
         }
 
         #region Events

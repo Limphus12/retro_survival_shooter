@@ -10884,12 +10884,9 @@ MonoBehaviour:
   - {fileID: 1868480552}
   playUI:
   - {fileID: 1257015363}
-  - {fileID: 1893626099}
   - {fileID: 134847153}
-  newUI:
-  - {fileID: 2057773634}
-  - {fileID: 2058579498}
-  - {fileID: 1117652687}
+  newUI: []
+  playSceneIndex: 1
 --- !u!114 &495825247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12287,7 +12284,6 @@ MonoBehaviour:
   biomeGenerator: {fileID: 0}
   firearmData: {fileID: 0}
   meleeData: {fileID: 0}
-  sustenanceData: {fileID: 0}
   debugtext: {fileID: 0}
 --- !u!1 &594268197
 GameObject:
@@ -25024,7 +25020,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 495825246}
         m_TargetAssemblyTypeName: com.limphus.retro_survival_shooter.MainMenu, Assembly-CSharp
-        m_MethodName: NewButton
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

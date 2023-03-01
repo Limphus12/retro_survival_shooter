@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 8066077402694949601}
   m_Layer: 0
   m_Name: wooden_cabin_fbx
-  m_TagString: Untagged
+  m_TagString: StructAsset
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
