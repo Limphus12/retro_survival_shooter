@@ -10872,7 +10872,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuUI:
   - {fileID: 1951952548}
-  - {fileID: 991157201}
   - {fileID: 183775845}
   optionsUI:
   - {fileID: 541463324}
@@ -10894,7 +10893,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 495825244}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd534b2222e56d4409846a7c4aaa283b, type: 3}
   m_Name: 
@@ -20355,7 +20354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &991157202
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30681,7 +30680,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1524323401
 RectTransform:
   m_ObjectHideFlags: 0
