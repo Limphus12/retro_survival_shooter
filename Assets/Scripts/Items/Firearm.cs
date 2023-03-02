@@ -30,10 +30,15 @@ namespace com.limphus.retro_survival_shooter
         private float reloadTime;
         private int maxAmmoReserves;
 
+
         private FirearmFireType fireType;
         private FirearmSize size;
          
         private FirearmShotType shotType;
+
+        [Header("Attributes - Reloading")]
+        [SerializeField] private Magazine magazine;
+
         private FirearmReloadType reloadType;
 
         private float cockTime; //hah, cock
@@ -59,6 +64,7 @@ namespace com.limphus.retro_survival_shooter
             InitStats(); InitEffects();
 
             if (!playerCamera) playerCamera = Camera.main.transform;
+            if (!magazine) magazine = GetComponent<Magazine>();
         }
 
         private void InitStats()
@@ -103,19 +109,38 @@ namespace com.limphus.retro_survival_shooter
 
         public void CheckInputs(bool leftMouseInput, bool rightMouseInput, bool reloadInput)
         {
-            //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
-            if (reloadInput && !isReloading && !isAttacking && (CheckReload() == 0 || CheckReload() == 1))
+            if (magazine)
             {
-                //we also need to check if we have ammo reserves
-                if (CheckAmmoReserves() != 0)
+                if (isReloading)
                 {
-                    //make sure to stop aiming lmao.
-                    StartReload(); Aim(false); return;
+                    if (leftMouseInput) magazine.InterruptReload();
                 }
+
+                //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
+                else if (reloadInput && !isReloading && !isAttacking)
+                {
+                    //if we can do the 
+                    if (magazine.CheckReload() == 2)
+                    {
+                        //make sure to stop aiming lmao.
+                        magazine.StartClipReload(); StartReload(); Aim(false); return;
+                    }
+
+                    //if we can only do the single bullet reload
+                    else if (magazine.CheckReload() == 1)
+                    {
+                        //make sure to stop aiming lmao.
+                        magazine.StartReload(); Aim(false); return;
+                    }
+
+                    else if (magazine.CheckReload() == 0) Debug.Log("Cannot Reload!");
+                }
+
+                isReloading = magazine.IsReloading;
             }
 
             //if we're already reloading, dont do anything else here.
-            else if (isReloading) return;
+            //else if (isReloading) return;
 
             //if were attacking already, dont do anything
             if (isAttacking) return;
