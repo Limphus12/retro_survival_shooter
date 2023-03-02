@@ -149,9 +149,9 @@ namespace com.limphus.retro_survival_shooter
                                 //check if they can grab any reserve ammo
                                 foreach (Firearm firearm in firearms)
                                 {
-                                    if (firearm.GetCurrentAmmoReserves() < firearm.GetMaxAmmoReserves())
+                                    //if (firearm.GetCurrentAmmoReserves() < firearm.GetMaxAmmoReserves())
                                     {
-                                        canLoot = true;
+                                        //canLoot = true;
                                     }
                                 }
                             }
@@ -232,10 +232,14 @@ namespace com.limphus.retro_survival_shooter
                         //check if they can grab any reserve ammo
                         foreach (Firearm firearm in firearms)
                         {
-                            if (firearm.GetCurrentAmmoReserves() < firearm.GetMaxAmmoReserves())
+                            //if (firearm.GetCurrentAmmoReserves() < firearm.GetMaxAmmoReserves())
                             {
-                                canLoot = true;
+                                //canLoot = true;
                             }
+
+
+                            //TODO! CURRENTLY WE CANNOT GET THE AMMO RESERVES!
+
                         }
                     }
 
@@ -279,10 +283,14 @@ namespace com.limphus.retro_survival_shooter
                             //check if they can grab any reserve ammo
                             foreach (Firearm firearm in firearms)
                             {
-                                if (firearm.GetCurrentAmmoReserves() < firearm.GetMaxAmmoReserves())
+                                //if (firearm.GetCurrentAmmoReserves() < firearm.GetMaxAmmoReserves())
                                 {
-                                    canLoot = true;
+                                    //canLoot = true;
                                 }
+
+
+                                //TODO! CURRENTLY WE CANNOT GET THE AMMO RESERVES!
+
                             }
                         }
 

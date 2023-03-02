@@ -323,6 +323,7 @@ GameObject:
   - component: {fileID: 4745835920928684932}
   - component: {fileID: 561186970382688648}
   - component: {fileID: 4745835920928684930}
+  - component: {fileID: 6433781005659821813}
   - component: {fileID: 4745835920928684929}
   - component: {fileID: 7186648629163708986}
   - component: {fileID: 7392162661057697630}
@@ -361,7 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c055abacdefead438b6f96eee19598b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemType: 0
+  itemType: 0
   itemData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
   itemSound: {fileID: 4745835920928684929}
   itemSway: {fileID: 7186648629163708986}
@@ -384,8 +385,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firearmData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
+  magazine: {fileID: 6433781005659821813}
   cameraRecoil: {fileID: 0}
   weaponRecoil: {fileID: 4745835921807592169}
+--- !u!114 &6433781005659821813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4745835920928684933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 190e5573edbfc2a4499bbf2a4c343ae0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reloadTime: 1
+  clipReloads: 0
+  clipReloadAmount: 3
+  clipReloadTime: 2
+  maxMagazineSize: 6
+  maxAmmoReserves: 18
 --- !u!114 &4745835920928684929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,9 +418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a4696e20316e54a9c2c440824b8bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixerGroup: {fileID: 0}
   itemSoundData: {fileID: 0}
   equipClip: {fileID: 0}
-  audioMixerGroup: {fileID: 0}
   firearmSoundData: {fileID: 11400000, guid: 9ee5575b892db00428346b16757eecdd, type: 2}
   firingClip: {fileID: 0}
   dryFiringClip: {fileID: 0}

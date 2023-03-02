@@ -65,14 +65,16 @@ namespace com.limphus.retro_survival_shooter
                 {
                     foreach(Firearm firearm in firearms)
                     {
+                        //TODO! CURRENTLY WE CANNOT GET THE AMMO RESERVES!
+
                         //calculate how much ammo we need to replenish
 
                         //by getting the max ammo reserves, and multiplying it by our ammo percentage
                         //and rounding it to the nearest int
-                        int k = Mathf.RoundToInt(firearm.GetMaxAmmoReserves() * ammoPercentage);
+                        //int k = Mathf.RoundToInt(firearm.GetMaxAmmoReserves() * ammoPercentage);
 
                         //then set our current ammo reserves
-                        firearm.SetCurrentAmmoReserves(firearm.GetCurrentAmmoReserves() + k);
+                        //firearm.SetCurrentAmmoReserves(firearm.GetCurrentAmmoReserves() + k);
                     }
                 }
             }

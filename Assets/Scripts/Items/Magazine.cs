@@ -27,6 +27,14 @@ namespace com.limphus.retro_survival_shooter
 
         public bool IsReloading { get; private set; } //we're gonna try this syntax
 
+        private void Awake() => Init();
+
+        private void Init()
+        {
+            currentMagazineCount = maxMagazineSize;
+            currentAmmoReserves = maxAmmoReserves;
+        }
+
         //a method to compare ammo reserves to maxMagazineSize
         private int CheckAmmoReserves(int amount)
         {
@@ -37,6 +45,13 @@ namespace com.limphus.retro_survival_shooter
             else if (currentAmmoReserves >= amount) return 2; //if we have enough to perform a reload with the amount required
 
             else return 3;
+        }
+
+        public int CheckMagazine()
+        {
+            if (currentMagazineCount <= 0) return 0; //if we have no ammo loaded
+            if (currentMagazineCount > 0) return 1; //if we have ammo loaded
+            else return 2;
         }
 
         public int CheckReload()
@@ -121,5 +136,6 @@ namespace com.limphus.retro_survival_shooter
 
         private void SetCurrentMagazineCount(int amount) => currentMagazineCount = Mathf.Clamp(amount, 0, maxMagazineSize);
         private void SetCurrentAmmoReserves(int amount) => currentAmmoReserves = Mathf.Clamp(amount, 0, maxAmmoReserves);
+        public void UseAmmo(int amount) => SetCurrentMagazineCount(currentMagazineCount -= amount);
     }
 }
