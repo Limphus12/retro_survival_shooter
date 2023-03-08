@@ -11,10 +11,17 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private float damage;
         [SerializeField] private float attackRate;
 
+        [SerializeField] private float equipTime;
+        [SerializeField] private float deEquipTime;
+
+        public float GetEquipTime() => equipTime;
+        public float GetDeEquipTime() => deEquipTime;
+
         [Space]
         [SerializeField] private Transform playerCamera;
 
         [Header("Effects")]
+        [SerializeField] private FirearmSway firearmSway;
         [SerializeField] private FirearmAnimation firearmAnimation;
         [SerializeField] private FirearmSound firearmSound;
 
@@ -29,7 +36,57 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private GameObject bulletParticles;
         [SerializeField] private GameObject muzzleParticles;
 
-        private bool isAttacking, isAiming;
+        private bool isAttacking, isAiming, isEquipping, isDeEquipping;
+        
+        public bool IsEquipped { get; private set; }
+
+        public void ToggleEquip(bool b)
+        {
+            if (b) StartEquip();
+            else if (!b) StartDeEquip();
+        }
+
+        void StartEquip()
+        {
+            isEquipping = true;
+
+            Invoke(nameof(Equip), equipTime);
+        }
+
+        void Equip()
+        {
+            IsEquipped = true;
+
+            Debug.Log("We're Equipped!");
+
+            EndEquip();
+        }
+
+        void EndEquip()
+        {
+            isEquipping = false;
+        }
+
+        void StartDeEquip()
+        {
+            isDeEquipping = true;
+
+            Invoke(nameof(DeEquip), deEquipTime);
+        }
+
+        void DeEquip()
+        {
+            IsEquipped = false;
+
+            Debug.Log("We're Not Equipped!");
+
+            EndDeEquip();
+        }
+
+        void EndDeEquip()
+        {
+            isDeEquipping = false;
+        }
 
         private void Start()
         {
@@ -46,6 +103,8 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
+            if (!IsEquipped) return;
+
             CheckInputs();
         }
 
@@ -146,6 +205,7 @@ namespace com.limphus.retro_survival_shooter
         {
             isAiming = b;
 
+            if (firearmSway) firearmSway.Aim(b);
             if (cameraRecoil) cameraRecoil.Aim(b);
             if (weaponRecoil) weaponRecoil.Aim(b);
         }

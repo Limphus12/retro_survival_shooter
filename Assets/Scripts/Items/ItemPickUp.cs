@@ -6,12 +6,9 @@ namespace com.limphus.retro_survival_shooter
 {
     public class ItemPickUp : MonoBehaviour
     {
-        private Item itemScript;
-
         [SerializeField] private Vector3 offset, defaultPosition;
+        [SerializeField] private LayerMask layerMask;
 
-        private void Start() => itemScript = gameObject.GetComponent<Item>();
-        
         private void OnTriggerEnter(Collider other)
         {
             NewPlayerInventory npi = other.GetComponent<NewPlayerInventory>();
@@ -30,10 +27,10 @@ namespace com.limphus.retro_survival_shooter
         {
             //do a raycast towards the floor
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity))
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask))
             {
                 //and put us there! oh and reset our rotation
-                transform.SetPositionAndRotation(hit.point + offset, Quaternion.Euler(0, 0, 0));
+                transform.SetPositionAndRotation(hit.point + offset, Quaternion.Euler(0, transform.rotation.y, 0));
             }
         }
 

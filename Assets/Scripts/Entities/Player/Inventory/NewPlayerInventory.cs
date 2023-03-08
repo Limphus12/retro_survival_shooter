@@ -51,9 +51,29 @@ namespace com.limphus.retro_survival_shooter
         {
             if (pickUpItem == null) return;
 
-            if (handItem != null) SwapItem();
+            if (handItem != null)
+            {
+                return;
 
-            else if (handItem == null) PickUpItem();
+                NewFirearm newFirearm = handItem.GetComponent<NewFirearm>();
+
+                if (newFirearm)
+                {
+                    newFirearm.ToggleEquip(false);
+                    Invoke(nameof(SwapItem), newFirearm.GetDeEquipTime());
+                }
+
+                else SwapItem();
+            }
+
+            else if (handItem == null)
+            {
+                NewFirearm newFirearm = pickUpItem.GetComponent<NewFirearm>();
+
+                if (newFirearm) newFirearm.ToggleEquip(true);
+
+                PickUpItem();
+            }
         }
 
         private void SwapItem()
@@ -69,6 +89,11 @@ namespace com.limphus.retro_survival_shooter
 
             //set our new item parent
             handItem.transform.parent = handSlot;
+
+            //oh and check if we need to toggle the equip
+            NewFirearm newFirearm = pickUpItem.GetComponent<NewFirearm>();
+
+            if (newFirearm) newFirearm.ToggleEquip(true);
         }
 
         private void PickUpItem()
@@ -85,7 +110,18 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckDrop()
         {
-            if (handItem != null) DropItem();
+            if (handItem != null)
+            {
+                NewFirearm newFirearm = handItem.GetComponent<NewFirearm>();
+
+                if (newFirearm)
+                {
+                    newFirearm.ToggleEquip(false);
+                    Invoke(nameof(DropItem), newFirearm.GetDeEquipTime());
+                }
+
+                else DropItem();
+            }
 
             else if (handItem == null) Debug.Log("Cannot drop item, since we dont have one!");
         }

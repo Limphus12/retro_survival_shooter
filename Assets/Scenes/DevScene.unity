@@ -146,6 +146,88 @@ MonoBehaviour:
   pickUpKey: 0
   dropKey: 0
   pickUpItem: {fileID: 0}
+--- !u!1001 &151931799
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7313094635298887908, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_Name
+      value: SKS-49 (PickUp)_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 257.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313094635298887909, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+--- !u!1 &151931800 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7313094635298887908, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+  m_PrefabInstance: {fileID: 151931799}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &151931801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151931800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a4696e20316e54a9c2c440824b8bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
+  itemSoundData: {fileID: 11400000, guid: 9ee5575b892db00428346b16757eecdd, type: 2}
+  equipClip: {fileID: 0}
+  firearmSoundData: {fileID: 0}
+  firingClip: {fileID: 0}
+  dryFiringClip: {fileID: 0}
+  reloadingClip: {fileID: 0}
+  cockingClip: {fileID: 0}
 --- !u!1 &179076756
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,6 +1026,31 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 835059729}
+--- !u!1 &1268246653 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7313094635298887908, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}
+  m_PrefabInstance: {fileID: 1480702273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1268246654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268246653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a4696e20316e54a9c2c440824b8bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixerGroup: {fileID: 3622686075943121564, guid: f7091cf851af71c4a9feb621dbe4b2d3, type: 2}
+  itemSoundData: {fileID: 11400000, guid: 9ee5575b892db00428346b16757eecdd, type: 2}
+  equipClip: {fileID: 0}
+  firearmSoundData: {fileID: 0}
+  firingClip: {fileID: 0}
+  dryFiringClip: {fileID: 0}
+  reloadingClip: {fileID: 0}
+  cockingClip: {fileID: 0}
 --- !u!1 &1323094123
 GameObject:
   m_ObjectHideFlags: 0

@@ -641,9 +641,11 @@ GameObject:
   - component: {fileID: 2709987684957324261}
   - component: {fileID: 568374235053105658}
   - component: {fileID: 5823643351609697881}
+  - component: {fileID: 1050474322270233858}
   - component: {fileID: 2701670438661710702}
+  - component: {fileID: 1978449922670466018}
   - component: {fileID: 7883335604278061237}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SKS-49 (PickUp)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -679,6 +681,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0.25, z: 0}
   defaultPosition: {x: 0.1, y: -0.1, z: 0.15}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 243
 --- !u!114 &568374235053105658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,9 +698,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 100
   attackRate: 2
+  equipTime: 1
+  deEquipTime: 1
   playerCamera: {fileID: 0}
+  firearmSway: {fileID: 1050474322270233858}
   firearmAnimation: {fileID: 2701670438661710702}
-  firearmSound: {fileID: 0}
+  firearmSound: {fileID: 1978449922670466018}
+  cameraRecoil: {fileID: 0}
+  weaponRecoil: {fileID: 0}
   firePoint: {fileID: 8588706286585507577}
   bulletParticles: {fileID: 6189553901500354980, guid: c7011f6ef8f98644a9b24b4aa40875e7, type: 3}
   muzzleParticles: {fileID: 2154087813206354009, guid: 31c2bf59d08204e49a64ce0658dc199e, type: 3}
@@ -710,8 +720,62 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 0.1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1050474322270233858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7313094635298887908}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 956665d636ddb1542a6ceb0ce0e73fd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
+  defaultPosition: {x: 0.1, y: -0.1, z: 0.15}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 1}
+  defaultSwaySmooth: 8
+  defaultSwayAmount: 0
+  defaultSwayMaximum: 2
+  defaultTiltSmooth: 5
+  defaultTiltAmount: 5
+  defaultTiltMaximum: 10
+  runningPosition: {x: 0, y: -0.15, z: 0.2}
+  runningRotation: {x: -0.18023995, y: 0.37533033, z: -0.07465784, w: -0.9061274}
+  runningSwaySmooth: 8
+  runningSwayAmount: 0
+  runningSwayMaximum: 2
+  runningTiltSmooth: 5
+  runningTiltAmount: 5
+  runningTiltMaximum: 10
+  aimingPosition: {x: 0, y: -0.06, z: 0.05}
+  aimingRotation: {x: 0, y: 0, z: 0, w: 1}
+  aimingSwaySmooth: 8
+  aimingSwayAmount: 0
+  aimingSwayMaximum: 2
+  aimingTiltSmooth: 5
+  aimingTiltAmount: 5
+  aimingTiltMaximum: 2
+  melee: {fileID: 0}
+  reloadingPosition: {x: 0, y: -0.125, z: 0.15}
+  reloadingRotation: {x: -0.14054368, y: 0.37822965, z: -0.05821511, w: -0.91312695}
+  reloadingSwaySmooth: 4
+  reloadingSwayAmount: 0
+  reloadingSwayMaximum: 2
+  reloadingTiltSmooth: 5
+  reloadingTiltAmount: 5
+  reloadingTiltMaximum: 10
+  cockingPosition: {x: 0, y: -0.1, z: 0.2}
+  cockingRotation: {x: 0.07301945, y: 0.3756525, z: -0.17628452, w: -0.90690523}
+  cockingSwaySmooth: 4
+  cockingSwayAmount: 0
+  cockingSwayMaximum: 2
+  cockingTiltSmooth: 5
+  cockingTiltAmount: 5
+  cockingTiltMaximum: 10
 --- !u!114 &2701670438661710702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,6 +789,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7883335604278061237}
+--- !u!114 &1978449922670466018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7313094635298887908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a4696e20316e54a9c2c440824b8bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixerGroup: {fileID: 0}
+  itemSoundData: {fileID: 0}
+  equipClip: {fileID: 0}
+  firearmSoundData: {fileID: 0}
+  firingClip: {fileID: 0}
+  dryFiringClip: {fileID: 0}
+  reloadingClip: {fileID: 0}
+  cockingClip: {fileID: 0}
 --- !u!95 &7883335604278061237
 Animator:
   serializedVersion: 3
@@ -733,7 +817,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7313094635298887908}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 51275154cad0fda48a0b8256021c3e99, type: 2}
   m_CullingMode: 0
