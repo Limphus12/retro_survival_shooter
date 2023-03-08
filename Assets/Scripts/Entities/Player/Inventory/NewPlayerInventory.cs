@@ -106,6 +106,22 @@ namespace com.limphus.retro_survival_shooter
         {
             if (item == null) return;
 
+            Collider[] colliders = item.GetComponents<Collider>();
+
+            if (colliders.Length > 0)
+            {
+                foreach (Collider collider in colliders)
+                {
+                    collider.enabled = !b;
+                }
+            }
+
+            //for new stuff
+            NewFirearm newFirearm = item.GetComponent<NewFirearm>(); if (newFirearm)
+            {
+                newFirearm.enabled = b;
+            }
+
             //try to grab all the components on the item and toggle them!
             Item itemScript = item.GetComponent<Item>(); if (itemScript)
             {
@@ -123,6 +139,13 @@ namespace com.limphus.retro_survival_shooter
                 ItemPickUp itemPickUp = item.GetComponent<ItemPickUp>();
 
                 if (itemPickUp) itemPickUp.PlaceOnFloor();
+            }
+
+            else if (b) //if we equipping
+            {
+                ItemPickUp itemPickUp = item.GetComponent<ItemPickUp>();
+
+                if (itemPickUp) itemPickUp.PlaceInHand();
             }
 
             //TODO: add layer functions when we get the proper fps rendering implemented.

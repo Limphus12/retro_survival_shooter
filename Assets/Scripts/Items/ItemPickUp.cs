@@ -8,7 +8,7 @@ namespace com.limphus.retro_survival_shooter
     {
         private Item itemScript;
 
-        [SerializeField] private Vector3 offset;
+        [SerializeField] private Vector3 offset, defaultPosition;
 
         private void Start() => itemScript = gameObject.GetComponent<Item>();
         
@@ -32,12 +32,18 @@ namespace com.limphus.retro_survival_shooter
             RaycastHit hit;
             if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity))
             {
-                //and put us there!
-                transform.position = hit.point + offset;
-
-                //oh and reset our rotation
-                transform.rotation = Quaternion.Euler(0, 0, 0);
+                //and put us there! oh and reset our rotation
+                transform.SetPositionAndRotation(hit.point + offset, Quaternion.Euler(0, 0, 0));
             }
+        }
+
+        public void PlaceInHand()
+        {
+            //and put us there! 
+            transform.localPosition = defaultPosition;
+
+            //oh and reset our rotation
+            transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }

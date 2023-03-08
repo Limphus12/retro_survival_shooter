@@ -30,13 +30,15 @@ namespace com.limphus.retro_survival_shooter
         private float reloadTime;
         private int maxAmmoReserves;
 
-
         private FirearmFireType fireType;
         private FirearmSize size;
          
         private FirearmShotType shotType;
 
         [Header("Attributes - Reloading")]
+        [SerializeField] private bool infiniteAmmo;
+
+        [Space]
         [SerializeField] private Magazine magazine;
 
         private FirearmReloadType reloadType;
@@ -104,123 +106,186 @@ namespace com.limphus.retro_survival_shooter
 
         public void CheckInputs(bool leftMouseInput, bool rightMouseInput, bool reloadInput)
         {
-            if (magazine)
+            if (infiniteAmmo)
             {
-                if (magazine.IsReloading)
+                //if were attacking already, dont do anything
+                if (isAttacking) return;
+
+                //check for r-mouse input and update aiming
+                Aim(rightMouseInput);
+
+                //if we're not shooting, run through the fire types
+                switch (fireType)
                 {
-                    if (leftMouseInput) magazine.InterruptReload();
-                }
+                    case FirearmFireType.SEMI:
 
-                //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
-                else if (reloadInput && !magazine.IsReloading && !isAttacking)
-                {
-                    //if we can do the clip reload
-                    if (magazine.CheckReload() == 2)
-                    {
-                        magazine.StartClipReload(); Aim(false); return;
-                    }
+                        //TO DO; actually implement semi auto fire e.g. the player has to click the mouse to fire,
+                        //not just hold it down. (maybe ill just get rid of semi and just use auto, but with a low fire rate?)
 
-                    //if we can only do the single bullet reload
-                    else if (magazine.CheckReload() == 1)
-                    {
-                        magazine.StartReload(); Aim(false); return;
-                    }
+                        if (leftMouseInput) StartAttack();
 
-                    else if (magazine.CheckReload() == 0) Debug.Log("Cannot Reload!");
+                        break;
+
+                    case FirearmFireType.BURST:
+
+                        //TO DO; implement burst firing (i have done so in the past, so it should be easy)
+
+                        break;
+                    case FirearmFireType.AUTO:
+
+                        if (leftMouseInput) StartAttack();
+
+                        break;
+                    case FirearmFireType.COCK:
+
+                        //if we're cocking
+                        if (isCocking)
+                        {
+                            Debug.Log("Cannot Fire! We are Cocking the Weapon!");
+                            return;
+                        }
+
+                        //if we'te havent cocked, start doing so!
+                        else if (!isCocked)
+                        {
+                            StartCock();
+                            return;
+                        }
+
+                        //if were; not shooting, not cocking and we have cocked the firearm,
+                        //and we press the l-mouse button
+                        //uncock the weapon and start firing!
+                        if (leftMouseInput && isCocked)
+                        {
+                            isCocked = false;
+
+                            StartAttack();
+                        }
+
+                        break;
                 }
             }
 
-            //if were attacking already, dont do anything
-            if (isAttacking) return;
-
-            //check for r-mouse input and update aiming
-            Aim(rightMouseInput);
-
-            //if we're not shooting, run through the fire types
-            switch (fireType)
+            else
             {
-                case FirearmFireType.SEMI:
-
-                    //TO DO; actually implement semi auto fire e.g. the player has to click the mouse to fire,
-                    //not just hold it down. (maybe ill just get rid of semi and just use auto, but with a low fire rate?)
-
-                    //if we have no ammo tho, cry about it
-                    if (magazine.CheckMagazine() == 0)
+                if (magazine)
+                {
+                    if (magazine.IsReloading)
                     {
-                        Debug.Log("No ammo in the mag, we can't fire!");
-
-                        //if we have the firearm sound reference, call the play dry firing sound
-                        if (firearmSound) firearmSound.PlayDryFiringSound();
-
-                        return;
+                        if (leftMouseInput) magazine.InterruptReload();
                     }
 
-                    if (leftMouseInput) StartAttack();
-
-                    break;
-
-                case FirearmFireType.BURST:
-
-                    //TO DO; implement burst firing (i have done so in the past, so it should be easy)
-
-                    break;
-                case FirearmFireType.AUTO:
-
-                    //if we have no ammo tho, cry about it
-                    if (magazine.CheckMagazine() == 0)
+                    //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
+                    else if (reloadInput && !magazine.IsReloading && !isAttacking)
                     {
-                        Debug.Log("No ammo in the mag, we can't fire!");
-
-                        //if we have the firearm sound reference, call the play dry firing sound
-                        if (firearmSound) firearmSound.PlayDryFiringSound();
-
-                        return;
-                    }
-
-                    if (leftMouseInput) StartAttack();
-
-                    break;
-                case FirearmFireType.COCK:
-
-                    //if we have no ammo tho, cry abou it
-                    if (magazine.CheckMagazine() == 0)
-                    {
-                        //if we have the firearm sound reference and we press teh left mouse button
-                        //*down*, call the play firing sound
-                        if (Input.GetMouseButtonDown(0) && firearmSound)
+                        //if we can do the clip reload
+                        if (magazine.CheckReload() == 2)
                         {
-                            firearmSound.PlayDryFiringSound();
+                            magazine.StartClipReload(); Aim(false); return;
                         }
 
-                        Debug.Log("No ammo in the mag, we can't cock our weapon!");
-                        return;
+                        //if we can only do the single bullet reload
+                        else if (magazine.CheckReload() == 1)
+                        {
+                            magazine.StartReload(); Aim(false); return;
+                        }
+
+                        else if (magazine.CheckReload() == 0) Debug.Log("Cannot Reload!");
                     }
+                }
 
-                    //if we're cocking
-                    if (isCocking)
-                    {
-                        Debug.Log("Cannot Fire! We are Cocking the Weapon!");
-                        return;
-                    }
+                //if were attacking already, dont do anything
+                if (isAttacking) return;
 
-                    //if we'te havent cocked, start doing so!
-                    else if (!isCocked)
-                    {
-                        StartCock();
-                        return;
-                    }
+                //check for r-mouse input and update aiming
+                Aim(rightMouseInput);
 
-                    //if were; not shooting, not cocking and we have cocked the firearm,
-                    //and we press the l-mouse button
-                    //uncock the weapon and start firing!
-                    if (leftMouseInput && isCocked)
-                    {
-                        isCocked = false;
+                //if we're not shooting, run through the fire types
+                switch (fireType)
+                {
+                    case FirearmFireType.SEMI:
 
-                        StartAttack();
-                    }
+                        //TO DO; actually implement semi auto fire e.g. the player has to click the mouse to fire,
+                        //not just hold it down. (maybe ill just get rid of semi and just use auto, but with a low fire rate?)
 
-                    break;
+                        //if we have no ammo tho, cry about it
+                        if (magazine.CheckMagazine() == 0)
+                        {
+                            Debug.Log("No ammo in the mag, we can't fire!");
+
+                            //if we have the firearm sound reference, call the play dry firing sound
+                            if (firearmSound) firearmSound.PlayDryFiringSound();
+
+                            return;
+                        }
+
+                        if (leftMouseInput) StartAttack();
+
+                        break;
+
+                    case FirearmFireType.BURST:
+
+                        //TO DO; implement burst firing (i have done so in the past, so it should be easy)
+
+                        break;
+                    case FirearmFireType.AUTO:
+
+                        //if we have no ammo tho, cry about it
+                        if (magazine.CheckMagazine() == 0)
+                        {
+                            Debug.Log("No ammo in the mag, we can't fire!");
+
+                            //if we have the firearm sound reference, call the play dry firing sound
+                            if (firearmSound) firearmSound.PlayDryFiringSound();
+
+                            return;
+                        }
+
+                        if (leftMouseInput) StartAttack();
+
+                        break;
+                    case FirearmFireType.COCK:
+
+                        //if we have no ammo tho, cry abou it
+                        if (magazine.CheckMagazine() == 0)
+                        {
+                            //if we have the firearm sound reference and we press teh left mouse button
+                            //*down*, call the play firing sound
+                            if (Input.GetMouseButtonDown(0) && firearmSound)
+                            {
+                                firearmSound.PlayDryFiringSound();
+                            }
+
+                            Debug.Log("No ammo in the mag, we can't cock our weapon!");
+                            return;
+                        }
+
+                        //if we're cocking
+                        if (isCocking)
+                        {
+                            Debug.Log("Cannot Fire! We are Cocking the Weapon!");
+                            return;
+                        }
+
+                        //if we'te havent cocked, start doing so!
+                        else if (!isCocked)
+                        {
+                            StartCock();
+                            return;
+                        }
+
+                        //if were; not shooting, not cocking and we have cocked the firearm,
+                        //and we press the l-mouse button
+                        //uncock the weapon and start firing!
+                        if (leftMouseInput && isCocked)
+                        {
+                            isCocked = false;
+
+                            StartAttack();
+                        }
+
+                        break;
+                }
             }
         }
 
@@ -246,7 +311,7 @@ namespace com.limphus.retro_survival_shooter
             Hit(playerCamera);
 
             //i think i wanna add an ammo usage variable in teh future, but idk yet.
-            magazine.UseAmmo(1);
+            if (!infiniteAmmo) magazine.UseAmmo(1);
 
             //if we have the camera and weapon recoil references, call the recoil method on them too
             if (cameraRecoil && weaponRecoil)
@@ -292,7 +357,12 @@ namespace com.limphus.retro_survival_shooter
         public FirearmState GetFirearmState()
         {
             if (isCocking) return FirearmState.COCKING;
-            else if (magazine.IsReloading) return FirearmState.RELOADING;
+
+            else if (!infiniteAmmo)
+            {
+                if (magazine.IsReloading) return FirearmState.RELOADING;
+            }
+
             else if (isAiming && !isAttacking) return FirearmState.AIMING;
             if (isAttacking && isAiming) return FirearmState.AIMATTACK;
             else if (isAttacking) return FirearmState.ATTACKING;

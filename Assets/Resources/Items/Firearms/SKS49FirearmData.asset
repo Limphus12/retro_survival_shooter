@@ -33,8 +33,8 @@ MonoBehaviour:
   magazineSize: 6
   reloadTime: 1.5
   maxAmmoReserves: 18
-  fireType: 3
-  size: 1
+  fireType: 0
+  size: 2
   shotType: 0
   reloadType: 1
   cockTime: 1.3
