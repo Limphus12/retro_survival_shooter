@@ -700,6 +700,7 @@ MonoBehaviour:
   attackRate: 2
   equipTime: 1
   deEquipTime: 1
+  ammoCount: 18
   playerCamera: {fileID: 0}
   firearmSway: {fileID: 1050474322270233858}
   firearmAnimation: {fileID: 2701670438661710702}

@@ -21,7 +21,26 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private GameObject pickUpItem;
 
-        public void SetPickupItem(GameObject obj) => pickUpItem = obj;
+        public void SetPickupItem(GameObject obj)
+        {
+            //attempt a grab of the new firearm script
+            NewFirearm newFirearm = obj.GetComponent<NewFirearm>();
+
+            if (newFirearm && handItem != null)
+            {
+                NewFirearm newFirearm1 = handItem.GetComponent<NewFirearm>();
+
+                if (newFirearm1 && newFirearm.GetFirearmType() == newFirearm1.GetFirearmType())
+                {
+                    newFirearm1.SetAmmoCount(newFirearm.GetAmmoCount() + newFirearm1.GetAmmoCount());
+
+                    Destroy(obj); return;
+                }
+            }
+
+            pickUpItem = obj;
+        }
+
         public void RemovePickupItem(GameObject obj)
         {
             if (pickUpItem && pickUpItem == obj)
@@ -172,16 +191,16 @@ namespace com.limphus.retro_survival_shooter
             {
                 //grab the item pick up script, and force it to go onto the floor.
 
-                ItemPickUp itemPickUp = item.GetComponent<ItemPickUp>();
+                UseableItem useableItem = item.GetComponent<UseableItem>();
 
-                if (itemPickUp) itemPickUp.PlaceOnFloor();
+                if (useableItem) useableItem.PlaceOnFloor();
             }
 
             else if (b) //if we equipping
             {
-                ItemPickUp itemPickUp = item.GetComponent<ItemPickUp>();
+                UseableItem useableItem = item.GetComponent<UseableItem>();
 
-                if (itemPickUp) itemPickUp.PlaceInHand();
+                if (useableItem) useableItem.PlaceInHand();
             }
 
             //TODO: add layer functions when we get the proper fps rendering implemented.

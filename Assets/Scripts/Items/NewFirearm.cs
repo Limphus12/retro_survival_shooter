@@ -5,9 +5,15 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+    public enum FirearmType { SKS }
+
     public class NewFirearm : MonoBehaviour
     {
         [Header("Attributes")]
+        [SerializeField] private FirearmType type;
+        public FirearmType GetFirearmType() => type;
+
+        [Space]
         [SerializeField] private float damage;
         [SerializeField] private float attackRate;
 
@@ -16,6 +22,13 @@ namespace com.limphus.retro_survival_shooter
 
         public float GetEquipTime() => equipTime;
         public float GetDeEquipTime() => deEquipTime;
+
+        [Space]
+        [SerializeField] private int ammoCount;
+        private int currentAmmoCount;
+
+        public int GetAmmoCount() => currentAmmoCount;
+        public void SetAmmoCount(int amount) => currentAmmoCount = amount;
 
         [Space]
         [SerializeField] private Transform playerCamera;
@@ -36,7 +49,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private GameObject bulletParticles;
         [SerializeField] private GameObject muzzleParticles;
 
-        private bool isAttacking, isAiming, isEquipping, isDeEquipping;
+        private bool init, isAttacking, isAiming, isEquipping, isDeEquipping;
         
         public bool IsEquipped { get; private set; }
 
@@ -88,6 +101,18 @@ namespace com.limphus.retro_survival_shooter
             isDeEquipping = false;
         }
 
+        private void Awake()
+        {
+            if (!init) Init();
+        }
+
+        private void Init()
+        {
+            currentAmmoCount = ammoCount;
+
+            init = true;
+        }
+
         private void Start()
         {
             if (!playerCamera) playerCamera = Camera.main.transform;
@@ -103,9 +128,17 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
-            if (!IsEquipped) return;
+            if (!IsEquipped)
+            {
+                if (isEquipping) firearmAnimation.PlayEquip();
+            }
 
-            CheckInputs();
+            else if (IsEquipped)
+            {
+                if (isDeEquipping) firearmAnimation.PlayDeEquip();
+
+                else CheckInputs();
+            }
         }
 
         private void CheckInputs()
@@ -121,7 +154,7 @@ namespace com.limphus.retro_survival_shooter
                 else firearmAnimation.PlayIdle();
             }
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && currentAmmoCount > 0)
             {
                 StartAttack();
             }
@@ -154,6 +187,8 @@ namespace com.limphus.retro_survival_shooter
 
                 else firearmAnimation.PlayFirearmFire();
             }
+
+            currentAmmoCount--;
             
             Effects();
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class ItemPickUp : MonoBehaviour
+    public class UseableItem : MonoBehaviour
     {
         [SerializeField] private Vector3 offset, defaultPosition;
         [SerializeField] private LayerMask layerMask;
