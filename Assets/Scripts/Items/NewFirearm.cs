@@ -24,10 +24,11 @@ namespace com.limphus.retro_survival_shooter
         public float GetDeEquipTime() => deEquipTime;
 
         [Space]
-        [SerializeField] private int ammoCount;
+        [SerializeField] private int maxAmmoCount;
         private int currentAmmoCount;
 
         public int GetAmmoCount() => currentAmmoCount;
+        public int GetMaxAmmoCount() => maxAmmoCount;
         public void SetAmmoCount(int amount) => currentAmmoCount = amount;
 
         [Space]
@@ -50,7 +51,9 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private GameObject muzzleParticles;
 
         private bool init, isAttacking, isAiming, isEquipping, isDeEquipping;
-        
+
+        #region Equip Methods
+
         public bool IsEquipped { get; private set; }
 
         public void ToggleEquip(bool b)
@@ -101,6 +104,12 @@ namespace com.limphus.retro_survival_shooter
             isDeEquipping = false;
         }
 
+        #endregion
+
+
+
+
+
         private void Awake()
         {
             if (!init) Init();
@@ -108,7 +117,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void Init()
         {
-            currentAmmoCount = ammoCount;
+            currentAmmoCount = maxAmmoCount;
 
             init = true;
         }

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: LootData001
   m_EditorClassIdentifier: 
   assets:
-  - {fileID: 2516890068559395848, guid: fcb08a1cadb672f44b40b3b53bf5562f, type: 3}
-  - {fileID: 3462352300096709117, guid: ea32e0730ea96eb40b245d547875598b, type: 3}
+  - {fileID: 154782877477721944, guid: 2f8b53d027e96db48a5ac41500745f07, type: 3}
+  - {fileID: 2583789278018954843, guid: f0281de7dda914844b1d8afdf0be6e3e, type: 3}
+  - {fileID: 7313094635298887908, guid: 258d864ed4f827348b9b6498c020e36d, type: 3}

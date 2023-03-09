@@ -696,11 +696,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35abe235dbd712e43af56ac25b616b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   damage: 100
   attackRate: 2
   equipTime: 1
   deEquipTime: 1
-  ammoCount: 18
+  maxAmmoCount: 18
   playerCamera: {fileID: 0}
   firearmSway: {fileID: 1050474322270233858}
   firearmAnimation: {fileID: 2701670438661710702}

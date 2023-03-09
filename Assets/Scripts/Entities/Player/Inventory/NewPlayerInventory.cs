@@ -21,6 +21,8 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private GameObject pickUpItem;
 
+        public GameObject GetCurrentHandItem() => handItem;
+
         public void SetPickupItem(GameObject obj)
         {
             //attempt a grab of the new firearm script
