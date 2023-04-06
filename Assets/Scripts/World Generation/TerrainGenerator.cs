@@ -16,9 +16,9 @@ namespace com.limphus.retro_survival_shooter
         Vector2[] uvs; //array of uvs
         Color[] colors; //array of colors
 
-        [Header("Terrain Size")]
-        [SerializeField] private Vector2Int size; //how big we want our grid of vertices
-        [SerializeField] private int gridMultiplier; //how far apart we want our vertices
+        //[Header("Terrain Size")]
+        private static int size = 16; //how big we want our grid of vertices
+        private static int gridMultiplier = 4; //how far apart we want our vertices
 
         [Header("Perlin Noise")]
         [SerializeField] private float noiseScale = 1.0f;
@@ -34,6 +34,11 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector3Int colorChance = new Vector3Int(25, 50, 75);
 
         private int seed;
+
+        public static int GetTerrainSize()
+        {
+            return size * gridMultiplier;
+        }
 
         //sets our seed and generates the mesh
         public void GenerateTerrain(int seed)
@@ -186,15 +191,15 @@ namespace com.limphus.retro_survival_shooter
         private Vector3[] CreateVertices()
         {
             //generate a grid of vertices, vertex count = (xSize + 1) * (zSize + 1)
-            Vector3[] vertices = new Vector3[(size.x + 1) * (size.y + 1)];
+            Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
 
             //calculate a height map, passing in our size variables, seed etc.
-            float[,] heightMap = Noise.ComplexNoiseMap(size.x + 1, size.y + 1, seed, noiseScale, octaves, persistance, lacunarity, offset);
+            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, seed, noiseScale, octaves, persistance, lacunarity, offset);
 
             //using a nested for loop to generate all our vertices
-            for (int i = 0, z = 0; z <= size.y; z++)
+            for (int i = 0, z = 0; z <= size; z++)
             {
-                for (int x = 0; x <= size.x; x++)
+                for (int x = 0; x <= size; x++)
                 {
                     //grabbing the perlin noise value, and multiplying it by the heightmultiplier
                     float y = heightMap[x, z] * heightMultiplier;
@@ -214,13 +219,13 @@ namespace com.limphus.retro_survival_shooter
         private int[] CreateTriangles()
         {
             //using another nested for loop to generate our triangles
-            int[] triangles = new int[size.x * size.y * 6]; //our triangle array, 6 points in a quad multiplied by our xSize and zSize
+            int[] triangles = new int[size * size * 6]; //our triangle array, 6 points in a quad multiplied by our xSize and zSize
 
             int vert = 0, tris = 0; //used to keep track of the vertices and triangles we are on
 
-            for (int z = 0; z < size.y; z++)
+            for (int z = 0; z < size; z++)
             {
-                for (int x = 0; x < size.x; x++)
+                for (int x = 0; x < size; x++)
                 {
                     //generating a triangle
                     //we add vert to each of the triangles to offset them correctly
@@ -228,13 +233,13 @@ namespace com.limphus.retro_survival_shooter
 
                     //first triangle
                     triangles[tris + 0] = vert + 0;
-                    triangles[tris + 1] = vert + size.x + 1;
+                    triangles[tris + 1] = vert + size + 1;
                     triangles[tris + 2] = vert + 1;
 
                     //second triangle
                     triangles[tris + 3] = vert + 1;
-                    triangles[tris + 4] = vert + size.x + 1;
-                    triangles[tris + 5] = vert + size.x + 2;
+                    triangles[tris + 4] = vert + size + 1;
+                    triangles[tris + 5] = vert + size + 2;
 
                     vert++;
                     tris += 6;
@@ -256,11 +261,11 @@ namespace com.limphus.retro_survival_shooter
             Vector2[] uvs = new Vector2[vertices.Length];
 
             //nested for loop to generate uv data
-            for (int i = 0, z = 0; z <= size.y; z++)
+            for (int i = 0, z = 0; z <= size; z++)
             {
-                for (int x = 0; x <= size.x; x++)
+                for (int x = 0; x <= size; x++)
                 {
-                    uvs[i] = new Vector2((float)x / size.x, (float)z / size.y);
+                    uvs[i] = new Vector2((float)x / size, (float)z / size);
                     i++;
                 }
             }
@@ -278,9 +283,9 @@ namespace com.limphus.retro_survival_shooter
 
             //nested for loop to generate color data
             //this implementation picks a random color from R, G, B or Black, based on the color chance.
-            for (int i = 0, z = 0; z <= size.y; z++)
+            for (int i = 0, z = 0; z <= size; z++)
             {
-                for (int x = 0; x <= size.x; x++)
+                for (int x = 0; x <= size; x++)
                 {
                     int j = Random.Range(0, 101);
 
