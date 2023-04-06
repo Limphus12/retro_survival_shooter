@@ -6,7 +6,12 @@ namespace com.limphus.utilities
 {
     public static class Noise
     {
-        public static float[,] ComplexNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
+        public enum NormalizeMode { LOCAL, GLOBAL }
+
+        public static int seed;
+        public static void InitState(int seed) => Noise.seed = seed;
+
+        public static float[,] ComplexNoiseMap(int mapWidth, int mapHeight, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode)
         {
             //initialise the noiseMap array
             float[,] noiseMap = new float[mapWidth, mapHeight];
@@ -17,6 +22,12 @@ namespace com.limphus.utilities
             //octave offsets so that points in each octave are sampled from different areas
             Vector2[] octaveOffsets = new Vector2[octaves];
 
+            float maxPossibleHeight = 0f;
+
+            //variables for amplitude, frequency and noise height
+            float amplitude = 1, frequency = 1;
+
+
             for (int i = 0; i < octaves; i++)
             {
                 //too high a value will break the generation, this seems like a good range
@@ -24,12 +35,15 @@ namespace com.limphus.utilities
                 float offsetY = prng.Next(-100000, 100000) + offset.y;
 
                 octaveOffsets[i] = new Vector2(offsetX, offsetY);
+
+                maxPossibleHeight += amplitude;
+                amplitude *= persistance;
             }
 
             if (scale <= 0) scale = 0.01f; //without this, if we attempt to divide by 0 or lower it would give us an error
 
             //keeping track of the min and max noise height
-            float maxNoiseHeight = float.MinValue, minNoiseHeight = float.MaxValue;
+            float maxLocalNoiseHeight = float.MinValue, minLocalNoiseHeight = float.MaxValue;
 
             //calculating the center of the noise map so that we can zoom in/out at the center rather than the top right corner
             float halfWidth = mapWidth / 2f;
@@ -40,14 +54,15 @@ namespace com.limphus.utilities
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
-                    //variables for amplitude, frequency and noise height
-                    float amplitude = 1, frequency = 1, noiseHeight = 0;
+                    amplitude = 1;
+                    frequency = 1;
+                    float noiseHeight = 0;
 
                     for (int o = 0; o < octaves; o++)
                     {
                         //generating sample values, divided by scale and multiplied by frequency and sampling the octaveOffsets
-                        float sampleX = (x - halfWidth) / scale * frequency + octaveOffsets[o].x * frequency;
-                        float sampleY = (y - halfHeight) / scale * frequency + octaveOffsets[o].y * frequency;
+                        float sampleX = (x - halfWidth + octaveOffsets[o].x) / scale * frequency;
+                        float sampleY = (y - halfHeight + octaveOffsets[o].y) / scale * frequency;
 
                         //generating perlin noise values
                         float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
@@ -60,8 +75,8 @@ namespace com.limphus.utilities
                     }
 
                     //updating the min and max noise height
-                    if (noiseHeight > maxNoiseHeight) maxNoiseHeight = noiseHeight;
-                    else if (noiseHeight < minNoiseHeight) minNoiseHeight = noiseHeight;
+                    if (noiseHeight > maxLocalNoiseHeight) maxLocalNoiseHeight = noiseHeight;
+                    else if (noiseHeight < minLocalNoiseHeight) minLocalNoiseHeight = noiseHeight;
 
                     noiseMap[x, y] = noiseHeight;
                 }
@@ -72,8 +87,22 @@ namespace com.limphus.utilities
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
-                    //normalize our noise map by inverse lerping between the min and max noise height
-                    noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+                    switch (normalizeMode)
+                    {
+                        case NormalizeMode.LOCAL:
+
+                            //normalize our noise map by inverse lerping between the min and max noise height
+                            noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
+
+                            break;
+
+                        case NormalizeMode.GLOBAL:
+
+                            float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight);
+                            noiseMap[x, y] = normalizedHeight;
+
+                            break;
+                    }
                 }
             }
 

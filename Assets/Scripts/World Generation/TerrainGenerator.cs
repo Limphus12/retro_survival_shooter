@@ -20,6 +20,10 @@ namespace com.limphus.retro_survival_shooter
         private static int size = 16; //how big we want our grid of vertices
         private static int gridMultiplier = 4; //how far apart we want our vertices
 
+
+        [Header("Terrain")]
+        [SerializeField] private Noise.NormalizeMode normalizeMode;
+
         [Header("Perlin Noise")]
         [SerializeField] private float noiseScale = 1.0f;
         [SerializeField] private int octaves = 4;
@@ -33,38 +37,52 @@ namespace com.limphus.retro_survival_shooter
         [Tooltip("The chances of choosing Red, Green, Blue or Black for the vertex color. For instance, [25, 50, 75] gives a 25% chance for each color.")]
         [SerializeField] private Vector3Int colorChance = new Vector3Int(25, 50, 75);
 
-        private int seed;
+        private static int seed;
+
+        public void SetSeed(int seed) => TerrainGenerator.seed = seed;
 
         public static int GetTerrainSize()
         {
             return size * gridMultiplier;
         }
 
+        public void SetOffset(Vector2Int offset) => this.offset = offset;
+
+        //sets our seed and offset, then generates the mesh
+        public void GenerateTerrain(int seed, Vector2Int offset)
+        {
+            TerrainGenerator.seed = seed; this.offset = offset;
+
+            //make sure to clear the current terrain first!
+            ClearTerrain(); GenerateMesh(); //then start generating the mesh!
+        }
+
+        //sets our seed and offset, then generates the mesh
+        public void GenerateTerrain(Vector2Int offset)
+        {
+            this.offset = offset;
+
+            //make sure to clear the current terrain first!
+            ClearTerrain(); GenerateMesh(); //then start generating the mesh!
+        }
+
         //sets our seed and generates the mesh
         public void GenerateTerrain(int seed)
         {
-            this.seed = seed; 
-            
-            //this.offset = new Vector2Int(Random.Range(-32000, 32000), Random.Range(-32000, 32000));
+            TerrainGenerator.seed = seed; //this.offset = new Vector2Int(Random.Range(-32000, 32000), Random.Range(-32000, 32000));
 
             //make sure to clear the current terrain first!
-            ClearTerrain();
-
-            //then start generating the mesh!
-            GenerateMesh();
+            ClearTerrain(); GenerateMesh(); //then start generating the mesh
         }
 
         //just generates the mesh!
         public void GenerateTerrain()
         {
             //RANDOM SEED
-            seed = Random.Range(-256000, 256000);
+            //seed = Random.Range(-256000, 256000);
 
             //make sure to clear the current terrain first!
-            ClearTerrain();
-
-            //then start generating the mesh!
-            GenerateMesh();
+            ClearTerrain(); GenerateMesh(); //then start generating the mesh!
         }
 
         public void ClearTerrain()
@@ -194,7 +212,7 @@ namespace com.limphus.retro_survival_shooter
             Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
 
             //calculate a height map, passing in our size variables, seed etc.
-            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, seed, noiseScale, octaves, persistance, lacunarity, offset);
+            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, noiseScale, octaves, persistance, lacunarity, offset, normalizeMode);
 
             //using a nested for loop to generate all our vertices
             for (int i = 0, z = 0; z <= size; z++)

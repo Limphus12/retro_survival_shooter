@@ -1,30 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
     public class ChunkGenerator : MonoBehaviour
     {
-        public const float renderDistance = 160f;
+        [SerializeField] private GameObject terrainObject;
+
+        public const float renderDistance = 128f;
 
         [SerializeField] private Transform player;
+
+        public static int seed = 128;
 
         public static Vector2 playerPosition;
 
         private int chunkSize, chunksVisible;
 
-        private Vector2Int currentChunkCoord;
+        public static Vector2Int currentChunkCoord;
 
         Dictionary<Vector2, Chunk> chunkDictionary = new Dictionary<Vector2, Chunk>();
         List<Chunk> previousChunks = new List<Chunk>();
-
 
         private void Start()
         {
             chunkSize = TerrainGenerator.GetTerrainSize();
 
             chunksVisible = Mathf.RoundToInt(renderDistance / chunkSize);
+
+            //since world gen is the first step, we're gonna init our seed.
+            Random.InitState(seed); Noise.InitState(seed);
         }
 
         private void Update()
@@ -50,12 +57,14 @@ namespace com.limphus.retro_survival_shooter
 
             currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPosition.x / chunkSize), Mathf.RoundToInt(playerPosition.y / chunkSize));
 
+            Debug.Log(currentChunkCoord);
+
             //For loop to find viewed chunk coords
             for (int y = -chunksVisible; y <= chunksVisible; y++)
             {
                 for (int x = -chunksVisible; x <= chunksVisible; x++)
                 {
-                    Vector2 viewedChunkCoord = new Vector2(currentChunkCoord.x + x, currentChunkCoord.y + y);
+                    Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y);
 
                     //if we've already visited this chunk
                     if (chunkDictionary.ContainsKey(viewedChunkCoord))
@@ -71,7 +80,7 @@ namespace com.limphus.retro_survival_shooter
                     }
 
                     //instantiate new terrain chunk at the proper coord/size and with this object as the parent
-                    else chunkDictionary.Add(viewedChunkCoord, new Chunk(viewedChunkCoord, chunkSize, gameObject.transform));
+                    else chunkDictionary.Add(viewedChunkCoord, new Chunk(terrainObject, viewedChunkCoord, chunkSize, gameObject.transform));
                 }
             }
         }
@@ -79,20 +88,23 @@ namespace com.limphus.retro_survival_shooter
 
     public class Chunk
     {
-        GameObject terrainObject;
+        GameObject terrain;
 
         Vector2 pos; Bounds bounds;
 
-        public Chunk(Vector2 coord, int size, Transform parent)
+        public Chunk(GameObject terrainObject, Vector2Int coord, int size, Transform parent)
         {
             pos = coord * size; bounds = new Bounds(pos, Vector2.one * size);
-
             Vector3 worldPos = new Vector3(pos.x, 0, pos.y);
 
-            terrainObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            terrainObject.transform.position = worldPos;
-            terrainObject.transform.localScale = Vector3.one * size / 10f;
-            terrainObject.transform.parent = parent;
+            terrain = Object.Instantiate(terrainObject);
+
+            terrain.transform.position = worldPos;
+            terrain.transform.parent = parent;
+
+            TerrainGenerator tg = terrain.GetComponent<TerrainGenerator>();
+
+            if (tg) tg.GenerateTerrain(coord * 16);
 
             SetVisible(false);
         }
@@ -104,8 +116,8 @@ namespace com.limphus.retro_survival_shooter
             SetVisible(visible);
         }
 
-        public void SetVisible(bool visible) => terrainObject.SetActive(visible);
+        public void SetVisible(bool visible) => terrain.SetActive(visible);
 
-        public bool IsVisible() => terrainObject.activeSelf;
+        public bool IsVisible() => terrain.activeSelf;
     }
 }
