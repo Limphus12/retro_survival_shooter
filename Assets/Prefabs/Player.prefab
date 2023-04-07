@@ -11365,7 +11365,7 @@ MonoBehaviour:
   reloadTime: 5.25
   clipReloads: 1
   clipReloadAmount: 6
-  clipReloadTime: 2
+  clipReloadTime: 5.25
   maxMagazineSize: 6
   maxAmmoReserves: 18
 --- !u!114 &8970660474695857551
@@ -11383,7 +11383,7 @@ MonoBehaviour:
   audioMixerGroup: {fileID: 0}
   itemSoundData: {fileID: 0}
   equipClip: {fileID: 0}
-  firearmSoundData: {fileID: 11400000, guid: 9ee5575b892db00428346b16757eecdd, type: 2}
+  firearmSoundData: {fileID: 11400000, guid: fe14afff4e942464ab31f24567a75c00, type: 2}
   firingClip: {fileID: 0}
   dryFiringClip: {fileID: 0}
   reloadingClip: {fileID: 0}

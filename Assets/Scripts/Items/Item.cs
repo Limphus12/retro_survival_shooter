@@ -257,8 +257,6 @@ namespace com.limphus.retro_survival_shooter
                 //FIREARM
                 if (firearm && firearmAnimation)
                 {
-                    Debug.Log("Checking Aniamtions");
-
                     //if we're cocking the gun, then play this anim
                     if (firearm.GetFirearmState() == FirearmState.COCKING)
                     {
@@ -277,7 +275,6 @@ namespace com.limphus.retro_survival_shooter
                     else if (firearm.GetFirearmState() == FirearmState.AIMING)
                     {
                         firearmAnimation.PlayFirearmAim();
-                        Debug.Log("Aiming Aniamtion");
                         return;
                     }
 

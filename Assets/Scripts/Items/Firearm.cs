@@ -178,6 +178,10 @@ namespace com.limphus.retro_survival_shooter
                     //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
                     else if (reloadInput && !magazine.IsReloading && !isAttacking)
                     {
+                        if (firearmSound) firearmSound.PlayReloadingSound();
+
+                        magazine.StartClipReload(); Aim(false); return;
+
                         //if we can do the clip reload
                         if (magazine.CheckReload() == 2)
                         {
