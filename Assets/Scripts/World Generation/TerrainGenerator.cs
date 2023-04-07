@@ -20,15 +20,12 @@ namespace com.limphus.retro_survival_shooter
         private static int size = 16; //how big we want our grid of vertices
         private static int gridMultiplier = 4; //how far apart we want our vertices
 
-
-        [Header("Terrain")]
-        [SerializeField] private Noise.NormalizeMode normalizeMode;
-
         [Header("Perlin Noise")]
         [SerializeField] private float noiseScale = 1.0f;
         [SerializeField] private int octaves = 4;
         [SerializeField] [Range(0f, 1f)] private float persistance = 0.5f;
         [SerializeField] private float lacunarity = 2.0f, heightMultiplier = 2.0f;
+        [SerializeField] private Noise.NormalizeMode normalizeMode;
 
         [Space]
         [SerializeField] private Vector2Int offset;
@@ -78,11 +75,15 @@ namespace com.limphus.retro_survival_shooter
         //just generates the mesh!
         public void GenerateTerrain()
         {
-            //RANDOM SEED
-            //seed = Random.Range(-256000, 256000);
-
             //make sure to clear the current terrain first!
             ClearTerrain(); GenerateMesh(); //then start generating the mesh!
+        }
+
+
+        public void GenerateTerrain(TerrainData terrainData)
+        {
+            //make sure to clear the current terrain first!
+            ClearTerrain(); GenerateMesh(terrainData); //then start generating the mesh!
         }
 
         public void ClearTerrain()
@@ -119,8 +120,8 @@ namespace com.limphus.retro_survival_shooter
             mesh.Clear();
 
             //generate the vertices, triangles, UVs and colours
-            mesh.vertices = CreateVertices();
-            mesh.triangles = CreateTriangles();
+            mesh.vertices = GenerateVertices();
+            mesh.triangles = GenerateTriangles();
             mesh.uv = GenerateUVs();
             mesh.colors = GenerateColors();
 
@@ -135,8 +136,8 @@ namespace com.limphus.retro_survival_shooter
             meshCollider.sharedMesh = mesh;
         }
 
-        //when we want to generate a mesh based on MeshData
-        public void GenerateMesh(MeshData meshData)
+        //when we want to generate a mesh based on terrain data
+        public void GenerateMesh(TerrainData terrainData)
         {
             //create a new mesh
             mesh = new Mesh();
@@ -148,10 +149,10 @@ namespace com.limphus.retro_survival_shooter
             mesh.Clear();
 
             //set the vertices, triangles, UVs and colours
-            mesh.vertices = meshData.vertices;
-            mesh.triangles = meshData.triangles;
-            mesh.uv = meshData.uvs;
-            mesh.colors = meshData.colors;
+            mesh.vertices = terrainData.vertices;
+            mesh.triangles = terrainData.triangles;
+            mesh.uv = terrainData.uvs;
+            mesh.colors = terrainData.colors;
 
             //recalculate normals on the mesh
             mesh.RecalculateNormals();
@@ -178,7 +179,7 @@ namespace com.limphus.retro_survival_shooter
 
             //generate the vertices, triangles, UVs and colours
             mesh.vertices = vertices; //we dont have to regenerate the vertices, just assign them
-            mesh.triangles = CreateTriangles();
+            mesh.triangles = GenerateTriangles();
             mesh.uv = GenerateUVs();
             mesh.colors = colors; //don't need to regenerate the colors
 
@@ -193,9 +194,9 @@ namespace com.limphus.retro_survival_shooter
             meshCollider.sharedMesh = mesh;
         }
 
-        public MeshData GetMeshData()
+        public TerrainData GetMeshData()
         {
-            MeshData meshData = new MeshData
+            TerrainData terrainData = new TerrainData
             {
                 vertices = vertices,
                 triangles = triangles,
@@ -203,10 +204,10 @@ namespace com.limphus.retro_survival_shooter
                 colors = colors
             };
 
-            return meshData;
+            return terrainData;
         }
 
-        private Vector3[] CreateVertices()
+        private Vector3[] GenerateVertices()
         {
             //generate a grid of vertices, vertex count = (xSize + 1) * (zSize + 1)
             Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
@@ -234,7 +235,7 @@ namespace com.limphus.retro_survival_shooter
             return vertices;
         }
 
-        private int[] CreateTriangles()
+        private int[] GenerateTriangles()
         {
             //using another nested for loop to generate our triangles
             int[] triangles = new int[size * size * 6]; //our triangle array, 6 points in a quad multiplied by our xSize and zSize
@@ -294,6 +295,24 @@ namespace com.limphus.retro_survival_shooter
             return uvs;
         }
 
+        private Vector2[] GenerateUVs(Vector3[] vertices)
+        {
+            //create a new vec2 array
+            Vector2[] uvs = new Vector2[vertices.Length];
+
+            //nested for loop to generate uv data
+            for (int i = 0, z = 0; z <= size; z++)
+            {
+                for (int x = 0; x <= size; x++)
+                {
+                    uvs[i] = new Vector2((float)x / size, (float)z / size);
+                    i++;
+                }
+            }
+
+            return uvs;
+        }
+
         private Color[] GenerateColors()
         {
             //create a new color array
@@ -318,6 +337,33 @@ namespace com.limphus.retro_survival_shooter
 
             //setting our colors to these generated ones
             this.colors = colors;
+
+            return colors;
+        }
+
+        private Color[] GenerateColors(Vector3[] vertices)
+        {
+            //create a new color array
+            Color[] colors = new Color[vertices.Length];
+
+            //nested for loop to generate color data
+            //this implementation picks a random color from R, G, B or Black, based on the color chance.
+            for (int i = 0, z = 0; z <= size; z++)
+            {
+                for (int x = 0; x <= size; x++)
+                {
+                    //int j = Random.Range(0, 101);
+
+                    //if (j > 0 && j <= colorChance.x) colors[i] = Color.red;
+                    //else if (j > colorChance.x && j <= colorChance.y) colors[i] = Color.green;
+                    //else if (j > colorChance.y && j <= colorChance.z) colors[i] = Color.blue;
+                    //else if (j > colorChance.z && j <= 100) colors[i] = Color.black;
+
+                    colors[i] = Color.red;
+
+                    i++;
+                }
+            }
 
             return colors;
         }
@@ -364,14 +410,33 @@ namespace com.limphus.retro_survival_shooter
             //regen the mesh, based on these new vertices
             GenerateMesh(vertices);
         }
+
+        public TerrainData GenerateTerrainData()
+        {
+            TerrainData terrainData = new TerrainData { };
+
+            terrainData.vertices = GenerateVertices();
+            terrainData.triangles = GenerateTriangles();
+            terrainData.uvs = GenerateUVs(terrainData.vertices);
+            terrainData.colors = GenerateColors(terrainData.vertices);
+
+            return terrainData;
+        }
     }
 
-    [System.Serializable]
-    public struct MeshData
+    public struct TerrainData
     {
         public Vector3[] vertices; //array of vertices
         public int[] triangles; //array of triangles
         public Vector2[] uvs; //array of uvs
         public Color[] colors; //array of colors
+
+        public TerrainData (Vector3[] vertices, int[] triangles, Vector2[] uvs, Color[] colors)
+        {
+            this.vertices = vertices;
+            this.triangles = triangles;
+            this.uvs = uvs;
+            this.colors = colors;
+        }
     }
 }

@@ -27,7 +27,6 @@ namespace com.limphus.utilities
             //variables for amplitude, frequency and noise height
             float amplitude = 1, frequency = 1;
 
-
             for (int i = 0; i < octaves; i++)
             {
                 //too high a value will break the generation, this seems like a good range

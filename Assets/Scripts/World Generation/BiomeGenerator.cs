@@ -21,10 +21,15 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector2Int gridSize;
         [SerializeField] private int gridMultiplier, gridOffset;
 
+        [Space]
+        [SerializeField] private Vector2Int offset;
+
         int i = 0;
 
+        public void SetOffset(Vector2Int offset) => this.offset = offset;
+
         //used for initial generation
-        public void GenerateRuntimeBiome()
+        public void GenerateBiome()
         {
             //when generating our biome, always get rid of any previous assets
             ClearBiome();
@@ -34,7 +39,7 @@ namespace com.limphus.retro_survival_shooter
         }
 
         //for use with the save system
-        public void GenerateRuntimeBiome(BiomeData biomeData)
+        public void GenerateBiome(BiomeData biomeData)
         {
             //when generating our biome, always get rid of any previous assets
             ClearBiome();
@@ -55,7 +60,6 @@ namespace com.limphus.retro_survival_shooter
             }
 
             AssetLoop(gridSize, gridMultiplier, gridOffset, biomeData.assets, placementChance, heightPlacementOffset);
-            Debug.Log("Spawned " + i + " Envionmental Assets");
         }
 
         //for use with the save system
@@ -68,7 +72,6 @@ namespace com.limphus.retro_survival_shooter
             }
 
             AssetLoop(gridSize, gridMultiplier, gridOffset, biomeData.assets, placementChance, heightPlacementOffset);
-            Debug.Log("Spawned " + i + " Biome Assets");
         }
 
         private void ClearAssets()
@@ -86,8 +89,6 @@ namespace com.limphus.retro_survival_shooter
 
         private void EditorClearAssets()
         {
-            Debug.Log("Editor - Removing Assets");
-
             while (transform.childCount != 0)
             {
                 DestroyImmediate(transform.GetChild(transform.childCount - 1).gameObject);
@@ -115,10 +116,10 @@ namespace com.limphus.retro_survival_shooter
                     if (z <= assetPlacementChance)
                     {
                         //generate a random offset
-                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), placementOffset, Random.Range(-1f, 1f));
+                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f) + offset.x, placementOffset, Random.Range(-1f, 1f) + offset.y);
 
                         //calculate the current raycast position, adding in our random offset
-                        Vector3 raycastPos = new Vector3((x * gridMultiplier) + randomOffset.x, raycastHeight, (y * gridMultiplier) + randomOffset.z);
+                        Vector3 raycastPos = new Vector3((x * gridMultiplier) + offset.x + randomOffset.x, raycastHeight, (y * gridMultiplier) + offset.y + randomOffset.y);
 
                         //and raycast downwards to hit the surface...
                         RaycastHit hit;
@@ -133,8 +134,7 @@ namespace com.limphus.retro_survival_shooter
                             //...placing down a random asset from the placeable asset array!
                             Instantiate(assets[Random.Range(0, assets.Length)], placementPoint, placementRotation, gameObject.transform);
 
-                            //increment i (for debug log)
-                            i++;
+                            i++; //increment i
                         }
                     }
                 }

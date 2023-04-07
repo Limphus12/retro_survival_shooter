@@ -16,6 +16,7 @@ namespace com.limphus.retro_survival_shooter
         public static int seed = 128;
 
         public static Vector2 playerPosition;
+        private Vector2 previousPlayerPosition;
 
         private int chunkSize, chunksVisible;
 
@@ -24,25 +25,42 @@ namespace com.limphus.retro_survival_shooter
         Dictionary<Vector2, Chunk> chunkDictionary = new Dictionary<Vector2, Chunk>();
         List<Chunk> previousChunks = new List<Chunk>();
 
-        private void Start()
-        {
-            chunkSize = TerrainGenerator.GetTerrainSize();
 
-            chunksVisible = Mathf.RoundToInt(renderDistance / chunkSize);
+        public static WorldManager worldManager;
+
+
+        private void Awake() => Init();
+
+        private void Init()
+        {
+            worldManager = FindObjectOfType<WorldManager>();
 
             //since world gen is the first step, we're gonna init our seed.
             Random.InitState(seed); Noise.InitState(seed);
+
+            chunkSize = TerrainGenerator.GetTerrainSize();
+            chunksVisible = Mathf.RoundToInt(renderDistance / chunkSize);
+
+            playerPosition = new Vector2(player.position.x, player.position.z);
+
+            UpdateVisibleChunks();
         }
 
         private void Update()
         {
             UpdatePlayerPosition();
-            UpdateVisibleChunks();
         }
 
         private void UpdatePlayerPosition()
         {
             playerPosition = new Vector2(player.position.x, player.position.z);
+
+            if (playerPosition != previousPlayerPosition)
+            {
+                previousPlayerPosition = playerPosition;
+
+                UpdateVisibleChunks();
+            }
         }
 
         private void UpdateVisibleChunks()
@@ -56,8 +74,6 @@ namespace com.limphus.retro_survival_shooter
             previousChunks.Clear();
 
             currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPosition.x / chunkSize), Mathf.RoundToInt(playerPosition.y / chunkSize));
-
-            Debug.Log(currentChunkCoord);
 
             //For loop to find viewed chunk coords
             for (int y = -chunksVisible; y <= chunksVisible; y++)
@@ -90,11 +106,16 @@ namespace com.limphus.retro_survival_shooter
     {
         GameObject terrain;
 
-        Vector2 pos; Bounds bounds;
+        Vector2 pos;
+
+        Vector2Int coord;
+
+        //Bounds bounds;
 
         public Chunk(GameObject terrainObject, Vector2Int coord, int size, Transform parent)
         {
-            pos = coord * size; bounds = new Bounds(pos, Vector2.one * size);
+            this.coord = coord;
+            pos = coord * size; //bounds = new Bounds(pos, Vector2.one * size);
             Vector3 worldPos = new Vector3(pos.x, 0, pos.y);
 
             terrain = Object.Instantiate(terrainObject);
@@ -104,15 +125,51 @@ namespace com.limphus.retro_survival_shooter
 
             TerrainGenerator tg = terrain.GetComponent<TerrainGenerator>();
 
-            if (tg) tg.GenerateTerrain(coord * 16);
+            if (tg)
+            {
+                tg.SetOffset(coord * 16);
+                tg.GenerateTerrain();
+            }
+
+            BiomeGenerator bg = terrain.GetComponentInChildren<BiomeGenerator>();
+
+            if (bg)
+            {
+                bg.SetOffset(coord * 64);
+                bg.GenerateBiome();
+            }
 
             SetVisible(false);
+
+            //ChunkGenerator.worldManager.RequestTerrainData(OnTerrainDataRecieved);
+        }
+
+        void OnTerrainDataRecieved(TerrainData terrainData)
+        {
+            TerrainGenerator tg = terrain.GetComponent<TerrainGenerator>();
+
+            if (tg)
+            {
+                tg.SetOffset(coord * 16);
+                tg.GenerateTerrain(terrainData);
+            }
+
+            BiomeGenerator bg = terrain.GetComponentInChildren<BiomeGenerator>();
+
+            if (bg)
+            {
+                bg.SetOffset(coord * 64);
+                bg.GenerateBiome();
+            }
+
+            //add in structure generator
         }
 
         public void CheckVisibility()
         {
-            float playerDistance = Mathf.Sqrt(bounds.SqrDistance(ChunkGenerator.playerPosition));
-            bool visible = playerDistance <= ChunkGenerator.renderDistance;
+            //float distance = Mathf.Sqrt(bounds.SqrDistance(ChunkGenerator.playerPosition));
+            float distance = Vector2.Distance(pos, ChunkGenerator.playerPosition);
+            bool visible = distance <= ChunkGenerator.renderDistance;
             SetVisible(visible);
         }
 

@@ -47,7 +47,7 @@ namespace com.limphus.retro_survival_shooter
 
             //now we grab the biome generator from our child and tell it to place assets!
             //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
-            if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
+            if (biomeGenerator) biomeGenerator.GenerateBiome();
 
             if (structureGenerator) structureGenerator.GenerateRuntimeStructures();
 
@@ -110,7 +110,7 @@ namespace com.limphus.retro_survival_shooter
             if (terrainGenerator) terrainGenerator.GenerateTerrain();
 
             //tell the biome generator to place assets!
-            if (biomeGenerator) biomeGenerator.GenerateRuntimeBiome();
+            if (biomeGenerator) biomeGenerator.GenerateBiome();
 
             //tell the structure generator to place assets!
             if (structureGenerator) structureGenerator.GenerateRuntimeStructures();
@@ -156,6 +156,6 @@ namespace com.limphus.retro_survival_shooter
     [System.Serializable]
     public struct WorldDataStruct
     {
-        public MeshData meshData;
+        public TerrainData meshData;
     }
 }
