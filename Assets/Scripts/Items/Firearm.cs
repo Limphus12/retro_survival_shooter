@@ -345,6 +345,8 @@ namespace com.limphus.retro_survival_shooter
         {
             isAiming = b;
 
+            if (b) Debug.Log("Aiming");
+
             //if we have the camera and weapon recoil references, as well as the weapon sway reference, call the aim method on them too
             if (cameraRecoil && weaponRecoil && firearmSway)
             {
