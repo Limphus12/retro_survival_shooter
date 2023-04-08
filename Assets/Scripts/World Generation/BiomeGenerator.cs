@@ -119,7 +119,7 @@ namespace com.limphus.retro_survival_shooter
                         Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f) + offset.x, placementOffset, Random.Range(-1f, 1f) + offset.y);
 
                         //calculate the current raycast position, adding in our random offset
-                        Vector3 raycastPos = new Vector3((x * gridMultiplier) + offset.x + randomOffset.x, raycastHeight, (y * gridMultiplier) + offset.y + randomOffset.y);
+                        Vector3 raycastPos = new Vector3((x * gridMultiplier) + randomOffset.x, raycastHeight, (y * gridMultiplier) + randomOffset.z);
 
                         //and raycast downwards to hit the surface...
                         RaycastHit hit;

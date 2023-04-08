@@ -8279,7 +8279,7 @@ MonoBehaviour:
   clipReloadAmount: 6
   clipReloadTime: 5.25
   maxMagazineSize: 6
-  maxAmmoReserves: 18
+  maxAmmoReserves: 1800
 --- !u!114 &3876215245220151411
 MonoBehaviour:
   m_ObjectHideFlags: 0

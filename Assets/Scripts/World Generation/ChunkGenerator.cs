@@ -23,11 +23,9 @@ namespace com.limphus.retro_survival_shooter
         public static Vector2Int currentChunkCoord;
 
         Dictionary<Vector2, Chunk> chunkDictionary = new Dictionary<Vector2, Chunk>();
-        List<Chunk> previousChunks = new List<Chunk>();
-
+        public static List<Chunk> visibleChunks = new List<Chunk>();
 
         public static WorldManager worldManager;
-
 
         private void Awake() => Init();
 
@@ -65,13 +63,14 @@ namespace com.limphus.retro_survival_shooter
 
         private void UpdateVisibleChunks()
         {
-            //For loop to update previous chunks
-            for (int i = 0; i < previousChunks.Count; i++)
-            {
-                previousChunks[i].SetVisible(false);
-            }
+            HashSet<Vector2Int> updatedChunkCoords = new HashSet<Vector2Int>();
 
-            previousChunks.Clear();
+            //For loop to update previous chunks
+            for (int i = visibleChunks.Count -1; i >= 0; i--)
+            {
+                updatedChunkCoords.Add(visibleChunks[i].coord);
+                visibleChunks[i].UpdateChunk();
+            }
 
             currentChunkCoord = new Vector2Int(Mathf.RoundToInt(playerPosition.x / chunkSize), Mathf.RoundToInt(playerPosition.y / chunkSize));
 
@@ -82,21 +81,25 @@ namespace com.limphus.retro_survival_shooter
                 {
                     Vector2Int viewedChunkCoord = new Vector2Int(currentChunkCoord.x + x, currentChunkCoord.y + y);
 
-                    //if we've already visited this chunk
-                    if (chunkDictionary.ContainsKey(viewedChunkCoord))
+                    //if the updated chunk coors contains this chunk
+                    if (!updatedChunkCoords.Contains(viewedChunkCoord))
                     {
-                        //check if it is still visible
-                        chunkDictionary[viewedChunkCoord].CheckVisibility();
-
-                        //add to the previous chunks if visible
-                        if (chunkDictionary[viewedChunkCoord].IsVisible())
+                        //if we've already visited this chunk
+                        if (chunkDictionary.ContainsKey(viewedChunkCoord))
                         {
-                            previousChunks.Add(chunkDictionary[viewedChunkCoord]);
-                        }
-                    }
+                            //check if it is still visible
+                            chunkDictionary[viewedChunkCoord].UpdateChunk();
 
-                    //instantiate new terrain chunk at the proper coord/size and with this object as the parent
-                    else chunkDictionary.Add(viewedChunkCoord, new Chunk(terrainObject, viewedChunkCoord, chunkSize, gameObject.transform));
+                            //add to the previous chunks if visible
+                            if (chunkDictionary[viewedChunkCoord].IsVisible())
+                            {
+                                visibleChunks.Add(chunkDictionary[viewedChunkCoord]);
+                            }
+                        }
+
+                        //instantiate new terrain chunk at the proper coord/size and with this object as the parent
+                        else chunkDictionary.Add(viewedChunkCoord, new Chunk(terrainObject, viewedChunkCoord, chunkSize, gameObject.transform));
+                    }
                 }
             }
         }
@@ -108,14 +111,14 @@ namespace com.limphus.retro_survival_shooter
 
         Vector2 pos;
 
-        Vector2Int coord;
+        public Vector2Int coord;
 
-        //Bounds bounds;
+        Bounds bounds;
 
         public Chunk(GameObject terrainObject, Vector2Int coord, int size, Transform parent)
         {
             this.coord = coord;
-            pos = coord * size; //bounds = new Bounds(pos, Vector2.one * size);
+            pos = coord * size; bounds = new Bounds(pos, Vector2.one * size);
             Vector3 worldPos = new Vector3(pos.x, 0, pos.y);
 
             terrain = Object.Instantiate(terrainObject);
@@ -165,12 +168,28 @@ namespace com.limphus.retro_survival_shooter
             //add in structure generator
         }
 
-        public void CheckVisibility()
+        public void UpdateChunk()
         {
-            //float distance = Mathf.Sqrt(bounds.SqrDistance(ChunkGenerator.playerPosition));
-            float distance = Vector2.Distance(pos, ChunkGenerator.playerPosition);
+            float distance = Mathf.Sqrt(bounds.SqrDistance(ChunkGenerator.playerPosition));
+            //float distance = Vector2.Distance(pos, ChunkGenerator.playerPosition);
+
+            bool wasVisible = IsVisible();
             bool visible = distance <= ChunkGenerator.renderDistance;
-            SetVisible(visible);
+
+            if (wasVisible != visible)
+            {
+                if (visible)
+                {
+                    ChunkGenerator.visibleChunks.Add(this);
+                }
+
+                else
+                {
+                    ChunkGenerator.visibleChunks.Remove(this);
+                }
+
+                SetVisible(visible);
+            }
         }
 
         public void SetVisible(bool visible) => terrain.SetActive(visible);
