@@ -8124,6 +8124,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &4011167335093056343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1259867041984913256}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1259867041984913256
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4011167335093056343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0445, z: 0.23}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8970660474839204989}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4222328406128531302
 GameObject:
   m_ObjectHideFlags: 0
@@ -10125,7 +10155,7 @@ MonoBehaviour:
   firearmData: {fileID: 11400000, guid: 584cb84241a3e3a4aa245e8f48a49558, type: 2}
   infiniteAmmo: 0
   magazine: {fileID: 5163788231738908800}
-  cameraRecoil: {fileID: 0}
+  cameraRecoil: {fileID: 6822713638158227432}
   weaponRecoil: {fileID: 5986115520172713935}
 --- !u!114 &5163788231738908800
 MonoBehaviour:
@@ -10177,7 +10207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956665d636ddb1542a6ceb0ce0e73fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
+  playerController: {fileID: 5358056577268887823}
   defaultPosition: {x: 0.1, y: -0.1, z: 0.15}
   defaultRotation: {x: 0, y: 0, z: 0, w: 1}
   defaultSwaySmooth: 8
@@ -11289,6 +11319,7 @@ GameObject:
   - component: {fileID: 6782054173401013300}
   - component: {fileID: 6572040802486982992}
   - component: {fileID: 8970660474695857544}
+  - component: {fileID: 7239827253612335563}
   m_Layer: 0
   m_Name: Revolver
   m_TagString: Untagged
@@ -11474,6 +11505,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7239827253612335563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8970660474695857547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a851a25ac77f70a429aedebea4c2b2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 1259867041984913256}
+  firearmBullet: {fileID: 6189553901500354980, guid: c7011f6ef8f98644a9b24b4aa40875e7, type: 3}
+  firearmBulletTime: 1
+  firearmMuzzle: {fileID: 2154087813206354009, guid: 31c2bf59d08204e49a64ce0658dc199e, type: 3}
+  firearmMuzzleTime: 1
 --- !u!1 &8970660474839204986
 GameObject:
   m_ObjectHideFlags: 0
@@ -11502,6 +11550,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 839008948795367873}
+  - {fileID: 1259867041984913256}
   m_Father: {fileID: 8970660474085262564}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

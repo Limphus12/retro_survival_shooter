@@ -49,6 +49,7 @@ namespace com.limphus.retro_survival_shooter
 
         private FirearmSway firearmSway;
         private FirearmAnimation firearmAnimation;
+        private FirearmFX firearmFX;
         
         [Space]
         [SerializeField] private WeaponRecoil cameraRecoil;
@@ -95,6 +96,8 @@ namespace com.limphus.retro_survival_shooter
             if (!firearmAnimation) firearmAnimation = gameObject.GetComponent<FirearmAnimation>();
 
             if (!firearmSound) firearmSound = gameObject.GetComponent<FirearmSound>();
+
+            if (!firearmFX) firearmFX = gameObject.GetComponent<FirearmFX>();
         }
 
         public bool InUse()
@@ -141,7 +144,6 @@ namespace com.limphus.retro_survival_shooter
                         //if we're cocking
                         if (isCocking)
                         {
-                            Debug.Log("Cannot Fire! We are Cocking the Weapon!");
                             return;
                         }
 
@@ -194,7 +196,7 @@ namespace com.limphus.retro_survival_shooter
                             magazine.StartReload(); Aim(false); return;
                         }
 
-                        else if (magazine.CheckReload() == 0) Debug.Log("Cannot Reload!");
+                        else if (magazine.CheckReload() == 0) { }
                     }
                 }
 
@@ -215,8 +217,6 @@ namespace com.limphus.retro_survival_shooter
                         //if we have no ammo tho, cry about it
                         if (magazine.CheckMagazine() == 0)
                         {
-                            Debug.Log("No ammo in the mag, we can't fire!");
-
                             //if we have the firearm sound reference, call the play dry firing sound
                             if (firearmSound) firearmSound.PlayDryFiringSound();
 
@@ -237,8 +237,6 @@ namespace com.limphus.retro_survival_shooter
                         //if we have no ammo tho, cry about it
                         if (magazine.CheckMagazine() == 0)
                         {
-                            Debug.Log("No ammo in the mag, we can't fire!");
-
                             //if we have the firearm sound reference, call the play dry firing sound
                             if (firearmSound) firearmSound.PlayDryFiringSound();
 
@@ -260,14 +258,12 @@ namespace com.limphus.retro_survival_shooter
                                 firearmSound.PlayDryFiringSound();
                             }
 
-                            Debug.Log("No ammo in the mag, we can't cock our weapon!");
                             return;
                         }
 
                         //if we're cocking
                         if (isCocking)
                         {
-                            Debug.Log("Cannot Fire! We are Cocking the Weapon!");
                             return;
                         }
 
@@ -303,6 +299,14 @@ namespace com.limphus.retro_survival_shooter
 
             //if we have the firearm sound reference, call the play firing sound
             if (firearmSound) firearmSound.PlayFiringSound();
+            
+            //if we have the firearm fx reference, play the bullet and muzzle effects
+            if (firearmFX)
+            {
+                firearmFX.PlayBulletEffect();
+                firearmFX.PlayMuzzleEffect();
+            }
+
 
             //invoke end shoot after our rate of fire
             Invoke(nameof(EndAttack), 1 / firearmAttackRate);
@@ -347,9 +351,9 @@ namespace com.limphus.retro_survival_shooter
 
         private void Aim(bool b)
         {
-            isAiming = b;
+            if (magazine.IsReloading) b = false;
 
-            if (b) Debug.Log("Aiming");
+            else isAiming = b;
 
             //if we have the camera and weapon recoil references, as well as the weapon sway reference, call the aim method on them too
             if (cameraRecoil && weaponRecoil && firearmSway)
@@ -364,11 +368,9 @@ namespace com.limphus.retro_survival_shooter
         {
             if (isCocking) return FirearmState.COCKING;
 
-            else if (!infiniteAmmo)
-            {
-                if (magazine.IsReloading) return FirearmState.RELOADING;
-            }
+            //else if (!infiniteAmmo) { }
 
+            else if (magazine.IsReloading) return FirearmState.RELOADING;
             else if (isAiming && !isAttacking) return FirearmState.AIMING;
             if (isAttacking && isAiming) return FirearmState.AIMATTACK;
             else if (isAttacking) return FirearmState.ATTACKING;
@@ -378,8 +380,6 @@ namespace com.limphus.retro_survival_shooter
         //starts cocking
         private void StartCock()
         {
-            Debug.Log("Cocking!");
-
             //set isCocking to true and invoke our cock method
             isCocking = true;
 
@@ -401,8 +401,6 @@ namespace com.limphus.retro_survival_shooter
         //ends cocking
         private void EndCock()
         {
-            Debug.Log("Cocked!");
-
             //set isCocking to false
             isCocking = false;
 
