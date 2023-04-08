@@ -50,6 +50,8 @@ namespace com.limphus.retro_survival_shooter
         private FirearmSway firearmSway;
         private FirearmAnimation firearmAnimation;
         private FirearmFX firearmFX;
+
+        private FirearmFunctionAnimation firearmFunctionAnimation;
         
         [Space]
         [SerializeField] private WeaponRecoil cameraRecoil;
@@ -98,6 +100,8 @@ namespace com.limphus.retro_survival_shooter
             if (!firearmSound) firearmSound = gameObject.GetComponent<FirearmSound>();
 
             if (!firearmFX) firearmFX = gameObject.GetComponent<FirearmFX>();
+
+            if (!firearmFunctionAnimation) firearmFunctionAnimation = gameObject.GetComponent<FirearmFunctionAnimation>();
         }
 
         public bool InUse()
@@ -307,6 +311,9 @@ namespace com.limphus.retro_survival_shooter
                 firearmFX.PlayMuzzleEffect();
             }
 
+            //if we have the firearm functions reference
+            if (firearmFunctionAnimation) firearmFunctionAnimation.PlayFirearmUnCock();
+
 
             //invoke end shoot after our rate of fire
             Invoke(nameof(EndAttack), 1 / firearmAttackRate);
@@ -388,6 +395,9 @@ namespace com.limphus.retro_survival_shooter
 
             //if we have the firearm sound reference, call the play cocking sound
             if (firearmSound) firearmSound.PlayCockingSound();
+
+            //if we have the firearm functions reference
+            if (firearmFunctionAnimation) firearmFunctionAnimation.PlayFirearmCock();
 
             Invoke(nameof(Cock), cockTime);
         }
