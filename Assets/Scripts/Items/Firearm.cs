@@ -326,7 +326,7 @@ namespace com.limphus.retro_survival_shooter
             Hit(playerCamera);
 
             //i think i wanna add an ammo usage variable in teh future, but idk yet.
-            if (!infiniteAmmo) magazine.UseAmmo(1);
+            magazine.UseAmmo(1);
 
             //if we have the camera and weapon recoil references, call the recoil method on them too
             if (cameraRecoil && weaponRecoil)

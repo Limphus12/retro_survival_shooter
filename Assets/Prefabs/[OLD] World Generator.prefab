@@ -247,6 +247,9 @@ MonoBehaviour:
   gridSize: {x: 128, y: 128}
   gridMultiplier: 4
   gridOffset: 2
+  offset: {x: 0, y: 0}
+  biomeDatas: []
+  terrainGenerator: {fileID: 0}
 --- !u!1 &261824860071655028
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +518,7 @@ MonoBehaviour:
   gridSize: {x: 128, y: 128}
   gridMultiplier: 4
   gridOffset: 16
+  offset: {x: 0, y: 0}
   terrainGenerator: {fileID: 261824860965984412}
 --- !u!1 &261824860965984480
 GameObject:
@@ -625,12 +629,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aecd0656ee26d84fa71a9de1cb36e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalizeMode: 0
+  terrainDatas: []
   noiseScale: 8
   octaves: 4
   persistance: 0.5
   lacunarity: 2
-  heightMultiplier: 8
+  heightMultiplier: 16
+  normalizeMode: 0
   offset: {x: 0, y: 0}
   colorChance: {x: 25, y: 50, z: 75}
 --- !u!1 &261824861117115388

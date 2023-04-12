@@ -18,6 +18,12 @@ namespace com.limphus.retro_survival_shooter
         //later down the line we should do this max stuff in scriptable objects instead...
         //then just load in the stats from that scriptable object...
 
+        public class OnIntChangedEventArgs : EventArgs { public int i; }
+        public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
+
+        public event EventHandler<OnIntChangedEventArgs> OnHealthChanged;
+
+
         private void Awake() => InitVariables();
 
         protected virtual void InitVariables()
@@ -25,6 +31,11 @@ namespace com.limphus.retro_survival_shooter
             SetCurrentHealth(maxHealth);
 
             isDead = false;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.H)) DepleteHealth(10);
         }
 
         //returns our current health
@@ -38,7 +49,10 @@ namespace com.limphus.retro_survival_shooter
 
             //doing our clamping in here
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-            
+
+            //firing off our event here
+            OnHealthChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentHealth });
+
             //check our health
             CheckHealth();
         }

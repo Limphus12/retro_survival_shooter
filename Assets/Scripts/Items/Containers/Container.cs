@@ -8,12 +8,11 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Attributes - Container")]
         [SerializeField] protected int lootAmount; //How many times this container can be looted
-        [SerializeField] protected float lootTime; //How long it takes to loot this container once
 
         [Space]
         [SerializeField] protected PlayerInventory playerInventory;
         [SerializeField] protected ItemType containerType;
-
+        
         [Space]
         [SerializeField] protected ContainerAnimation containerAnimation;
         [SerializeField] protected ContainerSound containerSound;
@@ -21,8 +20,7 @@ namespace com.limphus.retro_survival_shooter
         protected bool isLooting, isInteracting;
         protected int remainingLootAmount = -1;
 
-        public abstract void StartInteract();
-        public abstract void StopInteract();
+        public abstract void Interact();
 
         public ItemType GetItemType() => containerType;
 
@@ -41,10 +39,6 @@ namespace com.limphus.retro_survival_shooter
         }
 
         public abstract bool CanLoot();
-        public abstract bool IsLooting();
-        public abstract void StartLoot();
         protected abstract void Loot();
-        protected abstract void EndLoot();
-        public abstract void StopLoot();
     }
 }

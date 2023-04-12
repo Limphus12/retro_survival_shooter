@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -8,22 +9,33 @@ namespace com.limphus.retro_survival_shooter
 {
     public class UIManager : MonoBehaviour
     {
-        [Header("UI")]
+        [Header("UI - Text")]
         [SerializeField] private TextMeshProUGUI hungerText;
         [SerializeField] private TextMeshProUGUI thirstText, staminaText, meleeStaminaText, temperatureText;
 
-        [Space]
-        [SerializeField] private GameObject worldBorderUI, travellingUI; 
-        
+        [Header("UI - Sliders")]
+        [SerializeField] private Slider healthSlider;
+
+        [Header("UI - Loot")]
+        [SerializeField] private GameObject lootUI;
+
+        [Header("UI - Item")]
+        [SerializeField] private TextMeshProUGUI itemUINameText;
+        [SerializeField] private TextMeshProUGUI itemUIAmountText;
+
         private PlayerStats playerStats;
+        private PlayerInventory playerInventory;
         
         // Start is called before the first frame update
         void Start()
         {
             //make sure we have our playerstats
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+            if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
 
             //need to subscribe to events in the playerstats class.
+            playerStats.OnHealthChanged += PlayerStatsOnHealthChanged;
+
             playerStats.OnHungerChanged += PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged += PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged += PlayerStatsOnStaminaChanged;
@@ -37,6 +49,8 @@ namespace com.limphus.retro_survival_shooter
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
 
             //need to subscribe to events in the playerstats class.
+            playerStats.OnHealthChanged += PlayerStatsOnHealthChanged;
+
             playerStats.OnHungerChanged += PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged += PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged += PlayerStatsOnStaminaChanged;
@@ -50,6 +64,8 @@ namespace com.limphus.retro_survival_shooter
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
 
             //need to unsubscribe to events in the playerstats class.
+            playerStats.OnHealthChanged -= PlayerStatsOnHealthChanged;
+
             playerStats.OnHungerChanged -= PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged -= PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
@@ -63,6 +79,8 @@ namespace com.limphus.retro_survival_shooter
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
 
             //need to unsubscribe to events in the playerstats class.
+            playerStats.OnHealthChanged -= PlayerStatsOnHealthChanged;
+
             playerStats.OnHungerChanged -= PlayerStatsOnHungerChanged;
             playerStats.OnThirstChanged -= PlayerStatsOnThirstChanged;
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
@@ -77,17 +95,29 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckUI()
         {
-            if (worldBorderUI)
+            if (playerInventory && itemUINameText && itemUIAmountText)
             {
-                if (!WorldBorder.IsTravelling) worldBorderUI.SetActive(WorldBorder.IsInBorder);
+                GameObject item = playerInventory.GetCurrentItem();
 
-                else worldBorderUI.SetActive(false);
+                if (item != null)
+                {
+                    Item itemScript = item.GetComponent<Item>();
+
+                    if (itemScript != null)
+                    {   
+                        itemUINameText.text = "" + itemScript.GetItemData().itemName;
+                        //itemUIAmountText.text = "" + itemScript.get;
+                    }
+                }
             }
-
-            if (travellingUI) travellingUI.SetActive(WorldBorder.IsTravelling);
         }
 
         #region Events
+
+        private void PlayerStatsOnHealthChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        {
+            if (healthSlider) healthSlider.value = e.i;
+        }
 
         private void PlayerStatsOnHungerChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {

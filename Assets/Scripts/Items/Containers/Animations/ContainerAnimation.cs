@@ -7,9 +7,9 @@ namespace com.limphus.retro_survival_shooter
     public class ContainerAnimation : AnimationHandler
     {
         const string IDLE = "idle";
-        const string LOOTING = "looting";
+        const string LOOTED = "looted";
 
         public void PlayIdle() => PlayAnimation(IDLE);
-        public void PlayLooting() => PlayAnimation(LOOTING);
+        public void PlayLooted() => PlayAnimation(LOOTED);
     }
 }

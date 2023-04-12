@@ -16,6 +16,11 @@ namespace com.limphus.retro_survival_shooter
         private bool inInventory, enterInput, pickupInput, dropInput;
         private float scrollInput;
 
+        private GameObject currentItem;
+
+        private void SetCurrentItem(GameObject item) => currentItem = item;
+        public GameObject GetCurrentItem() => currentItem;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -76,6 +81,9 @@ namespace com.limphus.retro_survival_shooter
 
             //then select the new item
             ToggleItem(playerInventorySlots[selectedItem].GetSlotItem(), true);
+
+            //and set this item as our current item
+            SetCurrentItem(playerInventorySlots[selectedItem].GetSlotItem());
         }
 
         void ToggleItem(GameObject item, bool b)
@@ -165,6 +173,27 @@ namespace com.limphus.retro_survival_shooter
             }
 
             if (firearms.Count > 0) return firearms;
+
+            else return null;
+        }
+
+        public List<Consumable> GetConsumables()
+        {
+            List<Consumable> consumables = new List<Consumable>();
+
+            foreach (PlayerInventorySlot slot in playerInventorySlots)
+            {
+                GameObject slotItem = slot.GetSlotItem();
+
+                if (slotItem)
+                {
+                    Consumable consumable = slotItem.GetComponent<Consumable>();
+
+                    if (consumable) consumables.Add(consumable);
+                }
+            }
+
+            if (consumables.Count > 0) return consumables;
 
             else return null;
         }

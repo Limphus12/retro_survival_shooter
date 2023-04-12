@@ -9,81 +9,52 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Consumable")]
         [SerializeField] private ConsumableContainerData data;
 
-        public override void StartInteract()
-        {
-            isInteracting = true;
+        [SerializeField] private List <Consumable> consumables = new List<Consumable>();
 
-            if (containerAnimation) containerAnimation.PlayLooting();
-            if (containerSound) containerSound.PlayLootingSound();
+        protected override void Init()
+        {
+            base.Init();
         }
 
-        public override void StopInteract()
+        private void Start()
         {
-            isInteracting = false;
-
-            if (containerAnimation) containerAnimation.PlayIdle();
-            if (containerSound) containerSound.PlayLootingStopSound();
+            consumables = playerInventory.GetConsumables();
         }
 
+        //checking if we can loot this container
         public override bool CanLoot()
         {
-            if (remainingLootAmount > 0) return true;
+            consumables = playerInventory.GetConsumables();
+
+            if (remainingLootAmount > 0 && consumables.Count > 0)
+            {
+                bool b = false;
+
+                foreach(Consumable consumable in consumables)
+                {
+                    if (consumable.CanReplenish()) b = true;
+                }
+
+                return b;
+            }
 
             else return false;
         }
 
-        public override bool IsLooting() => isLooting;
-
-        public override void StartLoot()
-        {
-            isLooting = true;
-
-            Debug.Log("Started Looting the Consumable Containter!");
-
-            Invoke(nameof(Loot), lootTime);
-        }
+        public override void Interact() => Loot();
 
         protected override void Loot()
         {
-            //provide the player with a random loot fom the data var
-            //later on, we'd need to roll for a rarity, but rn we'll just pick a random item
-
-            //check if we have the player inventory and that we can add the item
-            if (playerInventory && playerInventory.CanAddItem(GetItemType()))
+            //check if we have the player inventory and that we can
+            if (playerInventory && consumables.Count > 0)
             {
-                if (playerInventory.CanAddItem(GetItemType()))
-                {
-                    int i = Random.Range(0, data.lootables.Length);
+                //pick a random consumable to replenish by 1
+                int i = Random.Range(0, consumables.Count);
 
-                    playerInventory.AddItem(Instantiate(data.lootables[i]), GetItemType());
-                }
-
-                else
-                {
-                    Debug.Log("No Inventory Space!");
-                    EndLoot(); return;
-                }
+                consumables[i].Replenish(1);
             }
 
             remainingLootAmount--;
-
-            EndLoot();
-        }
-
-        protected override void EndLoot()
-        {
-            Debug.Log("Ended Looting the Consumable Containter!");
-
-            isLooting = false;
-        }
-
-        public override void StopLoot()
-        {
-            EndLoot();
-
-            Debug.Log("Stopped Looting the Consumable Containter!");
-
-            CancelInvoke(nameof(Loot));
         }
     }
 }

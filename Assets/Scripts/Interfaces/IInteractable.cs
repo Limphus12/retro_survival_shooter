@@ -6,6 +6,6 @@ namespace com.limphus.retro_survival_shooter
 {
     public interface IInteractable
     {
-        public void StartInteract(); public void StopInteract();
+        public void Interact();
     }
 }

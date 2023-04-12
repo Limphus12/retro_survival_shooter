@@ -9,7 +9,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [SerializeField] private GameObject terrainObject;
 
-        public const float renderDistance = 128f;
+        public const float renderDistance = 160f;
 
         [SerializeField] private Transform player;
 
@@ -40,7 +40,10 @@ namespace com.limphus.retro_survival_shooter
             chunksVisible = Mathf.RoundToInt(renderDistance / chunkSize);
 
             playerPosition = new Vector2(player.position.x, player.position.z);
+        }
 
+        private void Start()
+        {
             UpdateVisibleChunks();
         }
 
@@ -127,19 +130,30 @@ namespace com.limphus.retro_survival_shooter
             terrain.transform.parent = parent;
 
             TerrainGenerator tg = terrain.GetComponent<TerrainGenerator>();
-
-            if (tg)
-            {
-                tg.SetOffset(coord * 16);
-                tg.GenerateTerrain();
-            }
-
             BiomeGenerator bg = terrain.GetComponentInChildren<BiomeGenerator>();
+            StructureGenerator sg = terrain.GetComponentInChildren<StructureGenerator>();
 
             if (bg)
             {
                 bg.SetOffset(coord * 64);
+                bg.GenerateBiomeNoise();
+            }
+
+            if (tg)
+            {
+                tg.SetOffset(coord * 16);
+                tg.GenerateTerrainWithBiomes();
+            }
+
+            if (bg)
+            {
                 bg.GenerateBiome();
+            }
+
+            if (sg)
+            {
+                //sg.SetOffset(coord * 64);
+                //sg.GenerateStructures();
             }
 
             SetVisible(false);
@@ -154,7 +168,7 @@ namespace com.limphus.retro_survival_shooter
             if (tg)
             {
                 tg.SetOffset(coord * 16);
-                tg.GenerateTerrain(terrainData);
+                //tg.GenerateTerrain(terrainData);
             }
 
             BiomeGenerator bg = terrain.GetComponentInChildren<BiomeGenerator>();
@@ -171,22 +185,13 @@ namespace com.limphus.retro_survival_shooter
         public void UpdateChunk()
         {
             float distance = Mathf.Sqrt(bounds.SqrDistance(ChunkGenerator.playerPosition));
-            //float distance = Vector2.Distance(pos, ChunkGenerator.playerPosition);
-
             bool wasVisible = IsVisible();
             bool visible = distance <= ChunkGenerator.renderDistance;
 
             if (wasVisible != visible)
             {
-                if (visible)
-                {
-                    ChunkGenerator.visibleChunks.Add(this);
-                }
-
-                else
-                {
-                    ChunkGenerator.visibleChunks.Remove(this);
-                }
+                if (visible) ChunkGenerator.visibleChunks.Add(this);
+                else ChunkGenerator.visibleChunks.Remove(this);
 
                 SetVisible(visible);
             }

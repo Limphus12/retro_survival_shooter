@@ -49,7 +49,7 @@ namespace com.limphus.retro_survival_shooter
             //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
             if (biomeGenerator) biomeGenerator.GenerateBiome();
 
-            if (structureGenerator) structureGenerator.GenerateRuntimeStructures();
+            if (structureGenerator) structureGenerator.GenerateStructures();
 
             Debug.Log("Generating World");
         }
@@ -113,7 +113,7 @@ namespace com.limphus.retro_survival_shooter
             if (biomeGenerator) biomeGenerator.GenerateBiome();
 
             //tell the structure generator to place assets!
-            if (structureGenerator) structureGenerator.GenerateRuntimeStructures();
+            if (structureGenerator) structureGenerator.GenerateStructures();
         }
 
         public Vector2Int GetCurrentChunk()

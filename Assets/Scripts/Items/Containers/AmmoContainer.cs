@@ -9,39 +9,13 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Ammo")]
         [Range(0f, 1f), SerializeField] private float ammoPercentage; //A certain percent of ammo that is restored
 
-        public override void StartInteract()
-        {
-            isInteracting = true;
-
-            if (containerAnimation) containerAnimation.PlayLooting();
-            if (containerSound) containerSound.PlayLootingSound();
-        }
-
-        public override void StopInteract()
-        {
-            isInteracting = false;
-
-            if (containerAnimation) containerAnimation.PlayIdle();
-            if (containerSound) containerSound.PlayLootingStopSound();
-        }
-
         public override bool CanLoot()
         {
             if (remainingLootAmount > 0) return true;
-
             else return false;
         }
 
-        public override bool IsLooting() => isLooting;
-
-        public override void StartLoot()
-        {
-            isLooting = true;
-
-            Debug.Log("Started Looting the Ammo Containter!");
-
-            Invoke(nameof(Loot), lootTime);
-        }
+        public override void Interact() => Loot();
 
         protected override void Loot()
         {
@@ -78,26 +52,6 @@ namespace com.limphus.retro_survival_shooter
                     }
                 }
             }
-
-            remainingLootAmount--;
-
-            EndLoot();
-        }
-
-        protected override void EndLoot()
-        {
-            Debug.Log("Ended Looting the Ammo Containter!");
-
-            isLooting = false;
-        }
-
-        public override void StopLoot()
-        {
-            EndLoot();
-
-            Debug.Log("Stopped Looting the Ammo Containter!");
-
-            CancelInvoke(nameof(Loot));
         }
     }
 }

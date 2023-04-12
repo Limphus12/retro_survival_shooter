@@ -48,13 +48,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83ce7290ab1dc242b5eec60357898c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootAmount: 10
-  lootTime: 2
+  lootAmount: 2
   playerInventory: {fileID: 0}
   containerType: 2
   containerAnimation: {fileID: 4680195877868328545}
   containerSound: {fileID: 2709868443456046927}
-  data: {fileID: 11400000, guid: 3fefbd0a20277e54dac63de7a31eddc6, type: 2}
+  data: {fileID: 0}
+  consumables: []
 --- !u!114 &4680195877868328545
 MonoBehaviour:
   m_ObjectHideFlags: 0

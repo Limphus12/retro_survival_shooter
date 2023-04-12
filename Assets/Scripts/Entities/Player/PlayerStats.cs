@@ -66,10 +66,6 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float meleeStaminaReplenishTime;
 
-
-        public class OnIntChangedEventArgs : EventArgs { public int i; }
-        public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
-
         public event EventHandler<OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged, OnMeleeStaminaChanged;
         public event EventHandler<OnTemperatureChangedEventArgs> OnTemperatureChanged;
 
@@ -269,7 +265,7 @@ namespace com.limphus.retro_survival_shooter
             if (currentStamina >= maxStamina) //if we have full stamina
             {
                 //then debug log that we have full stamina
-                Debug.Log("Character (" + gameObject.name + ") is at Full Stamina");
+                //Debug.Log("Character (" + gameObject.name + ") is at Full Stamina");
             }
         }
 

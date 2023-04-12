@@ -17,19 +17,25 @@ namespace com.limphus.retro_survival_shooter
 
         private ConsumableType consumableType;
 
-        private int useAmount;
-        private int consumableAmount;
-        private float consumeTime;
+        [SerializeField] private int useAmount;
+        [SerializeField] private int consumableAmount;
+        [SerializeField] private float consumeTime;
 
         private ConsumableSound consumableSound;
         private WeaponSway weaponSway;
 
         protected bool isConsuming;
-        protected int remainingUsageAmount = -1, remainingConsumableAmount = -1;
+        [SerializeField] protected int remainingUsageAmount = -1, remainingConsumableAmount = -1;
 
         private PlayerStats playerStats;
 
         public bool InUse() => isConsuming;
+
+        public bool CanReplenish()
+        {
+            if (remainingUsageAmount < useAmount) return true;
+            else return false;
+        }
 
         private void Awake() => Init();
 
@@ -62,7 +68,7 @@ namespace com.limphus.retro_survival_shooter
             if (!weaponSway) weaponSway = gameObject.GetComponent<WeaponSway>();
         }
 
-        public void CheckInputs(bool rightMouseInput)
+        public void CheckInputs(bool leftMouseInput)
         {
             if (playerStats)
             {
@@ -70,14 +76,14 @@ namespace com.limphus.retro_survival_shooter
                 if (!isConsuming)
                 {
                     //and we are holding our right mouse button
-                    if (rightMouseInput && remainingUsageAmount > 0)
+                    if (leftMouseInput && remainingUsageAmount > 0)
                     {
                         //start consuming
                         StartConsume();
                     }
 
                     //if we are holding the right mouse button but we cannot consume it
-                    else if (rightMouseInput && remainingUsageAmount == 0)
+                    else if (leftMouseInput && remainingUsageAmount == 0)
                     {
                         Debug.Log("We cannot consume this consumable, we've already consumed it all!");
                     }
@@ -87,7 +93,7 @@ namespace com.limphus.retro_survival_shooter
                 else if (isConsuming)
                 {
                     //if we release our right mouse input
-                    if (!rightMouseInput)
+                    if (!leftMouseInput)
                     {
                         //stop the invoke of the Consume method
                         CancelInvoke(nameof(Consume));
@@ -104,6 +110,14 @@ namespace com.limphus.retro_survival_shooter
                 Debug.LogWarning("No Player Stats Detected! Please Assign the Player Stats!");
                 return;
             }
+        }
+
+        public void Replenish(int amount)
+        {
+            remainingUsageAmount += amount;
+
+            //doing our clamping in here
+            remainingUsageAmount = Mathf.Clamp(remainingUsageAmount, 0, useAmount);
         }
 
         protected virtual void StartConsume()
@@ -133,24 +147,24 @@ namespace com.limphus.retro_survival_shooter
                 if (remainingUsageAmount > 1)
                 {
                     //round to an int how much consumableAmount we're gonna use
-                    int i = Mathf.RoundToInt(consumableAmount / useAmount);
+                    //int i = Mathf.RoundToInt(consumableAmount / useAmount);
 
                     //switch statement to replenish either hunger or thirst
                     switch (consumableType)
                     {
                         case ConsumableType.FOOD:
                             //call the replenish hunger method on our player stats reference
-                            playerStats.ReplenishHunger(i);
+                            playerStats.ReplenishHunger(consumableAmount);
                             break;
 
                         case ConsumableType.DRINK:
                             //call the replenish thirst method on our player stats reference
-                            playerStats.ReplenishThirst(i);
+                            playerStats.ReplenishThirst(consumableAmount);
                             break;
 
                         case ConsumableType.MEDICINE:
                             //call the replenish health method on our player stats reference
-                            playerStats.ReplenishHealth(i);
+                            playerStats.ReplenishHealth(consumableAmount);
                             break;
 
                         case ConsumableType.DRUG:
@@ -162,7 +176,7 @@ namespace com.limphus.retro_survival_shooter
                     }
 
                     //decreases our remaining sustenance amount
-                    remainingConsumableAmount -= i;
+                    //remainingConsumableAmount -= i;
                 }
 
                 //if we're on our last consume, just consume the rest of it, no maths required
@@ -173,17 +187,17 @@ namespace com.limphus.retro_survival_shooter
                     {
                         case ConsumableType.FOOD:
                             //call the replenish hunger method on our player stats reference
-                            playerStats.ReplenishHunger(remainingConsumableAmount);
+                            playerStats.ReplenishHunger(consumableAmount);
                             break;
 
                         case ConsumableType.DRINK:
                             //call the replenish thirst method on our player stats reference
-                            playerStats.ReplenishThirst(remainingConsumableAmount);
+                            playerStats.ReplenishThirst(consumableAmount);
                             break;
 
                         case ConsumableType.MEDICINE:
                             //call the replenish health method on our player stats reference
-                            playerStats.ReplenishHealth(remainingConsumableAmount);
+                            playerStats.ReplenishHealth(consumableAmount);
                             break;
 
                         case ConsumableType.DRUG:

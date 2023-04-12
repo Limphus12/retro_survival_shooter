@@ -194,7 +194,7 @@ namespace com.limphus.retro_survival_shooter
             {
                 if (firearm) firearm.CheckInputs(leftMouseInput, rightMouseInput, reloadInput);
 
-                else if (consumable) consumable.CheckInputs(rightMouseInput);
+                else if (consumable) consumable.CheckInputs(leftMouseInput);
 
                 else if (throwable) throwable.CheckInputs();
 
@@ -257,8 +257,6 @@ namespace com.limphus.retro_survival_shooter
                 //FIREARM
                 if (firearm && firearmAnimation)
                 {
-                    Debug.Log("checking firearm animations");
-
                     //if we're cocking the gun, then play this anim
                     if (firearm.GetFirearmState() == FirearmState.COCKING)
                     {
@@ -276,8 +274,6 @@ namespace com.limphus.retro_survival_shooter
                     //if we're aiming the gun and we're not shooting, play this anim
                     else if (firearm.GetFirearmState() == FirearmState.AIMING)
                     {
-                        Debug.Log("aiming");
-
                         firearmAnimation.PlayFirearmAim();
                         return;
                     }

@@ -10,6 +10,9 @@ namespace com.limphus.retro_survival_shooter
         //enabling reloading and ammo usage
 
         [Header("Attributes - Reloading")]
+        [SerializeField] private bool infinteAmmo;
+        [SerializeField] private bool infinteClip;
+
         [SerializeField] private float reloadTime;
 
         [Space]
@@ -115,7 +118,10 @@ namespace com.limphus.retro_survival_shooter
         void ClipReload()
         {
             //reload via a clip!
-            SetCurrentMagazineCount(currentMagazineCount += clipReloadAmount);
+
+            //if we're not using infinite ammo, reload by the clip amount
+            if (!infinteAmmo) SetCurrentMagazineCount(currentMagazineCount += clipReloadAmount);
+            else SetCurrentMagazineCount(maxMagazineSize);
 
             //if we still have ammo to reload
             if (currentMagazineCount < maxMagazineSize) StartReload();
@@ -136,6 +142,9 @@ namespace com.limphus.retro_survival_shooter
 
         private void SetCurrentMagazineCount(int amount) => currentMagazineCount = Mathf.Clamp(amount, 0, maxMagazineSize);
         private void SetCurrentAmmoReserves(int amount) => currentAmmoReserves = Mathf.Clamp(amount, 0, maxAmmoReserves);
-        public void UseAmmo(int amount) => SetCurrentMagazineCount(currentMagazineCount -= amount);
+        public void UseAmmo(int amount)
+        {
+            if (!infinteClip) SetCurrentMagazineCount(currentMagazineCount -= amount);
+        }
     }
 }

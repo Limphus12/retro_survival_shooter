@@ -21,6 +21,10 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector2Int gridSize;
         [SerializeField] private int gridMultiplier, gridOffset;
 
+        [Space]
+        [SerializeField] private Vector2Int offset;
+        public void SetOffset(Vector2Int offset) => this.offset = offset;
+
         private StructureAreaStruct structureAreaStruct = new StructureAreaStruct{ structureAreas = new List<Vector3>(), structurePositions = new List<Vector3>() };
 
         [Space]
@@ -29,7 +33,7 @@ namespace com.limphus.retro_survival_shooter
         int i = 0;
 
         //used for initial generation
-        public void GenerateRuntimeStructures()
+        public void GenerateStructures()
         {
             //when generating our structures, always get rid of any previous assets
             ClearStructures();
@@ -103,7 +107,7 @@ namespace com.limphus.retro_survival_shooter
                     if (z <= assetPlacementChance)
                     {
                         //generate a random offset
-                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), placementOffset, Random.Range(-1f, 1f));
+                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f) + offset.x, placementOffset, Random.Range(-1f, 1f) + offset.y);
 
                         //calculate the current raycast position, adding in our random offset
                         Vector3 raycastPos = new Vector3((x * gridMultiplier) + randomOffset.x, raycastHeight, (y * gridMultiplier) + randomOffset.z);

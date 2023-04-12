@@ -54,7 +54,7 @@ namespace com.limphus.retro_survival_shooter
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
         private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
-        private bool isCrouching, isRunning, isJumping, isCoyoteTime;
+        private bool isMoving, isCrouching, isRunning, isJumping, isCoyoteTime;
 
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
@@ -88,7 +88,7 @@ namespace com.limphus.retro_survival_shooter
         void Inputs()
         {
             //if were not pressing the crouch key, and we have the room to stand
-            if (!Input.GetKey(crouchKey) && !HitCeiling(currentCeilingRaycast))
+            if (!Input.GetKey(crouchKey) && !HitCeiling())
             {
                 Stand();
             }
@@ -194,6 +194,8 @@ namespace com.limphus.retro_survival_shooter
             curSpeedX = currentSpeed * Input.GetAxis("Horizontal");
             curSpeedZ = currentSpeed * Input.GetAxis("Vertical");
 
+            if (curSpeedX != 0 || curSpeedZ != 0) isMoving = true;
+
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedZ) + (right * curSpeedX);
 
@@ -232,7 +234,7 @@ namespace com.limphus.retro_survival_shooter
                 characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
 
                 //if we hit the ceiling when jumping, cancel our vertical velocity.
-                if (HitCeiling(currentCeilingRaycast))
+                if (HitCeiling())
                 {
                     moveDirection.y = 0;
                 }
@@ -277,7 +279,7 @@ namespace com.limphus.retro_survival_shooter
 
         public PlayerMovementState GetMovementState()
         {
-            if (isRunning) return PlayerMovementState.RUNNING;
+            if (isRunning && isMoving) return PlayerMovementState.RUNNING;
 
             else if (isCrouching) return PlayerMovementState.CROUCHING;
 
@@ -375,12 +377,14 @@ namespace com.limphus.retro_survival_shooter
 
         #region HitChecks
 
-        bool HitCeiling(float currentRaycastHeight)
+        bool HitCeiling()
         {
             //raycast upwards from our center
-            if (Physics.Raycast(transform.position, transform.up, currentRaycastHeight))
+            if (Physics.Raycast(transform.position, transform.up, out RaycastHit hit, currentCeilingRaycast))
             {
-                return true;
+                if (hit.transform != transform) return true;
+
+                else return false;
             }
 
             else return false;
@@ -389,9 +393,11 @@ namespace com.limphus.retro_survival_shooter
         bool HitGround()
         {
             //raycast downwards from our center
-            if (Physics.Raycast(transform.position, -transform.up, currentGroundRaycast))
+            if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, currentGroundRaycast))
             {
-                return true;
+                if (hit.transform != transform) return true;
+
+                else return false;
             }
 
             else return false;

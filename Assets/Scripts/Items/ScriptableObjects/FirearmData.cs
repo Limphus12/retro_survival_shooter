@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
     [CreateAssetMenu(fileName = "FirearmData", menuName = "Items/Firearm")]
 
     [System.Serializable]
-    public class FirearmData : MeleeData
+    public class FirearmData : ItemData
     {
         [Header("Attributes - Firearm")]
         public float firearmDamage;

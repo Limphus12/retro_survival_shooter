@@ -30,7 +30,7 @@ namespace com.limphus.retro_survival_shooter
                     }
                 }
 
-                Debug.Log("Removed " + i + " " + assetTag + "s");
+                //Debug.Log("Removed " + i + " " + assetTag + "s");
             }
 
             //destroy this object after removing shit

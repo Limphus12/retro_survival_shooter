@@ -40,13 +40,13 @@ namespace com.limphus.retro_survival_shooter
 
         void TerrainDataThread(Action<TerrainData> callback)
         {
-            TerrainData terrainData = terrainGenerator.GenerateTerrainData();
+            //TerrainData terrainData = terrainGenerator.GenerateTerrainData();
 
             //lock so we cannot access it when the thread reaches this stage
             //other threads will have to wait their turn?
             lock (terrainThreadInfoQueue)
             {
-                terrainThreadInfoQueue.Enqueue(new TerrainThreadInfo<TerrainData>(callback, terrainData));
+                //terrainThreadInfoQueue.Enqueue(new TerrainThreadInfo<TerrainData>(callback, terrainData));
             }
         }
 

@@ -134,5 +134,42 @@ namespace com.limphus.utilities
             //return the noiseMap array
             return noiseMap;
         }
+
+
+        public static float[,] SimpleNoiseMap(int mapWidth, int mapHeight, float scale, Vector2 offset)
+        {
+            //initialise the noiseMap array
+            float[,] noiseMap = new float[mapWidth, mapHeight];
+
+            //random generation using a seed
+            System.Random prng = new System.Random(seed);
+
+            float offsetX = prng.Next(-100000, 100000) + offset.x;
+            float offsetY = prng.Next(-100000, 100000) + offset.y;
+
+            //calculating the center of the noise map so that we can zoom in/out at the center rather than the top right corner
+            float halfWidth = mapWidth / 2f;
+            float halfHeight = mapHeight / 2f;
+
+            if (scale <= 0) scale = 0.01f; //without this, if we attempt to divide by 0 or lower it would give us an error
+
+            //nested arrays baby!
+            for (int y = 0; y < mapHeight; y++)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    //generating sample values, divided by scale
+                    float sampleX = (x - halfWidth + offsetX) / scale;
+                    float sampleY = (y - halfHeight + offsetY) / scale;
+
+                    //generating perlin noise values
+                    float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
+                    noiseMap[x, y] = perlinValue;
+                }
+            }
+
+            //return the noiseMap array
+            return noiseMap;
+        }
     }
 }

@@ -48,8 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d06377e51a54c4ab756efd593656d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootAmount: 8
-  lootTime: 2
+  lootAmount: 2
   playerInventory: {fileID: 0}
   containerType: 3
   containerAnimation: {fileID: 7149015101110186884}
