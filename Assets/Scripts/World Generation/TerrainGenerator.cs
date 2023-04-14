@@ -17,7 +17,7 @@ namespace com.limphus.retro_survival_shooter
         Color[] colors; //array of colors
 
         //[Header("Terrain Size")]
-        private static int size = 16; //how big we want our grid of vertices
+        private static int size = 128; //how big we want our grid of vertices
         private static int gridMultiplier = 4; //how far apart we want our vertices
 
         [Header("Terrain")]

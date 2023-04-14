@@ -10,8 +10,11 @@ namespace com.limphus.retro_survival_shooter
         //enabling reloading and ammo usage
 
         [Header("Attributes - Reloading")]
-        [SerializeField] private bool infinteAmmo;
-        [SerializeField] private bool infinteClip;
+        [SerializeField] private bool infiniteAmmo;
+        [SerializeField] private bool infiniteClip;
+
+        public bool InfinteAmmo { get; private set; }
+        public bool InfinteClip { get; private set; }
 
         [SerializeField] private float reloadTime;
 
@@ -22,11 +25,11 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] private int maxMagazineSize; //our internal mag size (how many bullets we can hold at once)
-        private int currentMagazineCount; //the current amount of bullets we have in our mag.
+        public int CurrentMagazineCount { get; private set; } //the current amount of bullets we have in our mag.
 
         [Space]
         [SerializeField] private int maxAmmoReserves; //our maximum ammo reserves for this weapon
-        private int currentAmmoReserves; //our current ammo reserves
+        public int CurrentAmmoReserves { get; private set; } //our current ammo reserves
 
         public bool IsReloading { get; private set; } //we're gonna try this syntax
 
@@ -34,26 +37,29 @@ namespace com.limphus.retro_survival_shooter
 
         private void Init()
         {
-            currentMagazineCount = maxMagazineSize;
-            currentAmmoReserves = maxAmmoReserves;
+            InfinteAmmo = infiniteAmmo;
+            InfinteClip = infiniteClip;
+
+            CurrentMagazineCount = maxMagazineSize;
+            CurrentAmmoReserves = maxAmmoReserves;
         }
 
         //a method to compare ammo reserves to maxMagazineSize
         private int CheckAmmoReserves(int amount)
         {
-            if (currentAmmoReserves <= 0) return 0; //if we have no reserve ammo
+            if (CurrentAmmoReserves <= 0) return 0; //if we have no reserve ammo
 
-            else if (currentAmmoReserves < amount) return 1; //if we dont have enough to perform a reload with the amount required
+            else if (CurrentAmmoReserves < amount) return 1; //if we dont have enough to perform a reload with the amount required
 
-            else if (currentAmmoReserves >= amount) return 2; //if we have enough to perform a reload with the amount required
+            else if (CurrentAmmoReserves >= amount) return 2; //if we have enough to perform a reload with the amount required
 
             else return 3;
         }
 
         public int CheckMagazine()
         {
-            if (currentMagazineCount <= 0) return 0; //if we have no ammo loaded
-            if (currentMagazineCount > 0) return 1; //if we have ammo loaded
+            if (CurrentMagazineCount <= 0) return 0; //if we have no ammo loaded
+            if (CurrentMagazineCount > 0) return 1; //if we have ammo loaded
             else return 2;
         }
 
@@ -67,24 +73,24 @@ namespace com.limphus.retro_survival_shooter
                 if (CheckAmmoReserves(clipReloadAmount) == 2)
                 {
                     //if we have enough mag space
-                    if ((maxMagazineSize - currentMagazineCount) >= clipReloadAmount) return 2;
+                    if ((maxMagazineSize - CurrentMagazineCount) >= clipReloadAmount) return 2;
 
                     //if we don't have enough space for a clip, but we have enough for a single bullet
-                    else if ((maxMagazineSize - currentMagazineCount) >= 1) return 1;
+                    else if ((maxMagazineSize - CurrentMagazineCount) >= 1) return 1;
 
                     //else we cannot reload!
                     else return 0;
                 }
 
                 //if we only have enough for a single bullet reload
-                else if (CheckAmmoReserves(1) == 2 && ((maxMagazineSize - currentMagazineCount) <= 1)) return 1;
+                else if (CheckAmmoReserves(1) == 2 && ((maxMagazineSize - CurrentMagazineCount) <= 1)) return 1;
 
                 //else we cannot reload!
                 else return 0;
             }
 
             //if we are not doing clip reloads, we have enough ammo for a single bullet reload, and we have the mag space
-            else if (!clipReloads && CheckAmmoReserves(1) == 2 && ((maxMagazineSize - currentMagazineCount) <= 1)) return 1;
+            else if (!clipReloads && CheckAmmoReserves(1) == 2 && ((maxMagazineSize - CurrentMagazineCount) <= 1)) return 1;
 
             //else we cannot reload!
             else return 0;
@@ -107,10 +113,10 @@ namespace com.limphus.retro_survival_shooter
         void Reload()
         {
             //reload!
-            SetCurrentMagazineCount(currentMagazineCount += 1);
+            SetCurrentMagazineCount(CurrentMagazineCount += 1);
 
             //if we still need to reload
-            if (currentMagazineCount < maxMagazineSize) StartReload();
+            if (CurrentMagazineCount < maxMagazineSize) StartReload();
             
             else EndReload();
         }
@@ -120,11 +126,16 @@ namespace com.limphus.retro_survival_shooter
             //reload via a clip!
 
             //if we're not using infinite ammo, reload by the clip amount
-            if (!infinteAmmo) SetCurrentMagazineCount(currentMagazineCount += clipReloadAmount);
+            if (!InfinteAmmo)
+            {
+                SetCurrentMagazineCount(CurrentMagazineCount += clipReloadAmount);
+                SetCurrentAmmoReserves(CurrentAmmoReserves -= clipReloadAmount);
+            }
+
             else SetCurrentMagazineCount(maxMagazineSize);
 
             //if we still have ammo to reload
-            if (currentMagazineCount < maxMagazineSize) StartReload();
+            if (CurrentMagazineCount < maxMagazineSize) StartReload();
 
             else EndReload();
         }
@@ -140,11 +151,11 @@ namespace com.limphus.retro_survival_shooter
             EndReload();
         }
 
-        private void SetCurrentMagazineCount(int amount) => currentMagazineCount = Mathf.Clamp(amount, 0, maxMagazineSize);
-        private void SetCurrentAmmoReserves(int amount) => currentAmmoReserves = Mathf.Clamp(amount, 0, maxAmmoReserves);
+        private void SetCurrentMagazineCount(int amount) => CurrentMagazineCount = Mathf.Clamp(amount, 0, maxMagazineSize);
+        private void SetCurrentAmmoReserves(int amount) => CurrentAmmoReserves = Mathf.Clamp(amount, 0, maxAmmoReserves);
         public void UseAmmo(int amount)
         {
-            if (!infinteClip) SetCurrentMagazineCount(currentMagazineCount -= amount);
+            if (!InfinteClip) SetCurrentMagazineCount(CurrentMagazineCount -= amount);
         }
     }
 }

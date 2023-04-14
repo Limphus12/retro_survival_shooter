@@ -40,5 +40,10 @@ namespace com.limphus.retro_survival_shooter
 
         public abstract bool CanLoot();
         protected abstract void Loot();
+
+        public bool CanInteract()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

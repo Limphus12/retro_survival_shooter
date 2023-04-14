@@ -38,8 +38,7 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Reloading")]
         [SerializeField] private bool infiniteAmmo;
 
-        [Space]
-        [SerializeField] private Magazine magazine;
+        public Magazine Magazine { get; private set; }
 
         private FirearmReloadType reloadType;
 
@@ -65,7 +64,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void Init()
         {
-            if (!magazine) magazine = GetComponent<Magazine>();
+            if (!Magazine) Magazine = GetComponent<Magazine>();
             if (!playerCamera) playerCamera = Camera.main.transform;
 
             InitStats(); InitEffects();
@@ -174,33 +173,33 @@ namespace com.limphus.retro_survival_shooter
 
             else
             {
-                if (magazine)
+                if (Magazine)
                 {
-                    if (magazine.IsReloading)
+                    if (Magazine.IsReloading)
                     {
-                        if (leftMouseInput) magazine.InterruptReload();
+                        if (leftMouseInput) Magazine.InterruptReload();
                     }
 
                     //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
-                    else if (reloadInput && !magazine.IsReloading && !isAttacking)
+                    else if (reloadInput && !Magazine.IsReloading && !isAttacking)
                     {
                         if (firearmSound) firearmSound.PlayReloadingSound();
 
-                        magazine.StartClipReload(); Aim(false); return;
+                        Magazine.StartClipReload(); Aim(false); return;
 
                         //if we can do the clip reload
-                        if (magazine.CheckReload() == 2)
+                        if (Magazine.CheckReload() == 2)
                         {
-                            magazine.StartClipReload(); Aim(false); return;
+                            Magazine.StartClipReload(); Aim(false); return;
                         }
 
                         //if we can only do the single bullet reload
-                        else if (magazine.CheckReload() == 1)
+                        else if (Magazine.CheckReload() == 1)
                         {
-                            magazine.StartReload(); Aim(false); return;
+                            Magazine.StartReload(); Aim(false); return;
                         }
 
-                        else if (magazine.CheckReload() == 0) { }
+                        else if (Magazine.CheckReload() == 0) { }
                     }
                 }
 
@@ -219,7 +218,7 @@ namespace com.limphus.retro_survival_shooter
                         //not just hold it down. (maybe ill just get rid of semi and just use auto, but with a low fire rate?)
 
                         //if we have no ammo tho, cry about it
-                        if (magazine.CheckMagazine() == 0)
+                        if (Magazine.CheckMagazine() == 0)
                         {
                             //if we have the firearm sound reference, call the play dry firing sound
                             if (firearmSound) firearmSound.PlayDryFiringSound();
@@ -239,7 +238,7 @@ namespace com.limphus.retro_survival_shooter
                     case FirearmFireType.AUTO:
 
                         //if we have no ammo tho, cry about it
-                        if (magazine.CheckMagazine() == 0)
+                        if (Magazine.CheckMagazine() == 0)
                         {
                             //if we have the firearm sound reference, call the play dry firing sound
                             if (firearmSound) firearmSound.PlayDryFiringSound();
@@ -253,7 +252,7 @@ namespace com.limphus.retro_survival_shooter
                     case FirearmFireType.COCK:
 
                         //if we have no ammo tho, cry abou it
-                        if (magazine.CheckMagazine() == 0)
+                        if (Magazine.CheckMagazine() == 0)
                         {
                             //if we have the firearm sound reference and we press teh left mouse button
                             //*down*, call the play firing sound
@@ -326,7 +325,7 @@ namespace com.limphus.retro_survival_shooter
             Hit(playerCamera);
 
             //i think i wanna add an ammo usage variable in teh future, but idk yet.
-            magazine.UseAmmo(1);
+            Magazine.UseAmmo(1);
 
             //if we have the camera and weapon recoil references, call the recoil method on them too
             if (cameraRecoil && weaponRecoil)
@@ -358,7 +357,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void Aim(bool b)
         {
-            if (magazine.IsReloading) b = false;
+            if (Magazine.IsReloading) b = false;
 
             else isAiming = b;
 
@@ -377,7 +376,7 @@ namespace com.limphus.retro_survival_shooter
 
             //else if (!infiniteAmmo) { }
 
-            else if (magazine.IsReloading) return FirearmState.RELOADING;
+            else if (Magazine.IsReloading) return FirearmState.RELOADING;
             else if (isAiming && !isAttacking) return FirearmState.AIMING;
             if (isAttacking && isAiming) return FirearmState.AIMATTACK;
             else if (isAttacking) return FirearmState.ATTACKING;
@@ -433,7 +432,7 @@ namespace com.limphus.retro_survival_shooter
 
             else
             {
-                if (magazine && magazine.IsReloading) magazine.InterruptReload();
+                if (Magazine && Magazine.IsReloading) Magazine.InterruptReload();
 
                 if (isCocking) InterruptCock();
             }

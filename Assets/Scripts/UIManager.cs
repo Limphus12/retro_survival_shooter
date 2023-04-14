@@ -10,11 +10,16 @@ namespace com.limphus.retro_survival_shooter
     public class UIManager : MonoBehaviour
     {
         [Header("UI - Text")]
-        [SerializeField] private TextMeshProUGUI hungerText;
-        [SerializeField] private TextMeshProUGUI thirstText, staminaText, meleeStaminaText, temperatureText;
+        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private TextMeshProUGUI hungerText, thirstText, staminaText, meleeStaminaText, temperatureText;
 
         [Header("UI - Sliders")]
         [SerializeField] private Slider healthSlider;
+        [SerializeField] private Slider hungerSlider;
+        [SerializeField] private Slider thirstSlider;
+        [SerializeField] private Slider staminaSlider;
+        [SerializeField] private Slider meleeStaminaSlider;
+        [SerializeField] private Slider tempuratureSlider;
 
         [Header("UI - Loot")]
         [SerializeField] private GameObject lootUI;
@@ -106,7 +111,51 @@ namespace com.limphus.retro_survival_shooter
                     if (itemScript != null)
                     {   
                         itemUINameText.text = "" + itemScript.GetItemData().itemName;
-                        //itemUIAmountText.text = "" + itemScript.get;
+
+                        Melee melee = itemScript.GetMelee();
+
+                        if (melee)
+                        {
+                            itemUIAmountText.text = "Melee";
+                            return;
+                        }
+
+                        Firearm firearm = itemScript.GetFirearm();
+
+                        if (firearm)
+                        {
+                            string text = ""; //setting our text to be either the infinte stuff or the current mag & ammo counts
+
+                            if (firearm.Magazine.InfinteClip) text += "Inf."; else text += firearm.Magazine.CurrentMagazineCount;
+
+                            if (firearm.Magazine.InfinteAmmo) text += " / Inf."; else text += " / " + firearm.Magazine.CurrentAmmoReserves;
+
+                            itemUIAmountText.text = text; return;
+                        }
+
+                        Throwable throwable = itemScript.GetThrowable();
+
+                        if (throwable)
+                        {
+                            itemUIAmountText.text = "Throwable";
+                            return;
+                        }
+
+                        Placeable placeable = itemScript.GetPlaceable();
+
+                        if (placeable)
+                        {
+                            itemUIAmountText.text = "Placeable";
+                            return;
+                        }
+
+                        Consumable consumable = itemScript.GetConsumable();
+
+                        if (consumable)
+                        {
+                            itemUIAmountText.text = "" + consumable.GetRemainingUsageAmount();
+                            return;
+                        }
                     }
                 }
             }
@@ -117,31 +166,36 @@ namespace com.limphus.retro_survival_shooter
         private void PlayerStatsOnHealthChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {
             if (healthSlider) healthSlider.value = e.i;
+            if (healthText) healthText.text = "" + e.i;
         }
 
         private void PlayerStatsOnHungerChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {
-            if (hungerText) hungerText.text = "Hunger - " + e.i + "/100";
+            if (hungerSlider) hungerSlider.value = e.i;
+            if (hungerText) hungerText.text = ""+ e.i;
         }
 
         private void PlayerStatsOnThirstChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {
-            if (thirstText) thirstText.text = "Thirst - " + e.i + "/100";
+            if (thirstSlider) thirstSlider.value = e.i;
+            if (thirstText) thirstText.text = "" + e.i;
         }
 
         private void PlayerStatsOnStaminaChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {
-            if (staminaText) staminaText.text = "Stamina - " + e.i + "/100";
+            if (staminaSlider) staminaSlider.value = e.i;
+            if (staminaText) staminaText.text = "" + e.i;
         }
 
         private void PlayerStatsOnMeleeStaminaChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
         {
-            if (meleeStaminaText) meleeStaminaText.text = "Melee Stamina - " + e.i + "/100";
+            if (meleeStaminaSlider) meleeStaminaSlider.value = e.i;
+            if (meleeStaminaText) meleeStaminaText.text = "" + e.i;
         }
 
         private void PlayerStatsOnTemperatureChanged(object sender, PlayerStats.OnTemperatureChangedEventArgs e)
         {
-            if (temperatureText) temperatureText.text = "Temperature - " + e.i.ToString();
+            if (temperatureText) temperatureText.text = e.i.ToString();
         }
 
         #endregion

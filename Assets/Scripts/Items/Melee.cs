@@ -100,11 +100,6 @@ namespace com.limphus.retro_survival_shooter
                 //if were not attacking and we press the l-mouse button or melee input
                 if (meleeInput)
                 {
-                    //So in code, ima have to check if we have mouse input, either start a timer or invoke some methods, then if we let go of the mouse before the specified time,
-                    //cancel the timer/invoke and do a light attack. However, if we go beyond the timer or we don't cancel the method invoke (because we held down the mouse),
-                    //then do a heavy attack. All before this, however, we need to check if we even have any stamina,
-                    //because if we don't, then we should perform an exhausted attack. Yeah, that sounds good…
-
                     //if we're already charged up/are charging up, just return out of this, since we can only attack when we release the mouse button
                     if (isCharged || isCharging) return;
 

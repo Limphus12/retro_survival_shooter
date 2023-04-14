@@ -6,7 +6,6 @@ namespace com.limphus.retro_survival_shooter
 {
     public class Placeable : MonoBehaviour
     {
-
         public void CheckInputs()
         {
 

@@ -29,6 +29,8 @@ namespace com.limphus.retro_survival_shooter
 
         private PlayerStats playerStats;
 
+        public int GetRemainingUsageAmount() => remainingUsageAmount;
+
         public bool InUse() => isConsuming;
 
         public bool CanReplenish()

@@ -23,6 +23,7 @@ namespace com.limphus.retro_survival_shooter
         private bool isInteracting, canInteract;
 
         private IInteractable interactable;
+        private Transform interactableTransform;
 
         List<Firearm> firearms = new List<Firearm>();
         bool canLoot = false;
@@ -56,14 +57,15 @@ namespace com.limphus.retro_survival_shooter
         void Inputs()
         {
             //check if we're attempting to interact
-            isInteracting = Input.GetKey(interactKey);
+            isInteracting = Input.GetKeyDown(interactKey);
 
-            CheckInteract();
+            FindInteract();
 
-            interactionUI.SetActive(canInteract);
+            if (interactable != null) CheckInteract();
+            else interactionUI.SetActive(false);
         }
 
-        private void CheckInteract()
+        private void FindInteract()
         {
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionDistance))
             {
@@ -73,48 +75,39 @@ namespace com.limphus.retro_survival_shooter
                 //if we do have it
                 if (interactable != null)
                 {
-                    canInteract = false;
-
-                    //check if its a container
-                    container = hit.transform.GetComponent<Container>();
-
-                    if (container)
-                    {
-                        ammo = container.GetComponent<AmmoContainer>();
-                        consumable = container.GetComponent<ConsumableContainer>();
-
-                        if (ammo)
-                        {
-
-                        }
-
-                        else if (consumable)
-                        {
-                            if (consumable.CanLoot()) canInteract = true;
-                        }
-                    }
-
-                    //check if its a door
-
-
-                    //check if its a 
-
-                    if (isInteracting && canInteract) Interact();
+                    interactableTransform = hit.transform;
                 }
             }
 
             else ResetInteract();
         }
 
+        private void CheckInteract()
+        {
+            if (!interactable.CanInteract())
+            {
+                interactionUI.SetActive(false);
+            }
+
+            if (interactable.CanInteract())
+            {
+                interactionUI.SetActive(true);
+
+                if (isInteracting) Interact();
+            }
+        }
+
         private void Interact()
         {
             interactable.Interact();
+
+            ResetInteract();
         }
 
         private void ResetInteract()
         {
             interactable = null;
-            canInteract = false;
-        }    
+            interactableTransform = null;
+        }
     }
 }

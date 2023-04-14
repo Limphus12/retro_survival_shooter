@@ -102,6 +102,7 @@ namespace com.limphus.retro_survival_shooter
         //used to grab our current hunger
         //(maybe replace with events instead?)
         public int GetCurrentHunger() => currentHunger;
+        public int GetMaxHunger() => maxHunger;
 
         //sets our current hunger
         public void SetCurrentHunger(int amount)
@@ -160,6 +161,7 @@ namespace com.limphus.retro_survival_shooter
         //used to grab our current thirst
         //(maybe replace with events instead?)
         public int GetCurrentThirst() => currentThirst;
+        public int GetMaxThirst() => maxThirst;
         
         //sets our current thirst
         public void SetCurrentThirst(int amount)
@@ -218,6 +220,7 @@ namespace com.limphus.retro_survival_shooter
         //used to grab our current stamina
         //(maybe replace with events instead?)
         public int GetCurrentStamina() => currentStamina;
+        public int GetMaxStamina() => maxStamina;
 
         //sets our current stamina
         public void SetCurrentStamina(int amount)
@@ -274,6 +277,7 @@ namespace com.limphus.retro_survival_shooter
         #region Melee Stamina
 
         public int GetCurrentMeleeStamina() => currentMeleeStamina;
+        public int GetMaxMeleeStamina() => maxMeleeStamina;
 
         //sets our current stamina
         public void SetCurrentMeleeStamina(int amount)
