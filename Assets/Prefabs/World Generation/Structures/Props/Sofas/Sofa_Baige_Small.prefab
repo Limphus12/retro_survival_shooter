@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6258241370655790184}
   - component: {fileID: 3067011590400896946}
   - component: {fileID: 5010140517079122282}
+  - component: {fileID: 4491034542185652718}
   m_Layer: 0
   m_Name: Sofa_Baige_Small
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4491034542185652718
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884335732139451250}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3433011651723317401, guid: 82d5d32dcb1b3dd41b7ccb772824b1e4, type: 3}
