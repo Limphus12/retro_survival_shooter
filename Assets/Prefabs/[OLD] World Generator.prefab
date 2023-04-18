@@ -242,7 +242,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  placementChance: 0.5
+  placementChance: 0.1
   heightPlacementOffset: -0.1
   gridSize: {x: 128, y: 128}
   gridMultiplier: 4
@@ -463,7 +463,7 @@ MonoBehaviour:
   seed: 128
   currentChunk: {x: 0, y: 0}
   terrainGenerator: {fileID: 261824860965984412}
-  biomeGenerator: {fileID: 261824860007357931}
+  biomeGenerator: {fileID: 0}
   structureGenerator: {fileID: 261824860932732966}
 --- !u!1 &261824860932732968
 GameObject:
@@ -514,7 +514,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   placementChance: 0.01
-  heightPlacementOffset: 0.1
+  heightPlacementOffset: 0.125
   gridSize: {x: 128, y: 128}
   gridMultiplier: 4
   gridOffset: 16

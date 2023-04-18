@@ -136,18 +136,18 @@ namespace com.limphus.retro_survival_shooter
                             //calculate a random rotation on the y axis
                             Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
-                            GameObject[] assetArray;
+                            //GameObject[] assetArray;
 
                             //calculate which biome we're in and use the according data
-                            float a = biomeDataStruct.biomeValues[i] * 10;
+                            //float a = biomeDataStruct.biomeValues[i] * 10;
 
-                            if (a <= -10) assetArray = biomeDatas[0].assets;
-                            else if (a > -5 && a <= 0) assetArray = biomeDatas[1].assets;
-                            else if (a > 0 && a <= 5) assetArray = biomeDatas[2].assets;
-                            else assetArray = biomeDatas[3].assets;
+                            //if (a <= -10) assetArray = biomeDatas[0].assets;
+                            //else if (a > -5 && a <= 0) assetArray = biomeDatas[1].assets;
+                            //else if (a > 0 && a <= 5) assetArray = biomeDatas[2].assets;
+                            //else assetArray = biomeDatas[3].assets;
 
                             //...placing down a random asset from the placeable asset array!
-                            Instantiate(assetArray[Random.Range(0, assetArray.Length)], placementPoint, placementRotation, gameObject.transform);
+                            Instantiate(assets[Random.Range(0, assets.Length)], placementPoint, placementRotation, gameObject.transform);
 
                             i++; //increment i
                         }

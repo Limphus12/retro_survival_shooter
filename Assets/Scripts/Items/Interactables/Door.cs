@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,26 +6,48 @@ namespace com.limphus.retro_survival_shooter
 {
     public class Door : InteractableItem
     {
-
         [Header("Attributes")]
+        [SerializeField] private Vector3 closedPosition;
+        [SerializeField] private Vector3 openPosition;
+        
+        [Space, SerializeField] private float positionSmooth;
+
+        [Space]
         [SerializeField] private Vector3 closedRotation;
         [SerializeField] private Vector3 openRotation;
 
         [Space, SerializeField] private float rotationSmooth;
 
-        private bool isOpen, isRotating;
+        private bool isOpen, isRotating, isMoving;
 
-        protected Quaternion initialRotation;
-
-        private void Awake() => Init();
-
-        private void Init()
+        private void Awake()
         {
-            initialRotation = transform.rotation;
+            int i = Random.Range(0, 5);
+
+            if (i == 0) isOpen = true;
+            else isOpen = false;
+
+            if (isOpen)
+            {
+                if (positionSmooth > 0) transform.localPosition = openPosition;
+                if (rotationSmooth > 0) transform.localRotation = Quaternion.Euler(openRotation);
+            }
+
+            else if (!isOpen)
+            {
+               if (positionSmooth > 0) transform.localPosition = closedPosition;
+               if (rotationSmooth > 0) transform.localRotation = Quaternion.Euler(closedRotation);
+            }
         }
 
         private void Update()
         {
+            if (isMoving)
+            {
+                if (isOpen) Move(openPosition);
+                else if (!isOpen) Move(closedPosition);
+            }
+
             if (isRotating)
             {
                 if (isOpen) Rotate(openRotation);
@@ -38,7 +59,9 @@ namespace com.limphus.retro_survival_shooter
 
         public override void Interact()
         {
-            isOpen = !isOpen; StartRotate();
+            isOpen = !isOpen; 
+            StartRotate();
+            StartMove();
         }
 
         void StartRotate()
@@ -53,7 +76,19 @@ namespace com.limphus.retro_survival_shooter
             isRotating = false;
         }
 
-        float rotateI = 0;
+        void StartMove()
+        {
+            moveI = 0;
+            isMoving = true;
+        }
+
+        void EndMove()
+        {
+            moveI = 0;
+            isMoving = false;
+        }
+
+        float rotateI = 0, moveI = 0;
 
         void Rotate(Vector3 rotation)
         {
@@ -65,6 +100,19 @@ namespace com.limphus.retro_survival_shooter
             if (rotateI >= 1)
             {
                 EndRotate();
+            }
+        }
+
+        void Move(Vector3 position)
+        {
+            moveI += Time.deltaTime * positionSmooth;
+
+            //apply target rotation
+            transform.localPosition = Vector3.Lerp(transform.localPosition, position, moveI);
+
+            if (moveI >= 1)
+            {
+                EndMove();
             }
         }
     }

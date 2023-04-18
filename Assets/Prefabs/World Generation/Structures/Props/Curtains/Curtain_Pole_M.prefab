@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6566794104689434080
 Transform:
@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c5504ef195bc14ba94d2156a3ec8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnAttempts: 1
   props:
   - prop: {fileID: 5969556685664328855, guid: 8eb9a62c61e3ab044af94c941745565e, type: 3}
     chanceToSpawn: 80
@@ -56,6 +57,8 @@ MonoBehaviour:
     chanceToSpawn: 80
   - prop: {fileID: 5807475306595104993, guid: 86fc63bc164085247acf5a7e667f012b, type: 3}
     chanceToSpawn: 80
+  forceSpawn: 0
+  applyRandomForce: 0
 --- !u!1 &4476043067307617712
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,7 +75,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8345452092938621144
 Transform:

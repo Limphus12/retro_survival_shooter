@@ -228,22 +228,20 @@ namespace com.limphus.retro_survival_shooter
             //when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
             //as an acceleration (ms^-2)
             if (!characterController.isGrounded)
-            {
-                moveDirection.y -= gravity * Time.deltaTime;
-
-                characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
-
+            { 
                 //if we hit the ceiling when jumping, cancel our vertical velocity.
                 if (HitCeiling())
                 {
-                    moveDirection.y = 0;
+                    moveDirection.y = -0.1f;
                 }
+
+                moveDirection.y -= gravity * Time.deltaTime;
+
+                characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
             }
 
             Move();
         }
-
-        //float zLean;
 
         //Deals with Movement
         void Move()

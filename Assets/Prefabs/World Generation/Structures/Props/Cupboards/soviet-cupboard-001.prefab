@@ -109,6 +109,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ecc184ca62e8fb459f92fde85e03cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closedPosition: {x: 0, y: 0, z: 0}
+  openPosition: {x: 0, y: 0, z: 0}
+  positionSmooth: 0
   closedRotation: {x: 0, y: 0, z: 0}
   openRotation: {x: 0, y: 0, z: 90}
   rotationSmooth: 0.1
@@ -221,6 +224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ecc184ca62e8fb459f92fde85e03cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closedPosition: {x: 0, y: 0, z: 0}
+  openPosition: {x: 0, y: 0, z: 0}
+  positionSmooth: 0
   closedRotation: {x: 0, y: 0, z: 0}
   openRotation: {x: 0, y: 0, z: -90}
   rotationSmooth: 0.1
@@ -333,6 +339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ecc184ca62e8fb459f92fde85e03cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closedPosition: {x: 0, y: 0, z: 0}
+  openPosition: {x: 0, y: 0, z: 0}
+  positionSmooth: 0
   closedRotation: {x: 0, y: 0, z: 0}
   openRotation: {x: 0, y: 0, z: -90}
   rotationSmooth: 0.1
@@ -756,6 +765,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ecc184ca62e8fb459f92fde85e03cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closedPosition: {x: 0, y: 0, z: 0}
+  openPosition: {x: 0, y: 0, z: 0}
+  positionSmooth: 0
   closedRotation: {x: 0, y: 0, z: 0}
   openRotation: {x: 0, y: 0, z: 90}
   rotationSmooth: 0.1

@@ -120,7 +120,17 @@ namespace com.limphus.retro_survival_shooter
                             Vector3 placementPoint = new Vector3(hit.point.x, hit.point.y + randomOffset.y, hit.point.z);
 
                             //calculate a random rotation on the y axis
-                            Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+                            //Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+
+                            //calculate a 90 degree angle on the y axis
+                            Quaternion placementRotation = new Quaternion();
+
+                            int i = Random.Range(0, 4);
+
+                            if (i == 0) { placementRotation = Quaternion.Euler(0, 0, 0);}
+                            else if (i == 1) { placementRotation = Quaternion.Euler(0, 90, 0);}
+                            else if (i == 2) { placementRotation = Quaternion.Euler(0, 180, 0);}
+                            else if (i == 3) { placementRotation = Quaternion.Euler(0, 270, 0);}
 
                             //...placing down a random asset from the placeable asset array!
                             GameObject asset = Instantiate(assets[Random.Range(0, assets.Length)], placementPoint, placementRotation, gameObject.transform);
