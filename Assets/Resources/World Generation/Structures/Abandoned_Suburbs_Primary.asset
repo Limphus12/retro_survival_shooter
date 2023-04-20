@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8876dd045a13b744a9e40d9d8612ce24, type: 3}
-  m_Name: Hilly
+  m_Script: {fileID: 11500000, guid: 5ec098b230be5a046b31ef43b2383863, type: 3}
+  m_Name: Abandoned_Suburbs_Primary
   m_EditorClassIdentifier: 
-  noiseScale: 8
-  octaves: 4
-  persistance: 0.5
-  lacunarity: 4
-  heightMultiplier: 16
+  assets:
+  - {fileID: 819187973504402422, guid: 9e593ddf394b12243af2108c32488c1c, type: 3}

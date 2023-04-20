@@ -9,8 +9,14 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector3 boxExtents = Vector3.one;
 
         [SerializeField] private string assetTag;
+        public string AssetTag { get; private set; }
 
         [SerializeField] private bool debug;
+
+        private void Awake()
+        {
+            AssetTag = assetTag;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -22,7 +28,7 @@ namespace com.limphus.retro_survival_shooter
                 int i = 0;
                 foreach (Collider col in collisions)
                 {
-                    if (col.CompareTag(assetTag))
+                    if (col.CompareTag(AssetTag))
                     {
                         Destroy(col.gameObject);
 

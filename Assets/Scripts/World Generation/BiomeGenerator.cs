@@ -66,7 +66,7 @@ namespace com.limphus.retro_survival_shooter
                 //delete all of our children
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    DestroyImmediate(transform.GetChild(i).gameObject);
+                    Destroy(transform.GetChild(i).gameObject);
                 }
             }
         }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec098b230be5a046b31ef43b2383863, type: 3}
+  m_Name: Abandoned_Suburbs_Tertiary
+  m_EditorClassIdentifier: 
+  assets:
+  - {fileID: 4640631794984641089, guid: 0d8ac736d6e145b4ca45f3e732ada021, type: 3}
+  - {fileID: 549600546165614644, guid: b208168a7ab9eb34a9748fad9ef91e08, type: 3}
+  - {fileID: 1433061168316802904, guid: fe8dea7d86589114db32555bc00188d1, type: 3}
+  - {fileID: 6526894950980952693, guid: bf256be955fc76b4797c0d1192e9f2bd, type: 3}
+  - {fileID: 616512601690933511, guid: 7c71ef05ba4dfca40a1959d3cfd85e85, type: 3}
+  - {fileID: 4629837454649126192, guid: f1b034532cd03cc43853da2ffc68452d, type: 3}
+  - {fileID: 689925405051230780, guid: 1b5e0d1ef1e04a94fa4ac280b8e1b688, type: 3}
+  - {fileID: 1384481890932862161, guid: 6902da00ac7f148449fd9f240bd4aec1, type: 3}

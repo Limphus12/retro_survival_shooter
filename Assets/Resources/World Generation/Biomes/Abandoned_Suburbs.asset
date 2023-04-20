@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ec098b230be5a046b31ef43b2383863, type: 3}
-  m_Name: TaigaStructureData
+  m_Script: {fileID: 11500000, guid: 8e130c5825d834a4dbf2751583e8fce3, type: 3}
+  m_Name: Abandoned_Suburbs
   m_EditorClassIdentifier: 
-  assets:
-  - {fileID: 819187973504402422, guid: 9e593ddf394b12243af2108c32488c1c, type: 3}
+  assets: []

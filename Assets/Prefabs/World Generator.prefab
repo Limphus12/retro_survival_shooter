@@ -43,7 +43,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 64, z: 128}
+  m_Size: {x: 3, y: 4096, z: 128}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8224924335407260634
 MonoBehaviour:
@@ -150,7 +150,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 64, z: 3}
+  m_Size: {x: 128, y: 4096, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8224924335624997208
 MonoBehaviour:
@@ -264,7 +264,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 64, z: 3}
+  m_Size: {x: 128, y: 4096, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8224924335847119563
 MonoBehaviour:
@@ -453,7 +453,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 64, z: 128}
+  m_Size: {x: 3, y: 4096, z: 128}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8224924336600566722
 MonoBehaviour:
@@ -628,16 +628,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25d45ec6dbdd99498e72f4ca6ddcaa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureData: {fileID: 11400000, guid: 55e93523768e16d4ba51ebfa7fe0535b, type: 2}
   raycastHeight: 1000
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  placementChance: 0.1
-  heightPlacementOffset: 0
-  gridSize: {x: 96, y: 96}
+  gridSize: 96
   gridMultiplier: 4
-  gridOffset: 64
+  gridOffset: 16
   offset: {x: 0, y: 0}
   terrainGenerator: {fileID: 8224924336892737701}
 --- !u!1 &8224924337041208563
@@ -704,6 +701,28 @@ MonoBehaviour:
       biomeData: {fileID: 11400000, guid: c4746a0354013a149b5ebb4a889fdfde, type: 2}
       placementChance: 0.1
       heightPlacementOffset: -0.1
+    structureData:
+      primaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.5
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+      secondaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.25
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+      tertiaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.1
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
   - name: Tundran Plains
     terrainData:
       noiseScale: 16
@@ -718,6 +737,28 @@ MonoBehaviour:
       biomeData: {fileID: 11400000, guid: c4746a0354013a149b5ebb4a889fdfde, type: 2}
       placementChance: 0.01
       heightPlacementOffset: -0.1
+    structureData:
+      primaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.5
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+      secondaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.25
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+      tertiaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.1
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
   - name: Rolling Highlands
     terrainData:
       noiseScale: 16
@@ -732,9 +773,67 @@ MonoBehaviour:
       biomeData: {fileID: 11400000, guid: cd9f1ce8ebc180f4d9028e880cf2513f, type: 2}
       placementChance: 0.05
       heightPlacementOffset: -0.1
+    structureData:
+      primaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.5
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+      secondaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.25
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+      tertiaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.1
+        heightPlacementOffset: -0.1
+        gridSize: 0
+        gridMultiplier: 0
+        gridOffset: 0
+  - name: '[WIP] Abandoned Suburbs'
+    terrainData:
+      noiseScale: 16
+      octaves: 4
+      persistance: 0.5
+      lacunarity: 2
+      heightMultiplier: 4
+      normalizeMode: 0
+      terrainMaterial: {fileID: 2100000, guid: 08bfea139c97043458ddd98bd18521df, type: 2}
+      colorChance: {x: 25, y: 50, z: 75}
+    biomeData:
+      biomeData: {fileID: 11400000, guid: 8336768904d3749458b06339f5ebf57f, type: 2}
+      placementChance: 0.01
+      heightPlacementOffset: -0.1
+    structureData:
+      primaryStructures:
+        structures: {fileID: 11400000, guid: 55e93523768e16d4ba51ebfa7fe0535b, type: 2}
+        placementChance: 0.001
+        heightPlacementOffset: -0.5
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 33
+      secondaryStructures:
+        structures: {fileID: 11400000, guid: f36a5f0acebf54848b469d239f65af96, type: 2}
+        placementChance: 0.01
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+      tertiaryStructures:
+        structures: {fileID: 11400000, guid: 9d0765a05e4b12a41bc1b4e4ad231c38, type: 2}
+        placementChance: 0.01
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
   terrainGenerator: {fileID: 8224924336892737701}
   biomeGenerator: {fileID: 8224924335699164626}
-  structureGenerator: {fileID: 0}
+  structureGenerator: {fileID: 8224924336919173151}
 --- !u!1 &8224924337437130158
 GameObject:
   m_ObjectHideFlags: 0

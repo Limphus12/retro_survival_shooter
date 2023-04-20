@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace com.limphus.uitilites
+namespace com.limphus.utilities
 {
     public class SoundHandler : MonoBehaviour
     {

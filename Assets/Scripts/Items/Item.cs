@@ -54,6 +54,8 @@ namespace com.limphus.retro_survival_shooter
 
         private bool leftMouseInput, rightMouseInput, reloadInput, meleeInput, previousMeleeInput;
 
+        public static bool CanUse = true;
+
         public bool IsEquipped()
         {
             return isEquipped;
@@ -138,7 +140,10 @@ namespace com.limphus.retro_survival_shooter
             if (!isEquipped) return;
         }
 
-        private void Update() => Inputs();
+        private void Update()
+        {
+            if (CanUse) Inputs();
+        }
 
         private void Inputs()
         {

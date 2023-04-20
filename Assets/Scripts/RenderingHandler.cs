@@ -45,7 +45,7 @@ namespace com.limphus.retro_survival_shooter
         {
             foreach (MeshRenderer meshRenderer in meshRenderers)
             {
-                meshRenderer.forceRenderingOff = !b;
+                if (meshRenderer) meshRenderer.forceRenderingOff = !b;
             }
         }
     }

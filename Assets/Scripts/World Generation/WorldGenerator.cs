@@ -17,6 +17,7 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         public TerrainDataStruct terrainData;
         public BiomeDataStruct biomeData;
+        public StructureDataStruct structureData;
     }
 
     public class WorldGenerator : MonoBehaviour
@@ -47,6 +48,14 @@ namespace com.limphus.retro_survival_shooter
 
             //generate our world!
             GenerateWorld();
+        }
+
+        public void EditorInitializeWorld()
+        {
+            Random.InitState(seed); Noise.InitState(seed); //since world gen is the first step, we're gonna init our seed.
+
+            //generate our world!
+            EditorGenerateWorld();
         }
 
         public void GenerateWorld()
@@ -82,40 +91,71 @@ namespace com.limphus.retro_survival_shooter
                 biomeGenerator.GenerateBiome();
             }
 
-            //if (structureGenerator) structureGenerator.GenerateStructures();
+            if (structureGenerator)
+            {
+                structureGenerator.StructureData = CurrentWorldData.structureData;
+                structureGenerator.SetOffset(currentChunk);
+                structureGenerator.GenerateStructures();
+            }
         }
 
-        public void ClearWorld()
+        public void EditorGenerateWorld()
         {
-            //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
-            if (terrainGenerator) terrainGenerator.ClearTerrain();
+            //firstly clear the world of previous terrain, biomes etc.
+            EditorClearWorld();
 
-#if UNITY_EDITOR
+            //int i = Random.Range(0, worldData.Length) + currentChunk.x + currentChunk.y;
 
-            //Non-Runtime Functions are Called Here
+            int j = 0;
 
-            bool b = false;
+            for (int i = 0; i < currentChunk.x + currentChunk.y; i++)
+            {
+                j++;
+
+                //not gonna reset j to 0, instead will pick a random (in range) value
+                if (j > worldData.Length - 1) j = Random.Range(0, worldData.Length);
+            }
+
+            CurrentWorldData = worldData[j];
+
+            if (terrainGenerator)
+            {
+                terrainGenerator.TerrainData = CurrentWorldData.terrainData;
+                terrainGenerator.SetOffset(currentChunk);
+                terrainGenerator.GenerateTerrain();
+            }
 
             if (biomeGenerator)
             {
-                biomeGenerator.EditorClearBiome();
-
-                b = true;
+                biomeGenerator.BiomeData = CurrentWorldData.biomeData;
+                biomeGenerator.SetOffset(currentChunk);
+                biomeGenerator.GenerateBiome();
             }
 
             if (structureGenerator)
             {
-                structureGenerator.EditorClearStructures();
-
-                b = true;
+                structureGenerator.StructureData = CurrentWorldData.structureData;
+                structureGenerator.SetOffset(currentChunk);
+                structureGenerator.GenerateStructures();
             }
-#endif
+        }
 
-            if (b) return;
+        public void ClearWorld()
+        {
+            if (terrainGenerator) terrainGenerator.ClearTerrain();
 
             if (biomeGenerator) biomeGenerator.ClearBiome();
 
             if (structureGenerator) structureGenerator.ClearStructures();
+        }
+
+        public void EditorClearWorld()
+        {
+            if (terrainGenerator) terrainGenerator.ClearTerrain();
+
+            if (biomeGenerator) biomeGenerator.EditorClearBiome();
+
+            if (structureGenerator) structureGenerator.EditorClearStructures();
         }
 
         public void Travel(CardinalDirection direction)
@@ -154,8 +194,8 @@ namespace com.limphus.retro_survival_shooter
 
             GUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Generate")) worldGen.InitializeWorld();
-            if (GUILayout.Button("Clear")) worldGen.ClearWorld();
+            if (GUILayout.Button("Generate")) worldGen.EditorInitializeWorld();
+            if (GUILayout.Button("Clear")) worldGen.EditorClearWorld();
 
             GUILayout.EndHorizontal();
         }

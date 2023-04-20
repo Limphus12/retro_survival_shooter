@@ -46,7 +46,7 @@ namespace com.limphus.retro_survival_shooter
         [Header("Debug Settings")]
         [SerializeField] private bool debug;
 
-        private bool canMove = true, canRotate = true, canCameraLean = true;
+        public static bool canMove = true, canRotate = true, canCameraLean = true;
 
         public void ToggleCanMove(bool b) => canMove = b;
         public void ToggleCanRotate(bool b) => canRotate = b;
