@@ -4,29 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
     public class UIManager : MonoBehaviour
     {
-        [Header("UI - Text")]
-        [SerializeField] private TextMeshProUGUI healthText;
-        [SerializeField] private TextMeshProUGUI hungerText, thirstText, staminaText, meleeStaminaText, temperatureText;
-
         [Header("UI - Sliders")]
         [SerializeField] private Slider healthSlider;
-        [SerializeField] private Slider hungerSlider;
-        [SerializeField] private Slider thirstSlider;
-        [SerializeField] private Slider staminaSlider;
-        [SerializeField] private Slider meleeStaminaSlider;
-        [SerializeField] private Slider tempuratureSlider;
+        [SerializeField] private Slider hungerSlider, thirstSlider, staminaSlider, meleeStaminaSlider, tempuratureSlider;
 
-        [Header("UI - Loot")]
+        [Header("UI - GameObjects")]
         [SerializeField] private GameObject lootUI;
+        [SerializeField] private GameObject statsUI, inventoryUI;
 
-        [Header("UI - Item")]
+        [Header("UI - Text")]
         [SerializeField] private TextMeshProUGUI itemUINameText;
-        [SerializeField] private TextMeshProUGUI itemUIAmountText;
+        [SerializeField] private TextMeshProUGUI itemUIAmountText, worldBorderText;
+
+        [Space]
+        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private TextMeshProUGUI hungerText, thirstText, staminaText, meleeStaminaText;
+
+        [Header("UI - Animation")]
+        [SerializeField] private Animator worldBorderAnimator; 
 
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
@@ -46,6 +47,10 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnStaminaChanged += PlayerStatsOnStaminaChanged;
             playerStats.OnMeleeStaminaChanged += PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged += PlayerStatsOnTemperatureChanged;
+
+            //and subscribe to the event in the world border class.
+            WorldBorder.OnBorderChanged += WorldBorderOnBorderChanged;
+
         }
 
         void OnEnable()
@@ -61,6 +66,9 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnStaminaChanged += PlayerStatsOnStaminaChanged;
             playerStats.OnMeleeStaminaChanged += PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged += PlayerStatsOnTemperatureChanged;
+
+            //and subscribe to the event in the world border class.
+            WorldBorder.OnBorderChanged += WorldBorderOnBorderChanged;
         }
 
         void OnDisable()
@@ -76,6 +84,9 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
             playerStats.OnMeleeStaminaChanged -= PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged -= PlayerStatsOnTemperatureChanged;
+
+            //need to unsubscribe to the event in the world border class.
+            WorldBorder.OnBorderChanged -= WorldBorderOnBorderChanged;
         }
 
         private void OnDestroy()
@@ -91,11 +102,24 @@ namespace com.limphus.retro_survival_shooter
             playerStats.OnStaminaChanged -= PlayerStatsOnStaminaChanged;
             playerStats.OnMeleeStaminaChanged -= PlayerStatsOnMeleeStaminaChanged;
             playerStats.OnTemperatureChanged -= PlayerStatsOnTemperatureChanged;
+            
+            //need to unsubscribe to the event in the world border class.
+            WorldBorder.OnBorderChanged -= WorldBorderOnBorderChanged;
         }
+
+        bool uiToggle = true;
 
         private void Update()
         {
             CheckUI();
+
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                uiToggle = !uiToggle;
+
+                //togggle some of the ui, so we can have a cleaner screen
+                statsUI.SetActive(uiToggle); inventoryUI.SetActive(uiToggle);
+            }
         }
 
         private void CheckUI()
@@ -163,39 +187,50 @@ namespace com.limphus.retro_survival_shooter
 
         #region Events
 
-        private void PlayerStatsOnHealthChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        private void PlayerStatsOnHealthChanged(object sender, Events.OnIntChangedEventArgs e)
         {
-            if (healthSlider) healthSlider.value = e.i;
             if (healthText) healthText.text = "" + e.i;
+            if (healthSlider) healthSlider.value = e.i;
         }
 
-        private void PlayerStatsOnHungerChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        private void PlayerStatsOnHungerChanged(object sender, Events.OnIntChangedEventArgs e)
         {
+            if (hungerText) hungerText.text = "" + e.i;
             if (hungerSlider) hungerSlider.value = e.i;
-            if (hungerText) hungerText.text = ""+ e.i;
         }
 
-        private void PlayerStatsOnThirstChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        private void PlayerStatsOnThirstChanged(object sender, Events.OnIntChangedEventArgs e)
         {
-            if (thirstSlider) thirstSlider.value = e.i;
             if (thirstText) thirstText.text = "" + e.i;
+            if (thirstSlider) thirstSlider.value = e.i;
         }
 
-        private void PlayerStatsOnStaminaChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        private void PlayerStatsOnStaminaChanged(object sender, Events.OnIntChangedEventArgs e)
         {
-            if (staminaSlider) staminaSlider.value = e.i;
             if (staminaText) staminaText.text = "" + e.i;
+            if (staminaSlider) staminaSlider.value = e.i;
         }
 
-        private void PlayerStatsOnMeleeStaminaChanged(object sender, PlayerStats.OnIntChangedEventArgs e)
+        private void PlayerStatsOnMeleeStaminaChanged(object sender, Events.OnIntChangedEventArgs e)
         {
-            if (meleeStaminaSlider) meleeStaminaSlider.value = e.i;
             if (meleeStaminaText) meleeStaminaText.text = "" + e.i;
+            if (meleeStaminaSlider) meleeStaminaSlider.value = e.i;
         }
 
         private void PlayerStatsOnTemperatureChanged(object sender, PlayerStats.OnTemperatureChangedEventArgs e)
         {
-            if (temperatureText) temperatureText.text = e.i.ToString();
+            
+        }
+
+        private void WorldBorderOnBorderChanged(object sender, Events.OnStringChangedEventArgs e)
+        {
+            if (worldBorderText) worldBorderText.text = e.i;
+            
+            if (worldBorderAnimator) 
+            {
+                if (e.i.Contains("Exiting")) worldBorderAnimator.SetTrigger("FadeOut");
+                else if (e.i.Contains("Entering")) worldBorderAnimator.SetTrigger("FadeIn");
+            }
         }
 
         #endregion

@@ -5,31 +5,32 @@ using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [System.Serializable]
+    public struct BiomeDataStruct
+    {
+        [Space]
+        public BiomeData biomeData;
+
+        [Space]
+        public float placementChance;
+        public float heightPlacementOffset;
+    }
+
     public class BiomeGenerator : MonoBehaviour
     {
-        [Header("Attributes - Biome Data")]
-        [SerializeField] private BiomeData biomeData;
+        [Header("Attributes - Biome Size")]
+        [Space]
+        [SerializeField] private int gridSize;
+        [SerializeField] private int gridMultiplier, gridOffset;
 
         [Space]
         [SerializeField] private float raycastHeight;
         [SerializeField] private LayerMask layerMask;
 
         [Space]
-        [SerializeField] private float placementChance = 0.5f;
-        [SerializeField] private float heightPlacementOffset = -0.1f;
-
-        [Space]
-        [SerializeField] private Vector2Int gridSize;
-        [SerializeField] private int gridMultiplier, gridOffset;
-
-        [Space]
         [SerializeField] private Vector2Int offset;
 
-        [Space]
-        [SerializeField] private BiomeData[] biomeDatas;
-        [SerializeField] private TerrainGenerator terrainGenerator;
-
-        int i = 0;
+        public BiomeDataStruct BiomeData { private get; set; }
 
         public void SetOffset(Vector2Int offset) => this.offset = offset;
 
@@ -43,40 +44,18 @@ namespace com.limphus.retro_survival_shooter
             GenerateAssets();
         }
 
-        //for use with the save system
-        public void GenerateBiome(BiomeData biomeData)
-        {
-            //when generating our biome, always get rid of any previous assets
-            ClearBiome();
-
-            //then generate the new assets
-            GenerateAssets(biomeData);
-        }
-
         public void ClearBiome() => ClearAssets();
         public void EditorClearBiome() => EditorClearAssets();
 
         private void GenerateAssets()
         {
-            if (!biomeData)
+            if (BiomeData.Equals(null))
             {
                 Debug.Log("We have no Biome assigned!");
                 return;
             }
 
-            AssetLoop(gridSize, gridMultiplier, gridOffset, biomeData.assets, placementChance, heightPlacementOffset);
-        }
-
-        //for use with the save system
-        private void GenerateAssets(BiomeData biomeData)
-        {
-            if (!biomeData)
-            {
-                Debug.Log("We have no Biome assigned!");
-                return;
-            }
-
-            AssetLoop(gridSize, gridMultiplier, gridOffset, biomeData.assets, placementChance, heightPlacementOffset);
+            AssetLoop(gridSize, gridMultiplier, gridOffset, BiomeData.biomeData.assets, BiomeData.placementChance, BiomeData.heightPlacementOffset);
         }
 
         private void ClearAssets()
@@ -87,7 +66,7 @@ namespace com.limphus.retro_survival_shooter
                 //delete all of our children
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    Destroy(transform.GetChild(i).gameObject);
+                    DestroyImmediate(transform.GetChild(i).gameObject);
                 }
             }
         }
@@ -102,26 +81,28 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        private void AssetLoop(Vector2Int gridSize, int gridMultiplier, int gridOffset, GameObject[] assets, float assetPlacementChance, float placementOffset)
+        private void AssetLoop(int gridSize, int gridMultiplier, int gridOffset, GameObject[] assets, float assetPlacementChance, float placementOffset)
         {
-            i = 0;
-
             //if we have no assets, then skip!
             if (assets.Length == 0) return;
 
+            float[,] heightMap = Noise.SimpleNoiseMap(gridSize + 1 - gridOffset, gridSize + 1 - gridOffset, gridMultiplier, offset);
+
             //using a nested for loop - including our offset where we start at y & x = offset, and y & x increments until its less than or equal to gridsize - grid offset.
-            for (int y = gridOffset; y <= gridSize.y - gridOffset; y++)
+            for (int y = gridOffset; y <= gridSize - gridOffset; y++)
             {
-                for (int x = gridOffset; x <= gridSize.x - gridOffset; x++)
+                for (int x = gridOffset; x <= gridSize - gridOffset; x++)
                 {
                     //generate a no. between 0 and 1
-                    float z = Random.Range(0.0f, 1.0f);
+                    //float z = Random.Range(0.0f, 1.0f);
 
-                    //if its greater than the placement chance
+                    float z = Mathf.Abs(heightMap[x, y]);
+
+                    //if its less than the placement chance
                     if (z <= assetPlacementChance)
                     {
                         //generate a random offset
-                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f) + offset.x, placementOffset, Random.Range(-1f, 1f) + offset.y);
+                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), placementOffset, Random.Range(-1f, 1f));
 
                         //calculate the current raycast position, adding in our random offset
                         Vector3 raycastPos = new Vector3((x * gridMultiplier) + randomOffset.x, raycastHeight, (y * gridMultiplier) + randomOffset.z);
@@ -136,59 +117,12 @@ namespace com.limphus.retro_survival_shooter
                             //calculate a random rotation on the y axis
                             Quaternion placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
-                            //GameObject[] assetArray;
-
-                            //calculate which biome we're in and use the according data
-                            //float a = biomeDataStruct.biomeValues[i] * 10;
-
-                            //if (a <= -10) assetArray = biomeDatas[0].assets;
-                            //else if (a > -5 && a <= 0) assetArray = biomeDatas[1].assets;
-                            //else if (a > 0 && a <= 5) assetArray = biomeDatas[2].assets;
-                            //else assetArray = biomeDatas[3].assets;
-
                             //...placing down a random asset from the placeable asset array!
                             Instantiate(assets[Random.Range(0, assets.Length)], placementPoint, placementRotation, gameObject.transform);
-
-                            i++; //increment i
                         }
                     }
                 }
             }
         }
-
-        private BiomeDataStruct biomeDataStruct;
-
-        public void SetBiomeDataStruct(BiomeDataStruct biomeDataStruct)
-        {
-            this.biomeDataStruct = biomeDataStruct;
-        }
-
-
-        public void GenerateBiomeNoise()
-        {
-            float[,] biomeMap = Noise.SimpleNoiseMap(16, 16, 4096/2, offset); 
-
-            BiomeDataStruct biomeDataStruct = new BiomeDataStruct { biomeValues = new float[17 * 17] };
-
-            //using a nested for loop to generate all our values
-            for (int i = 0, z = 0; z < 16; z++)
-            {
-                for (int x = 0; x < 16; x++)
-                {
-                    //grabbing the perlin noise value and assinging it
-                    biomeDataStruct.biomeValues[i] = biomeMap[x, z];
-
-                    i++;
-                }
-            }
-
-            SetBiomeDataStruct(biomeDataStruct);
-            terrainGenerator.SetBiomeDataStruct(biomeDataStruct);
-        }
-    }
-
-    public struct BiomeDataStruct
-    {
-        public float[] biomeValues;
     }
 }

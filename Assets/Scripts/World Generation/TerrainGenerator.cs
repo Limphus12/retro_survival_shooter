@@ -5,6 +5,24 @@ using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [System.Serializable]
+    public struct TerrainDataStruct
+    {
+        [Space]
+        public float noiseScale;
+        public int octaves;
+        [Range(0f, 1f)] public float persistance;
+        public float lacunarity, heightMultiplier;
+        public Noise.NormalizeMode normalizeMode;
+
+        [Space]
+        public Material terrainMaterial;
+
+        [Space]
+        [Tooltip("The chances of choosing Red, Green, Blue or Black for the vertex color. For instance, [25, 50, 75] gives a 25% chance for each color.")]
+        public Vector3Int colorChance;
+    }
+
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshCollider))]
     public class TerrainGenerator : MonoBehaviour
@@ -16,89 +34,22 @@ namespace com.limphus.retro_survival_shooter
         Vector2[] uvs; //array of uvs
         Color[] colors; //array of colors
 
-        //[Header("Terrain Size")]
-        private static int size = 128; //how big we want our grid of vertices
-        private static int gridMultiplier = 4; //how far apart we want our vertices
-
-        [Header("Terrain")]
-        [SerializeField] private TerrainData[] terrainDatas;
-
-        [Header("Perlin Noise")]
-        [SerializeField] private float noiseScale = 1.0f;
-        [SerializeField] private int octaves = 4;
-        [SerializeField] [Range(0f, 1f)] private float persistance = 0.5f;
-        [SerializeField] private float lacunarity = 2.0f, heightMultiplier = 2.0f;
-        [SerializeField] private Noise.NormalizeMode normalizeMode;
+        [Header("Terrain Size")]
+        [SerializeField] private int size = 128; //how big we want our grid of vertices
+        [SerializeField] private int gridMultiplier = 4; //how far apart we want our vertices
 
         [Space]
         [SerializeField] private Vector2Int offset;
 
-        [Header("Vertex Colors")]
-        [Tooltip("The chances of choosing Red, Green, Blue or Black for the vertex color. For instance, [25, 50, 75] gives a 25% chance for each color.")]
-        [SerializeField] private Vector3Int colorChance = new Vector3Int(25, 50, 75);
-
-        private BiomeDataStruct biomeDataStruct;
-
-        public void SetBiomeDataStruct(BiomeDataStruct biomeDataStruct)
-        {
-            this.biomeDataStruct = biomeDataStruct;
-        }
-
-        private static int seed;
-        public void SetSeed(int seed) => TerrainGenerator.seed = seed;
-
-        public static int GetTerrainSize()
-        {
-            return size * gridMultiplier;
-        }
+        public TerrainDataStruct TerrainData { private get; set; }
 
         public void SetOffset(Vector2Int offset) => this.offset = offset;
-
-        //sets our seed and offset, then generates the mesh
-        public void GenerateTerrain(int seed, Vector2Int offset)
-        {
-            TerrainGenerator.seed = seed; this.offset = offset;
-
-            //make sure to clear the current terrain first!
-            ClearTerrain(); GenerateMesh(); //then start generating the mesh!
-        }
-
-        //sets our seed and offset, then generates the mesh
-        public void GenerateTerrain(Vector2Int offset)
-        {
-            this.offset = offset;
-
-            //make sure to clear the current terrain first!
-            ClearTerrain(); GenerateMesh(); //then start generating the mesh!
-        }
-
-        //sets our seed and generates the mesh
-        public void GenerateTerrain(int seed)
-        {
-            TerrainGenerator.seed = seed; //this.offset = new Vector2Int(Random.Range(-32000, 32000), Random.Range(-32000, 32000));
-
-            //make sure to clear the current terrain first!
-            ClearTerrain(); GenerateMesh(); //then start generating the mesh
-        }
 
         //just generates the mesh!
         public void GenerateTerrain()
         {
             //make sure to clear the current terrain first!
             ClearTerrain(); GenerateMesh(); //then start generating the mesh!
-        }
-
-        //public void GenerateTerrain(TerrainDataStruct terrainData)
-        //{
-            //make sure to clear the current terrain first!
-            //ClearTerrain(); GenerateMesh(terrainData); //then start generating the mesh!
-        //}
-
-        //biome generation thingy - 09/04/2023
-        public void GenerateTerrainWithBiomes()
-        {
-            //make sure to clear the current terrain first!
-            ClearTerrain(); GenerateMeshWithBiomes(); //then start generating the mesh!
         }
 
         public void ClearTerrain()
@@ -149,35 +100,10 @@ namespace com.limphus.retro_survival_shooter
             mesh.RecalculateBounds();
             MeshCollider meshCollider = GetComponent<MeshCollider>();
             meshCollider.sharedMesh = mesh;
-        }
 
-        //when we want to generate a mesh based on terrain data
-        public void GenerateMeshWithBiomes()
-        {
-            //create a new mesh
-            mesh = new Mesh();
-
-            //set the mesh filter's mesh and name
-            GetComponent<MeshFilter>().sharedMesh = mesh; mesh.name = "Terrain";
-
-            //ensure we have a clean mesh
-            mesh.Clear();
-
-            //generate the vertices, triangles, UVs and colours
-            mesh.vertices = GenerateVerticesWithBiomes();
-            mesh.triangles = GenerateTriangles();
-            mesh.uv = GenerateUVs();
-            mesh.colors = GenerateColors();
-
-            //recalculate normals on the mesh
-            mesh.RecalculateNormals();
-
-            // optionally, add a mesh collider (As suggested by Franku Kek via Youtube comments).
-            // To use this, your MeshGenerator GameObject needs to have a mesh collider
-            // component added to it.  Then, just re-enable the code below.
-            mesh.RecalculateBounds();
-            MeshCollider meshCollider = GetComponent<MeshCollider>();
-            meshCollider.sharedMesh = mesh;
+            //finally, we can change the material for different biomes!
+            Renderer renderer = gameObject.GetComponent<Renderer>();
+            renderer.material = TerrainData.terrainMaterial;
         }
 
         //when we want to generate a mesh with a pre-determined vertice array
@@ -209,26 +135,13 @@ namespace com.limphus.retro_survival_shooter
             meshCollider.sharedMesh = mesh;
         }
 
-        public TerrainDataStruct GetMeshData()
-        {
-            TerrainDataStruct terrainData = new TerrainDataStruct
-            {
-                vertices = vertices,
-                triangles = triangles,
-                uvs = uvs,
-                colors = colors
-            };
-
-            return terrainData;
-        }
-
         private Vector3[] GenerateVertices()
         {
             //generate a grid of vertices, vertex count = (xSize + 1) * (zSize + 1)
             Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
 
             //calculate a height map, passing in our size variables, seed etc.
-            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, noiseScale, octaves, persistance, lacunarity, offset, normalizeMode);
+            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, TerrainData.noiseScale, TerrainData.octaves, TerrainData.persistance, TerrainData.lacunarity, offset, TerrainData.normalizeMode);
 
             //using a nested for loop to generate all our vertices
             for (int i = 0, z = 0; z <= size; z++)
@@ -236,71 +149,7 @@ namespace com.limphus.retro_survival_shooter
                 for (int x = 0; x <= size; x++)
                 {
                     //grabbing the perlin noise value, and multiplying it by the heightmultiplier
-                    float y = heightMap[x, z] * heightMultiplier;
-
-                    //adding a new vertice to our array
-                    vertices[i] = new Vector3(x * gridMultiplier, y, z * gridMultiplier);
-                    i++;
-                }
-            }
-
-            //setting our vertices to these generated ones
-            this.vertices = vertices;
-
-            return vertices;
-        }
-
-        public Vector3[] GenerateVertices(TerrainData terrainData)
-        {
-            //generate a grid of vertices, vertex count = (xSize + 1) * (zSize + 1)
-            Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
-
-            //calculate a height map, passing in our size variables, seed etc.
-            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, noiseScale, octaves, persistance, lacunarity, offset, normalizeMode);
-
-            //using a nested for loop to generate all our vertices
-            for (int i = 0, z = 0; z <= size; z++)
-            {
-                for (int x = 0; x <= size; x++)
-                {
-                    //grabbing the perlin noise value, and multiplying it by the heightmultiplier
-                    float y = heightMap[x, z] * heightMultiplier;
-
-                    //adding a new vertice to our array
-                    vertices[i] = new Vector3(x * gridMultiplier, y, z * gridMultiplier);
-                    i++;
-                }
-            }
-
-            //setting our vertices to these generated ones
-            this.vertices = vertices;
-
-            return vertices;
-        }
-
-        private Vector3[] GenerateVerticesWithBiomes()
-        {
-            //generate a grid of vertices, vertex count = (xSize + 1) * (zSize + 1)
-            Vector3[] vertices = new Vector3[(size + 1) * (size + 1)];
-
-            //calculate a height map, passing in our size variables, seed etc.
-            float[,] heightMap = Noise.ComplexNoiseMap(size + 1, size + 1, noiseScale, octaves, persistance, lacunarity, offset, normalizeMode);
-
-            //using a nested for loop to generate all our vertices
-            for (int i = 0, z = 0; z <= size; z++)
-            {
-                for (int x = 0; x <= size; x++)
-                {
-                    //calculate which biome we're in and use the according data
-                    float heightMulti = biomeDataStruct.biomeValues[i] * 10;
-
-                    if (heightMulti > -10 && heightMulti <= -5) heightMulti = terrainDatas[0].heightMultiplier;
-                    else if (heightMulti > -5 && heightMulti <= 0) heightMulti = terrainDatas[1].heightMultiplier;
-                    else if (heightMulti > 0 && heightMulti <= 5) heightMulti = terrainDatas[2].heightMultiplier;
-                    else heightMulti = terrainDatas[3].heightMultiplier;
-
-                    //grabbing the perlin noise value, and multiplying it by the heightmultiplier
-                    float y = heightMap[x, z] * heightMulti;
+                    float y = heightMap[x, z] * TerrainData.heightMultiplier;
 
                     //adding a new vertice to our array
                     vertices[i] = new Vector3(x * gridMultiplier, y, z * gridMultiplier);
@@ -405,9 +254,9 @@ namespace com.limphus.retro_survival_shooter
                 {
                     int j = Random.Range(0, 101);
 
-                    if (j > 0 && j <= colorChance.x) colors[i] = Color.red;
-                    else if (j > colorChance.x && j <= colorChance.y) colors[i] = Color.green;
-                    else if (j > colorChance.y && j <= colorChance.z) colors[i] = Color.blue;
+                    if (j > 0 && j <= TerrainData.colorChance.x) colors[i] = Color.red;
+                    else if (j > TerrainData.colorChance.x && j <= TerrainData.colorChance.y) colors[i] = Color.green;
+                    else if (j > TerrainData.colorChance.y && j <= TerrainData.colorChance.z) colors[i] = Color.blue;
                     else colors[i] = Color.black;
 
                     i++;
@@ -419,34 +268,6 @@ namespace com.limphus.retro_survival_shooter
 
             return colors;
         }
-
-        private Color[] GenerateColors(Vector3[] vertices)
-        {
-            //create a new color array
-            Color[] colors = new Color[vertices.Length];
-
-            //nested for loop to generate color data
-            //this implementation picks a random color from R, G, B or Black, based on the color chance.
-            for (int i = 0, z = 0; z <= size; z++)
-            {
-                for (int x = 0; x <= size; x++)
-                {
-                    //int j = Random.Range(0, 101);
-
-                    //if (j > 0 && j <= colorChance.x) colors[i] = Color.red;
-                    //else if (j > colorChance.x && j <= colorChance.y) colors[i] = Color.green;
-                    //else if (j > colorChance.y && j <= colorChance.z) colors[i] = Color.blue;
-                    //else if (j > colorChance.z && j <= 100) colors[i] = Color.black;
-
-                    colors[i] = Color.red;
-
-                    i++;
-                }
-            }
-
-            return colors;
-        }
-
         public void ModifyVertices(StructureAreaStruct sas)
         {
             //for loop to run through each vertice in our vertices array
@@ -488,34 +309,6 @@ namespace com.limphus.retro_survival_shooter
 
             //regen the mesh, based on these new vertices
             GenerateMesh(vertices);
-        }
-
-        public TerrainDataStruct GenerateTerrainData()
-        {
-            TerrainDataStruct terrainData = new TerrainDataStruct { };
-
-            terrainData.vertices = GenerateVertices();
-            terrainData.triangles = GenerateTriangles();
-            terrainData.uvs = GenerateUVs(terrainData.vertices);
-            terrainData.colors = GenerateColors(terrainData.vertices);
-
-            return terrainData;
-        }
-    }
-
-    public struct TerrainDataStruct
-    {
-        public Vector3[] vertices; //array of vertices
-        public int[] triangles; //array of triangles
-        public Vector2[] uvs; //array of uvs
-        public Color[] colors; //array of colors
-
-        public TerrainDataStruct(Vector3[] vertices, int[] triangles, Vector2[] uvs, Color[] colors)
-        {
-            this.vertices = vertices;
-            this.triangles = triangles;
-            this.uvs = uvs;
-            this.colors = colors;
         }
     }
 }

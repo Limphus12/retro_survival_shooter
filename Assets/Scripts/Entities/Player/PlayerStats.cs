@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -66,7 +67,7 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [Tooltip("[IN SECONDS] The time it takes for Stamina Regen to kick in")] [SerializeField] private float meleeStaminaReplenishTime;
 
-        public event EventHandler<OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged, OnMeleeStaminaChanged;
+        public event EventHandler<Events.OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged, OnMeleeStaminaChanged;
         public event EventHandler<OnTemperatureChangedEventArgs> OnTemperatureChanged;
 
         #region Initialization
@@ -113,7 +114,7 @@ namespace com.limphus.retro_survival_shooter
             currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
 
             //firing off our event here
-            OnHungerChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentHunger });
+            OnHungerChanged?.Invoke(this, new Events.OnIntChangedEventArgs { i = currentHunger });
         }
 
         //a method to deplete hunger
@@ -172,7 +173,7 @@ namespace com.limphus.retro_survival_shooter
             currentThirst = Mathf.Clamp(currentThirst, 0, maxThirst);
 
             //firing off our event here
-            OnThirstChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentThirst });
+            OnThirstChanged?.Invoke(this, new Events.OnIntChangedEventArgs { i = currentThirst });
         }
 
         //a method to deplete thirst
@@ -231,7 +232,7 @@ namespace com.limphus.retro_survival_shooter
             currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
 
             //firing off our event here
-            OnStaminaChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentStamina });
+            OnStaminaChanged?.Invoke(this, new Events.OnIntChangedEventArgs { i = currentStamina });
         }
 
         //method to invoke our stamina tick
@@ -288,7 +289,7 @@ namespace com.limphus.retro_survival_shooter
             currentMeleeStamina = Mathf.Clamp(currentMeleeStamina, 0, maxMeleeStamina);
 
             //firing off our event here
-            OnMeleeStaminaChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentMeleeStamina });
+            OnMeleeStaminaChanged?.Invoke(this, new Events.OnIntChangedEventArgs { i = currentMeleeStamina });
         }
 
         //a method to deplete stamina

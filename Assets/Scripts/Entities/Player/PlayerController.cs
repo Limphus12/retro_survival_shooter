@@ -54,7 +54,12 @@ namespace com.limphus.retro_survival_shooter
         private CharacterController characterController;
         private Vector3 moveDirection = Vector3.zero;
         private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
-        private bool isMoving, isCrouching, isRunning, isJumping, isCoyoteTime;
+        private bool isCrouching, isRunning, isJumping, isCoyoteTime;
+
+        public float CurrentHeight { get; private set; }
+
+        public bool Grounded { get; private set; }
+        public bool IsMoving { get; private set; }
 
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
@@ -100,7 +105,7 @@ namespace com.limphus.retro_survival_shooter
             }
 
             //if we're not pressing the run key, then walk (sets our speed to either crouch speed or walk speed)
-            if (!Input.GetKey(runKey))
+            if (!Input.GetKey(runKey) || (playerStats && playerStats.GetCurrentStamina() <= 0))
             {
                 //if we have the playerstats reference, cancel the stamina depletion tick
                 if (playerStats)
@@ -194,7 +199,8 @@ namespace com.limphus.retro_survival_shooter
             curSpeedX = currentSpeed * Input.GetAxis("Horizontal");
             curSpeedZ = currentSpeed * Input.GetAxis("Vertical");
 
-            if (curSpeedX != 0 || curSpeedZ != 0) isMoving = true;
+            if (curSpeedX == 0 && curSpeedZ == 0) IsMoving = false;
+            else IsMoving = true;
 
             float movementDirectionY = moveDirection.y;
             moveDirection = (forward * curSpeedZ) + (right * curSpeedX);
@@ -277,9 +283,9 @@ namespace com.limphus.retro_survival_shooter
 
         public PlayerMovementState GetMovementState()
         {
-            if (isRunning && isMoving) return PlayerMovementState.RUNNING;
+            if (isCrouching) return PlayerMovementState.CROUCHING;
 
-            else if (isCrouching) return PlayerMovementState.CROUCHING;
+            else if (isRunning && IsMoving) return PlayerMovementState.RUNNING;
 
             else return PlayerMovementState.WALKING;
         }
@@ -369,6 +375,8 @@ namespace com.limphus.retro_survival_shooter
                 currentCeilingRaycast = crouchingHeight / 2 + 0.1f;
                 currentGroundRaycast = crouchingHeight / 2 + 0.25f;
             }
+
+            CurrentHeight = height;
         }
 
         #endregion
@@ -393,12 +401,21 @@ namespace com.limphus.retro_survival_shooter
             //raycast downwards from our center
             if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, currentGroundRaycast))
             {
-                if (hit.transform != transform) return true;
+                if (hit.transform != transform)
+                {
+                    Grounded = true; return true;
+                }
 
-                else return false;
+                else
+                {
+                    Grounded = false; return false;
+                }
             }
 
-            else return false;
+            else
+            {
+                Grounded = false; return false;
+            }
         }
 
         #endregion

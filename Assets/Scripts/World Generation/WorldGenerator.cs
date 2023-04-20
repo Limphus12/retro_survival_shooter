@@ -9,12 +9,26 @@ using UnityEditor;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [System.Serializable]
+    public struct WorldDataStruct
+    {
+        public string name;
+
+        [Space]
+        public TerrainDataStruct terrainData;
+        public BiomeDataStruct biomeData;
+    }
+
     public class WorldGenerator : MonoBehaviour
     {
         [SerializeField] private int seed;
+        public static int Seed;
 
         [Space]
         [SerializeField] private Vector2Int currentChunk = Vector2Int.zero;
+
+        [Space]
+        [SerializeField] private WorldDataStruct[] worldData;
 
         [Header("References")]
         [SerializeField] private TerrainGenerator terrainGenerator;
@@ -23,12 +37,13 @@ namespace com.limphus.retro_survival_shooter
 
         [SerializeField] private StructureGenerator structureGenerator;
 
+        public WorldDataStruct CurrentWorldData { get; private set; }
+
         void Awake() => InitializeWorld();
 
         public void InitializeWorld()
         {
-            //since world gen is the first step, we're gonna init our seed.
-            Random.InitState(seed); Noise.InitState(seed);
+            Random.InitState(seed); Noise.InitState(seed); //since world gen is the first step, we're gonna init our seed.
 
             //generate our world!
             GenerateWorld();
@@ -36,28 +51,42 @@ namespace com.limphus.retro_survival_shooter
 
         public void GenerateWorld()
         {
-            //we're gonna need to eventually grab the current chunk from our save
+            //firstly clear the world of previous terrain, biomes etc.
+            ClearWorld();
 
-            //grab the terrain generator from our child and tell it to generate our terrain!
-            //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
-            if (terrainGenerator) terrainGenerator.SetSeed(seed);
+            //int i = Random.Range(0, worldData.Length) + currentChunk.x + currentChunk.y;
 
-            if (terrainGenerator) terrainGenerator.GenerateTerrain(currentChunk);
-            //if (terrainGenerator) terrainGenerator.GenerateTerrain(seed);
+            int j = 0;
 
-            //now we grab the biome generator from our child and tell it to place assets!
-            //BiomeGenerator biomeGenerator = GetComponentInChildren<BiomeGenerator>();
-            if (biomeGenerator) biomeGenerator.GenerateBiome();
+            for (int i = 0; i < currentChunk.x + currentChunk.y; i++)
+            {
+                j++;
 
-            if (structureGenerator) structureGenerator.GenerateStructures();
+                //not gonna reset j to 0, instead will pick a random (in range) value
+                if (j > worldData.Length - 1) j = Random.Range(0, worldData.Length);
+            }
 
-            Debug.Log("Generating World");
+            CurrentWorldData = worldData[j];
+
+            if (terrainGenerator)
+            {
+                terrainGenerator.TerrainData = CurrentWorldData.terrainData;
+                terrainGenerator.SetOffset(currentChunk);
+                terrainGenerator.GenerateTerrain();
+            }
+
+            if (biomeGenerator)
+            {
+                biomeGenerator.BiomeData = CurrentWorldData.biomeData;
+                biomeGenerator.SetOffset(currentChunk);
+                biomeGenerator.GenerateBiome();
+            }
+
+            //if (structureGenerator) structureGenerator.GenerateStructures();
         }
 
         public void ClearWorld()
         {
-            Debug.Log("Clearing World");
-
             //TerrainGenerator terrainGenerator = GetComponentInChildren<TerrainGenerator>();
             if (terrainGenerator) terrainGenerator.ClearTerrain();
 
@@ -80,52 +109,32 @@ namespace com.limphus.retro_survival_shooter
 
                 b = true;
             }
+#endif
 
             if (b) return;
-#endif
 
             if (biomeGenerator) biomeGenerator.ClearBiome();
 
             if (structureGenerator) structureGenerator.ClearStructures();
         }
 
-        //we're prolly gonna call this from the borders around our world.
-        public void MoveChunk(int i)
+        public void Travel(CardinalDirection direction)
         {
-            Debug.Log("Move Chunk");
+            switch (direction)
+            {
+                case CardinalDirection.NORTH: currentChunk.y++;
+                    break;
 
-            //north
-            if (i <= 0) currentChunk.y++;
+                case CardinalDirection.EAST: currentChunk.x++;
+                    break;
 
-            //east
-            else if (i == 1) currentChunk.x++;
+                case CardinalDirection.SOUTH: currentChunk.y--;
+                    break;
 
-            //south
-            else if (i == 2) currentChunk.y--;
+                case CardinalDirection.WEST: currentChunk.x++;
+                    break;
+            }
 
-            //west
-            else if (i >= 3) currentChunk.x--;
-
-            //tell the terrain generator to generate our terrain!
-            if (terrainGenerator) terrainGenerator.GenerateTerrain();
-
-            //tell the biome generator to place assets!
-            if (biomeGenerator) biomeGenerator.GenerateBiome();
-
-            //tell the structure generator to place assets!
-            if (structureGenerator) structureGenerator.GenerateStructures();
-        }
-
-        public Vector2Int GetCurrentChunk()
-        {
-            return currentChunk;
-        }
-
-        public void SetCurrentChunk(Vector2Int chunk)
-        {
-            currentChunk = chunk;
-
-            //generate our world!
             GenerateWorld();
         }
     }
@@ -152,10 +161,4 @@ namespace com.limphus.retro_survival_shooter
         }
     }
 #endif
-
-    [System.Serializable]
-    public struct WorldDataStruct
-    {
-        public TerrainData meshData;
-    }
 }

@@ -20,15 +20,9 @@ namespace com.limphus.retro_survival_shooter
 
         private Camera playerCamera;
 
-        private bool isInteracting, canInteract;
+        private bool isInteracting;
 
         private IInteractable interactable;
-        private Transform interactableTransform;
-
-        List<Firearm> firearms = new List<Firearm>();
-        bool canLoot = false;
-
-        Container container; AmmoContainer ammo; ConsumableContainer consumable;
 
         private void Awake() => Init();
 
@@ -45,11 +39,6 @@ namespace com.limphus.retro_survival_shooter
 
             //Grabs the player inventory from the player object
             if (!playerInventory) playerInventory = GetComponent<PlayerInventory>();
-
-            if (playerInventory)
-            {
-                firearms = playerInventory.GetFirearms();
-            }
         }
 
         private void Update() => Inputs();
@@ -71,12 +60,6 @@ namespace com.limphus.retro_survival_shooter
             {
                 //attempt to grab the interactable conmponent
                 interactable = hit.transform.GetComponent<IInteractable>();
-
-                //if we do have it
-                if (interactable != null)
-                {
-                    interactableTransform = hit.transform;
-                }
             }
 
             else ResetInteract();
@@ -84,12 +67,9 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckInteract()
         {
-            if (!interactable.CanInteract())
-            {
-                interactionUI.SetActive(false);
-            }
+            if (!interactable.CanInteract()) interactionUI.SetActive(false);
 
-            if (interactable.CanInteract())
+            else if (interactable.CanInteract())
             {
                 interactionUI.SetActive(true);
 
@@ -97,17 +77,8 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        private void Interact()
-        {
-            interactable.Interact();
+        private void Interact() { interactable.Interact(); ResetInteract(); }
 
-            ResetInteract();
-        }
-
-        private void ResetInteract()
-        {
-            interactable = null;
-            interactableTransform = null;
-        }
+        private void ResetInteract() => interactable = null;
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -18,10 +19,9 @@ namespace com.limphus.retro_survival_shooter
         //later down the line we should do this max stuff in scriptable objects instead...
         //then just load in the stats from that scriptable object...
 
-        public class OnIntChangedEventArgs : EventArgs { public int i; }
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
 
-        public event EventHandler<OnIntChangedEventArgs> OnHealthChanged;
+        public event EventHandler<Events.OnIntChangedEventArgs> OnHealthChanged;
 
 
         private void Awake() => InitVariables();
@@ -51,7 +51,7 @@ namespace com.limphus.retro_survival_shooter
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
             //firing off our event here
-            OnHealthChanged?.Invoke(this, new OnIntChangedEventArgs { i = currentHealth });
+            OnHealthChanged?.Invoke(this, new Events.OnIntChangedEventArgs { i = currentHealth });
 
             //check our health
             CheckHealth();
@@ -79,7 +79,7 @@ namespace com.limphus.retro_survival_shooter
             else if (GetCurrentHealth() >= maxHealth) //if we have full health
             {
                 //then debug log that we have full health
-                Debug.Log("Character (" + gameObject.name + ") is at Full Health");
+                //Debug.Log("Character (" + gameObject.name + ") is at Full Health");
             }
         }
 

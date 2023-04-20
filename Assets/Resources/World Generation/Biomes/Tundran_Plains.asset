@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e130c5825d834a4dbf2751583e8fce3, type: 3}
+  m_Name: Tundran_Plains
+  m_EditorClassIdentifier: 
+  assets:
+  - {fileID: 3166914705229725855, guid: e68ff02517c39c34d8813f2ff62f0d9a, type: 3}
+  - {fileID: 9168436356214145764, guid: 31f3bfefeba238e4fb9bd00e0c5b75f6, type: 3}
+  - {fileID: 5942531564146134965, guid: 3b1712d22b62c644dbe517b9628705d0, type: 3}
+  - {fileID: 8913335718725013372, guid: ba59ebad58525584c8311b3376f61712, type: 3}
+  - {fileID: 8550579577136021871, guid: c3fe73f0139140841af026d0f487ed26, type: 3}
