@@ -73,9 +73,6 @@ namespace com.limphus.retro_survival_shooter
             breathingSource.volume = Mathf.Abs(s - 1);
         }
 
-        public void PlayBreathingSound() => PlayLoopingSound(breathingSource);
-        public void StopBreathingSound() => StopLoopingSound(breathingSource);
-
         private void CheckFootstepSounds()
         {
             if (playerController.Grounded && playerController.IsMoving)
