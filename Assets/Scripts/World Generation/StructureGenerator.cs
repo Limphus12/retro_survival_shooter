@@ -61,12 +61,12 @@ namespace com.limphus.retro_survival_shooter
 
         private void GenerateAssets()
         {
-            //need to do 3 asset loops for the primary, secondary and tertiary assets!
-            if (StructureData.primaryStructures.structures != null) AssetLoop(StructureData.primaryStructures.gridSize, StructureData.primaryStructures.gridMultiplier, StructureData.primaryStructures.gridOffset, StructureData.primaryStructures.structures.assets, StructureData.primaryStructures.placementChance, StructureData.primaryStructures.heightPlacementOffset, true, false);
+            //need to do 3 asset loops for the primary, secondary and tertiary assets! (doing them backwards tho)
+            if (StructureData.tertiaryStructures.structures != null) AssetLoop(StructureData.tertiaryStructures.gridSize, StructureData.tertiaryStructures.gridMultiplier, StructureData.tertiaryStructures.gridOffset, StructureData.tertiaryStructures.structures.assets, StructureData.tertiaryStructures.placementChance, StructureData.tertiaryStructures.heightPlacementOffset, false, false);
 
             if (StructureData.secondaryStructures.structures != null) AssetLoop(StructureData.secondaryStructures.gridSize, StructureData.secondaryStructures.gridMultiplier, StructureData.secondaryStructures.gridOffset, StructureData.secondaryStructures.structures.assets, StructureData.secondaryStructures.placementChance, StructureData.secondaryStructures.heightPlacementOffset, false, false);
 
-            if (StructureData.tertiaryStructures.structures != null) AssetLoop(StructureData.tertiaryStructures.gridSize, StructureData.tertiaryStructures.gridMultiplier, StructureData.tertiaryStructures.gridOffset, StructureData.tertiaryStructures.structures.assets, StructureData.tertiaryStructures.placementChance, StructureData.tertiaryStructures.heightPlacementOffset, false, false);
+            if (StructureData.primaryStructures.structures != null) AssetLoop(StructureData.primaryStructures.gridSize, StructureData.primaryStructures.gridMultiplier, StructureData.primaryStructures.gridOffset, StructureData.primaryStructures.structures.assets, StructureData.primaryStructures.placementChance, StructureData.primaryStructures.heightPlacementOffset, true, false);
         }
 
         private void ClearAssets()
@@ -119,7 +119,7 @@ namespace com.limphus.retro_survival_shooter
                     if (z <= assetPlacementChance)
                     {
                         //generate a random offset
-                        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), placementOffset, Random.Range(-1f, 1f));
+                        Vector3 randomOffset = new Vector3(Random.Range(-2.5f, 2.5f), placementOffset, Random.Range(-2.5f, 2.5f));
 
                         //calculate the current raycast position, adding in our random offset
                         Vector3 raycastPos = new Vector3((x * gridMultiplier) + randomOffset.x, raycastHeight, (y * gridMultiplier) + randomOffset.z);
@@ -152,8 +152,10 @@ namespace com.limphus.retro_survival_shooter
                                 placementRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
                             }
 
+                            int j = Random.Range(0, assets.Length);
+
                             //...placing down a random asset from the placeable asset array!
-                            GameObject asset = Instantiate(assets[Random.Range(0, assets.Length)], placementPoint, placementRotation, gameObject.transform);
+                            GameObject asset = Instantiate(assets[j], placementPoint, placementRotation * assets[j].transform.localRotation, gameObject.transform);
 
                             if (flatLand)
                             {

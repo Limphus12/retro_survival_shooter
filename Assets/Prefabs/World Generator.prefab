@@ -795,7 +795,7 @@ MonoBehaviour:
         gridSize: 0
         gridMultiplier: 0
         gridOffset: 0
-  - name: '[WIP] Abandoned Suburbs'
+  - name: Abandoned Suburbs
     terrainData:
       noiseScale: 16
       octaves: 4
@@ -820,13 +820,13 @@ MonoBehaviour:
       secondaryStructures:
         structures: {fileID: 11400000, guid: f36a5f0acebf54848b469d239f65af96, type: 2}
         placementChance: 0.01
-        heightPlacementOffset: -0.1
+        heightPlacementOffset: -0.5
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 32
       tertiaryStructures:
         structures: {fileID: 11400000, guid: 9d0765a05e4b12a41bc1b4e4ad231c38, type: 2}
-        placementChance: 0.01
+        placementChance: 0.05
         heightPlacementOffset: -0.1
         gridSize: 96
         gridMultiplier: 4
