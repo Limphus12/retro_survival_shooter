@@ -157,20 +157,17 @@ namespace com.limphus.retro_survival_shooter
                             //...placing down a random asset from the placeable asset array!
                             GameObject asset = Instantiate(assets[j], placementPoint, placementRotation * assets[j].transform.localRotation, gameObject.transform);
 
-                            if (flatLand)
-                            {
-                                //grabs the asset remover script and chucks the extents in the structureAreas list
-                                AssetRemover[] ar = asset.GetComponentsInChildren<AssetRemover>();
+                            //grabs the asset remover script and chucks the extents in the structureAreas list
+                            AssetRemover[] ar = asset.GetComponentsInChildren<AssetRemover>();
 
-                                if (ar.Length > 0)
+                            if (ar.Length > 0)
+                            {
+                                foreach (AssetRemover assetRemover in ar)
                                 {
-                                    foreach (AssetRemover assetRemover in ar)
+                                    if (assetRemover.AssetTag == "StructAsset" && flatLand)
                                     {
-                                        if (assetRemover.AssetTag == "StructAsset")
-                                        {
-                                            structureAreaStruct.structurePositions.Add(assetRemover.transform.position);
-                                            structureAreaStruct.structureAreas.Add(assetRemover.GetBoxExtents());
-                                        }
+                                        structureAreaStruct.structurePositions.Add(assetRemover.transform.position);
+                                        structureAreaStruct.structureAreas.Add(assetRemover.GetBoxExtents());
                                     }
                                 }
                             }
