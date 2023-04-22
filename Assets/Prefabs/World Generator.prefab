@@ -634,7 +634,7 @@ MonoBehaviour:
     m_Bits: 64
   gridSize: 96
   gridMultiplier: 4
-  gridOffset: 16
+  gridOffset: 20
   offset: {x: 0, y: 0}
   terrainGenerator: {fileID: 8224924336892737701}
 --- !u!1 &8224924337041208563

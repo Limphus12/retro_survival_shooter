@@ -6,8 +6,12 @@ namespace com.limphus.retro_survival_shooter
 {
     public class AnimationHandler : MonoBehaviour
     {
-        [Header("Attributes - Animation")]
-        [SerializeField] protected Animator animator;
+        protected Animator animator;
+
+        private void Awake()
+        {
+            if (!animator) animator = GetComponent<Animator>();
+        }
 
         protected string currentState;
 

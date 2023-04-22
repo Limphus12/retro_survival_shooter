@@ -37,6 +37,8 @@ namespace com.limphus.retro_survival_shooter
         private PlayerStats playerStats;
         private PlayerController playerController;
 
+        private IUseable useable;
+
         private FirearmAnimation firearmAnimation;
         private MeleeAnimation meleeAnimation;
         private ConsumableAnimation consumableAnimation;
@@ -52,14 +54,11 @@ namespace com.limphus.retro_survival_shooter
 
         protected bool isEquipped;
 
-        private bool leftMouseInput, rightMouseInput, reloadInput, meleeInput, previousMeleeInput;
+        private bool leftMouseInput, rightMouseInput, reloadInput, meleeInput, previousMeleeInput, functionToggleInput;
 
         public static bool CanUse = true;
 
-        public bool IsEquipped()
-        {
-            return isEquipped;
-        }
+        public bool IsEquipped() => isEquipped;
 
         public void ToggleEquip(bool b)
         {
@@ -70,6 +69,8 @@ namespace com.limphus.retro_survival_shooter
 
         protected virtual void Init()
         {
+            if (useable == null) useable = GetComponent<IUseable>();
+
             InitStats(); InitReferences(); InitEffects();
         }
 
@@ -142,7 +143,8 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
-            if (CanUse) Inputs();
+            if (CanUse && useable != null) useable.CheckInput();
+            else if (CanUse) Inputs();
         }
 
         private void Inputs()
@@ -160,6 +162,8 @@ namespace com.limphus.retro_survival_shooter
 
             if (Input.GetKeyDown(KeyCode.V)) meleeInput = true;
             else if (Input.GetKeyUp(KeyCode.V)) meleeInput = false;
+
+            if (Input.GetKeyDown(KeyCode.F)) functionToggleInput = !functionToggleInput;
 
             Functions();
         }

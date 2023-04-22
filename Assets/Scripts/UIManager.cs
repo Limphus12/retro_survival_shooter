@@ -134,7 +134,7 @@ namespace com.limphus.retro_survival_shooter
 
                     if (itemScript != null)
                     {   
-                        itemUINameText.text = "" + itemScript.GetItemData().itemName;
+                        if (itemScript.GetItemData() != null) itemUINameText.text = "" + itemScript.GetItemData().itemName;
 
                         Melee melee = itemScript.GetMelee();
 
