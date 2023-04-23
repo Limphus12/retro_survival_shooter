@@ -313,7 +313,6 @@ namespace com.limphus.retro_survival_shooter
                 if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
                 {
                     itemAnimation.PlayRunning();
-                    Debug.Log("Running");
 
                     return;
                 }

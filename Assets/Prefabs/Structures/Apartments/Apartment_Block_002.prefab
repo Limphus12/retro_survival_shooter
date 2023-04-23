@@ -18183,7 +18183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7798404b4e8e9b94ba1fc560c747f5fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 24, y: 24, z: 24}
+  boxExtents: {x: 17, y: 20, z: 17}
   assetTag: EnvAsset
   debug: 1
 --- !u!1 &819187974472955618
@@ -28812,7 +28812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7798404b4e8e9b94ba1fc560c747f5fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 24, y: 24, z: 24}
+  boxExtents: {x: 17, y: 20, z: 17}
   assetTag: StructAsset
   debug: 1
 --- !u!1001 &819187972945208065

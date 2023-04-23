@@ -20,6 +20,10 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         public float fogDistance;
+
+        [Space]
+        public AudioSource weatherSound;
+        public float volume;
     }
 
     public class GameManager : MonoBehaviour
@@ -128,8 +132,9 @@ namespace com.limphus.retro_survival_shooter
 
             currentWeatherChangeInterval = Random.Range(weatherChangeIntervalRange.x, weatherChangeIntervalRange.y);
 
-            
             oldWeather = currentWeather;
+
+            //currentWeather = weathers[3]; return;
 
             //while loop to ensure we pick a different weather
             while (currentWeather.Equals(oldWeather))
@@ -144,13 +149,16 @@ namespace com.limphus.retro_survival_shooter
         {
             lerpI += Time.deltaTime * weatherLerpMultiplier;
 
+            //gradients
             timeGradient = utilities.Gradient.LerpNoAlpha(oldWeather.timeGradient, currentWeather.timeGradient, lerpI);
             skyGradient = utilities.Gradient.LerpNoAlpha(oldWeather.skyGradient, currentWeather.skyGradient, lerpI);
             equatorGradient = utilities.Gradient.LerpNoAlpha(oldWeather.equatorGradient, currentWeather.equatorGradient, lerpI);
             groundGradient = utilities.Gradient.LerpNoAlpha(oldWeather.groundGradient, currentWeather.groundGradient, lerpI);
 
+            //fog
             fogDistance = Mathf.Lerp(oldWeather.fogDistance, currentWeather.fogDistance, lerpI);
 
+            //weather particles
             if (oldWeather.particles != null)
             {
                 ParticleSystem.EmissionModule emissionModule = oldWeather.particles.emission;
@@ -164,6 +172,10 @@ namespace com.limphus.retro_survival_shooter
 
                 emissionModule.rateOverTime = Mathf.Lerp(0, currentWeather.emmisionRate, lerpI);
             }
+
+            //weather sounds
+            if (oldWeather.weatherSound != null) oldWeather.weatherSound.volume = Mathf.Lerp(oldWeather.volume, 0, lerpI);
+            if (currentWeather.weatherSound != null) currentWeather.weatherSound.volume = Mathf.Lerp(0, currentWeather.volume, lerpI);
 
             if (lerpI >= 1f)
             {

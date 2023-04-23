@@ -701,7 +701,7 @@ MonoBehaviour:
       primaryStructures:
         structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
         placementChance: 0.0025
-        heightPlacementOffset: -0.05
+        heightPlacementOffset: -0.01
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 36
@@ -743,7 +743,7 @@ MonoBehaviour:
       primaryStructures:
         structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
         placementChance: 0.0025
-        heightPlacementOffset: -0.05
+        heightPlacementOffset: -0.01
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 36
@@ -826,7 +826,7 @@ MonoBehaviour:
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: 55e93523768e16d4ba51ebfa7fe0535b, type: 2}
-        placementChance: 0.0015
+        placementChance: 0.0025
         heightPlacementOffset: -0.5
         gridSize: 96
         gridMultiplier: 4
