@@ -105,7 +105,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 64, z: 1}
+  m_Size: {x: 128, y: 4096, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8224924335624997211
 GameObject:
@@ -326,7 +326,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 64, z: 1}
+  m_Size: {x: 128, y: 4096, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8224924336504708298
 GameObject:
@@ -408,7 +408,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 64, z: 128}
+  m_Size: {x: 1, y: 4096, z: 128}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8224924336600566725
 GameObject:
@@ -632,9 +632,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  gridSize: 96
-  gridMultiplier: 4
-  gridOffset: 20
   offset: {x: 0, y: 0}
   terrainGenerator: {fileID: 8224924336892737701}
 --- !u!1 &8224924337041208563
@@ -684,7 +681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3fe4152b5f521499a97b46fcd3363a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 0
   currentChunk: {x: 0, y: 0}
   worldData:
   - name: Boreal Forest
@@ -703,26 +699,32 @@ MonoBehaviour:
       heightPlacementOffset: -0.1
     structureData:
       primaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.5
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
+        placementChance: 0.0025
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 36
+        rightAngles: 0
+        flatLand: 1
       secondaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.25
+        structures: {fileID: 11400000, guid: aee311d6a7f8a704f897308609265eeb, type: 2}
+        placementChance: 0.002
         heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 16
+        rightAngles: 0
+        flatLand: 0
       tertiaryStructures:
         structures: {fileID: 0}
-        placementChance: 0.1
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        placementChance: 0.5
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
   - name: Tundran Plains
     terrainData:
       noiseScale: 16
@@ -739,26 +741,32 @@ MonoBehaviour:
       heightPlacementOffset: -0.1
     structureData:
       primaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.5
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
+        placementChance: 0.0025
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 36
+        rightAngles: 0
+        flatLand: 1
       secondaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.25
+        structures: {fileID: 11400000, guid: aee311d6a7f8a704f897308609265eeb, type: 2}
+        placementChance: 0.002
         heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 16
+        rightAngles: 0
+        flatLand: 0
       tertiaryStructures:
         structures: {fileID: 0}
-        placementChance: 0.1
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        placementChance: 0.5
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
   - name: Rolling Highlands
     terrainData:
       noiseScale: 16
@@ -777,24 +785,30 @@ MonoBehaviour:
       primaryStructures:
         structures: {fileID: 0}
         placementChance: 0.5
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
       secondaryStructures:
         structures: {fileID: 0}
-        placementChance: 0.25
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        placementChance: 0.5
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
       tertiaryStructures:
         structures: {fileID: 0}
-        placementChance: 0.1
-        heightPlacementOffset: -0.1
-        gridSize: 0
-        gridMultiplier: 0
-        gridOffset: 0
+        placementChance: 0.5
+        heightPlacementOffset: -0.05
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
   - name: Abandoned Suburbs
     terrainData:
       noiseScale: 16
@@ -812,11 +826,13 @@ MonoBehaviour:
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: 55e93523768e16d4ba51ebfa7fe0535b, type: 2}
-        placementChance: 0.001
+        placementChance: 0.0015
         heightPlacementOffset: -0.5
         gridSize: 96
         gridMultiplier: 4
-        gridOffset: 33
+        gridOffset: 36
+        rightAngles: 1
+        flatLand: 1
       secondaryStructures:
         structures: {fileID: 11400000, guid: f36a5f0acebf54848b469d239f65af96, type: 2}
         placementChance: 0.01
@@ -824,6 +840,8 @@ MonoBehaviour:
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
       tertiaryStructures:
         structures: {fileID: 11400000, guid: 9d0765a05e4b12a41bc1b4e4ad231c38, type: 2}
         placementChance: 0.05
@@ -831,6 +849,50 @@ MonoBehaviour:
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
+  - name: Ruined Battlefield
+    terrainData:
+      noiseScale: 16
+      octaves: 4
+      persistance: 0.5
+      lacunarity: 2
+      heightMultiplier: 4
+      normalizeMode: 0
+      terrainMaterial: {fileID: 2100000, guid: 5fdc579de7f0ef34283116401149e404, type: 2}
+      colorChance: {x: 25, y: 50, z: 75}
+    biomeData:
+      biomeData: {fileID: 11400000, guid: 8336768904d3749458b06339f5ebf57f, type: 2}
+      placementChance: 0.025
+      heightPlacementOffset: -0.1
+    structureData:
+      primaryStructures:
+        structures: {fileID: 11400000, guid: fd4226047c982a840b9ebebef509cda7, type: 2}
+        placementChance: 0.003
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
+      secondaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.01
+        heightPlacementOffset: -0.5
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
+      tertiaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.05
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 32
+        rightAngles: 0
+        flatLand: 0
   terrainGenerator: {fileID: 8224924336892737701}
   biomeGenerator: {fileID: 8224924335699164626}
   structureGenerator: {fileID: 8224924336919173151}
@@ -876,5 +938,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 64, z: 128}
+  m_Size: {x: 1, y: 4096, z: 128}
   m_Center: {x: 0, y: 0, z: 0}

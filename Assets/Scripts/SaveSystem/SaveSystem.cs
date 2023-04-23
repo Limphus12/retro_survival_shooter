@@ -7,66 +7,89 @@ using TMPro;
 namespace com.limphus.retro_survival_shooter
 {
     [Serializable]
-    public class Test
+    public class SettingsData
     {
-        public List<ItemData> itemDatas;
+        public bool fullscreen;
+
+        public Resolution currentResolution;
+
+        public int currentQualityLevel;
+
+        public float currentMasterVolume, currentAmbienceVolume, currentSoundVolume;
     }
 
     public class SaveSystem : MonoBehaviour
     {
-        [Header("Player Stuff")]
-        [SerializeField] private Transform playerTransform;
+        Transform playerTransform;
 
-        [SerializeField] private PlayerStats playerStats;
+        PlayerStats playerStats;
 
         [Space]
-        [SerializeField] private PlayerInventory playerInventory;
+        PlayerInventory playerInventory;
 
-        [Header("World Stuff")]
-        [SerializeField] private WorldGenerator worldGenerator;
-        [SerializeField] private TerrainGenerator terrainGenerator;
-        [SerializeField] private BiomeGenerator biomeGenerator;
+        private WorldGenerator worldGenerator;
+        private TerrainGenerator terrainGenerator;
+        private BiomeGenerator biomeGenerator;
 
-        [Header("Test")]
-        [SerializeField] private FirearmData firearmData;
-        [SerializeField] private MeleeData meleeData;
+        private FirearmData firearmData;
+        private MeleeData meleeData;
+
         //[SerializeField] private SustenanceData sustenanceData;
 
-        [Space]
-        public TextMeshProUGUI debugtext;
-
-        private void Test2()
-        {
-            //checking if the file exists.
-            if (System.IO.File.Exists(Application.persistentDataPath + "/Saves/" + "/Test_002.json"))
-            {
-                //grabbing the data from the .txt file
-                string saveString = System.IO.File.ReadAllText(Application.persistentDataPath + "/Saves/" + "/Test_002.json");
-
-                //create a save object
-                Test saveObject = JsonUtility.FromJson<Test>(saveString);
-
-                //setting our firearm data
-                //firearmData = (FirearmData)saveObject.itemDatas[0];
-                //meleeData = (MeleeData)saveObject.itemDatas[1];
-                //sustenanceData = (SustenanceData)saveObject.itemDatas[2];
-
-                //debug text - 1
-                //debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.rateOfFire + "...";
-
-                //debugtext.text = "Name: " + firearmData.itemName + ", Weight: " + firearmData.itemWeight + ", Damage: " + firearmData.damage + ", Rate of Fire: " + firearmData.attackRate + "..." + "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.attackRate + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.useAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
-
-                //debugtext.text = "Name: " + meleeData.itemName + ", Weight: " + meleeData.itemWeight + ", Damage: " + meleeData.damage + ", Rate of Fire: " + meleeData.rateOfFire + "..." + "Name: " + sustenanceData.itemName + ", Weight: " + sustenanceData.itemWeight + ", Consume Amount: " + sustenanceData.consumeAmount + ", Consume Time: " + sustenanceData.consumeTime + "...";
-
-                //returns the save string
-                Debug.Log(saveString);
-            }
-        }
+        private TextMeshProUGUI debugtext;
 
         private void Awake()
         {
             //initializing the save manager
             SaveManager.Init();
+
+            LoadSettings();
+        }
+
+        public void SaveSettings()
+        {
+            SettingsData settingsData = new SettingsData
+            {
+                fullscreen = Settings.fullscreen,
+                currentResolution = Settings.currentResolution,
+                currentQualityLevel = Settings.currentQualityLevel,
+                currentMasterVolume = Settings.currentMasterVolume + 80,
+                currentAmbienceVolume = Settings.currentAmbienceVolume + 80,
+                currentSoundVolume = Settings.currentSoundVolume + 80
+            };
+
+            //creating a new save object, setting the values
+            SettingsSaveObject saveObject = new SettingsSaveObject { settingsData = settingsData };
+
+            //using json utilities to write a json file -  true for prettyPrint
+            string json = JsonUtility.ToJson(saveObject, true);
+
+            //save it to the correct folder and file, passing through our json string
+            SaveManager.Save(SaveManager.DEFAULT_FOLDER + SaveManager.SETTINGS_FILE, json);
+        }
+
+        private void LoadSettings()
+        {
+            //asking for the save string from teh save manager
+            string saveString = SaveManager.Load(SaveManager.DEFAULT_FOLDER + SaveManager.SETTINGS_FILE);
+
+            if (saveString != null)
+            {
+                //creating a save object from the json/string
+                SettingsSaveObject saveObject = JsonUtility.FromJson<SettingsSaveObject>(saveString);
+
+                //grab the settings data from the save object
+                SettingsData settingsData = saveObject.settingsData;
+
+                Settings.fullscreen = settingsData.fullscreen;
+                Settings.currentResolution = settingsData.currentResolution;
+                Settings.currentQualityLevel = settingsData.currentQualityLevel;
+                Settings.currentMasterVolume = settingsData.currentMasterVolume - 80;
+                Settings.currentAmbienceVolume = settingsData.currentAmbienceVolume - 80;
+                Settings.currentSoundVolume = settingsData.currentSoundVolume - 80;
+            }
+
+            else Debug.Log("No Settings Save Detected!");
         }
 
         private void Start()
@@ -130,7 +153,7 @@ namespace com.limphus.retro_survival_shooter
                 string json = JsonUtility.ToJson(saveObject, true);
 
                 //calling the save method on the save manager
-                SaveManager.Save(json);
+                SaveManager.Save(SaveManager.SAVE_FOLDER + SaveManager.SAVE_FILE, json);
             }
 
             else Debug.LogError("Missing Critical References, cannot Save!");
@@ -139,7 +162,7 @@ namespace com.limphus.retro_survival_shooter
         private void Load()
         {
             //asking for the save string from teh save manager
-            string saveString = SaveManager.Load();
+            string saveString = SaveManager.Load(SaveManager.SAVE_FOLDER + SaveManager.SAVE_FILE);
 
             if (saveString != null)
             {
@@ -177,6 +200,11 @@ namespace com.limphus.retro_survival_shooter
             }
 
             else Debug.Log("No Save Detected!");
+        }
+
+        private class SettingsSaveObject
+        {
+            public SettingsData settingsData;
         }
 
         private class SaveObject

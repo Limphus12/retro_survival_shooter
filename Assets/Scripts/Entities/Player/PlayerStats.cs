@@ -151,7 +151,7 @@ namespace com.limphus.retro_survival_shooter
             if (GetCurrentHunger() >= maxHunger) //if we have full hunger
             {
                 //then debug log that we have full hunger
-                Debug.Log("Character (" + gameObject.name + ") is at Full Hunger");
+                //Debug.Log("Character (" + gameObject.name + ") is at Full Hunger");
             }
         }
 
@@ -210,7 +210,7 @@ namespace com.limphus.retro_survival_shooter
             if (GetCurrentThirst() >= maxThirst) //if we have full thirst
             {
                 //then debug log that we have full thirst
-                Debug.Log("Character (" + gameObject.name + ") is at Full Thirst");
+                //Debug.Log("Character (" + gameObject.name + ") is at Full Thirst");
             }
         }
 
@@ -250,7 +250,7 @@ namespace com.limphus.retro_survival_shooter
             //checking if our stamina is 0
             if (GetCurrentStamina() <= 0)
             {
-                Debug.Log("Character (" + gameObject.name + ") Has no Stamina!");
+                //Debug.Log("Character (" + gameObject.name + ") Has no Stamina!");
             }
         }
 
@@ -301,7 +301,7 @@ namespace com.limphus.retro_survival_shooter
             //checking if our stamina is 0
             if (GetCurrentMeleeStamina() <= 0)
             {
-                Debug.Log("Character (" + gameObject.name + ") Has no Melee Stamina!");
+               // Debug.Log("Character (" + gameObject.name + ") Has no Melee Stamina!");
             }
         }
 
@@ -320,7 +320,7 @@ namespace com.limphus.retro_survival_shooter
             if (currentMeleeStamina >= maxMeleeStamina) //if we have full stamina
             {
                 //then debug log that we have full stamina
-                Debug.Log("Character (" + gameObject.name + ") is at Full Melee Stamina");
+                //Debug.Log("Character (" + gameObject.name + ") is at Full Melee Stamina");
             }
         }
 

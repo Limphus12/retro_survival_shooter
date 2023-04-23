@@ -34,6 +34,5 @@ namespace com.limphus.retro_survival_shooter
         {
             toggle = !toggle; toggleObject.SetActive(toggle);
         }
-
     }
 }

@@ -25897,7 +25897,7 @@ GameObject:
   - component: {fileID: 5967710040595965110}
   m_Layer: 0
   m_Name: 2_Bedroom_Apartment_001
-  m_TagString: Untagged
+  m_TagString: StructAsset
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25940,7 +25940,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4d485df9c101545bb293e47e1c91a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderDistance: 128
 --- !u!1 &5628939921834087069
 GameObject:
   m_ObjectHideFlags: 0

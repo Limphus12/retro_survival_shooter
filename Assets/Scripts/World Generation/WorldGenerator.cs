@@ -22,7 +22,6 @@ namespace com.limphus.retro_survival_shooter
 
     public class WorldGenerator : MonoBehaviour
     {
-        [SerializeField] private int seed;
         public static int Seed;
 
         [Space]
@@ -40,11 +39,13 @@ namespace com.limphus.retro_survival_shooter
 
         public WorldDataStruct CurrentWorldData { get; private set; }
 
+        public static void SetCurrentSeed(int i) => Seed = i;
+
         void Awake() => InitializeWorld();
 
         public void InitializeWorld()
         {
-            Random.InitState(seed); Noise.InitState(seed); //since world gen is the first step, we're gonna init our seed.
+            Random.InitState(Seed); Noise.InitState(Seed); //since world gen is the first step, we're gonna init our seed.
 
             //generate our world!
             GenerateWorld();
@@ -52,7 +53,7 @@ namespace com.limphus.retro_survival_shooter
 
         public void EditorInitializeWorld()
         {
-            Random.InitState(seed); Noise.InitState(seed); //since world gen is the first step, we're gonna init our seed.
+            Random.InitState(Seed); Noise.InitState(Seed); //since world gen is the first step, we're gonna init our seed.
 
             //generate our world!
             EditorGenerateWorld();
@@ -67,7 +68,8 @@ namespace com.limphus.retro_survival_shooter
 
             int j = 0;
 
-            for (int i = 0; i < currentChunk.x + currentChunk.y; i++)
+            //doing mathf.abs cos chunks can go into the negative
+            for (int i = 0; i < Mathf.Abs(currentChunk.x + currentChunk.y); i++)
             {
                 j++;
 
@@ -76,6 +78,8 @@ namespace com.limphus.retro_survival_shooter
             }
 
             CurrentWorldData = worldData[j];
+
+            //Debug.Log(worldData[j].name);
 
             if (terrainGenerator)
             {
@@ -108,7 +112,7 @@ namespace com.limphus.retro_survival_shooter
 
             int j = 0;
 
-            for (int i = 0; i < currentChunk.x + currentChunk.y; i++)
+            for (int i = 0; i < Mathf.Abs(currentChunk.x + currentChunk.y); i++)
             {
                 j++;
 
@@ -117,6 +121,8 @@ namespace com.limphus.retro_survival_shooter
             }
 
             CurrentWorldData = worldData[j];
+
+            //Debug.Log(worldData[j].name);
 
             if (terrainGenerator)
             {

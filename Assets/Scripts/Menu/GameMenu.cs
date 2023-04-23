@@ -53,8 +53,6 @@ namespace com.limphus.retro_survival_shooter
 
         public void MainMenuButton()
         {
-            Debug.Log("back to main menu!");
-
             SceneManager.LoadSceneAsync(menuSceneIndex);
         }
     }

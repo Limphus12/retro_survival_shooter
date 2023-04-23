@@ -1,9 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
+    [System.Serializable]
+    public struct WeatherDataStruct
+    {
+        public string name;
+
+        [Space]
+        public UnityEngine.Gradient timeGradient;
+        public UnityEngine.Gradient skyGradient, equatorGradient, groundGradient;
+
+        [Space]
+        public ParticleSystem particles;
+        public float emmisionRate;
+
+        [Space]
+        public float fogDistance;
+    }
+
     public class GameManager : MonoBehaviour
     {
         private GameObject player;
@@ -18,16 +36,30 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("Time Management")] // <- heh i need me some of that
         [SerializeField] private float timeMultiplier = 1f;
-
-        [Space]
-        [SerializeField] private Gradient timeGradient;
-        [SerializeField] private Gradient skyGradient, equatorGradient, groundGradient;
-
-        private void Awake() => Init();
-
         [SerializeField, Range(0f, 24000f)] private float currentTime;
 
+        [Header("Sky & Weather")]
+        [SerializeField] private float weatherLerpMultiplier = 0.1f;
+
+        [SerializeField] private Vector2 weatherChangeIntervalRange = new Vector2(4000, 24000);
+
+        [Space]
+        [SerializeField] private WeatherDataStruct[] weathers;
+
         private float maxTime = 24000f;
+
+        private float currentWeatherChangeInterval, weatherTime;
+
+        private UnityEngine.Gradient timeGradient;
+        private UnityEngine.Gradient skyGradient, equatorGradient, groundGradient;
+
+        private float fogDistance;
+
+        bool isChangingWeather;
+
+        private WeatherDataStruct currentWeather, oldWeather;
+
+        private void Awake() => Init();
 
         private void Init()
         {
@@ -42,21 +74,33 @@ namespace com.limphus.retro_survival_shooter
             }
 
             PlayerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
+            currentWeather = weathers[Random.Range(0, weathers.Length)];
         }
+
+        private void Start() => ChangeWeather();
 
         private void Update()
         {
-            UpdateTime();
+            if (isChangingWeather) LerpWeather();
+
+            UpdateTime(); UpdateWeather();
         }
 
         private void UpdateTime()
         {
             //increment and clamp our current time
             currentTime += Time.deltaTime * timeMultiplier; currentTime = Mathf.Clamp(currentTime, 0f, maxTime);
+            weatherTime += Time.deltaTime * timeMultiplier;
+
+            if (weatherTime >= currentWeatherChangeInterval) ChangeWeather();
 
             //reset our current time if it reaches max time
             if (currentTime == maxTime) currentTime = 0;
+        }
 
+        private void UpdateWeather()
+        {
             //calculate a normalized time value (between 0 and 1), and do a debug
             float normalizedTimeValue = currentTime / maxTime; //Debug.Log(currentTime + " / " + normalizedTimeValue);
 
@@ -69,12 +113,63 @@ namespace com.limphus.retro_survival_shooter
 
             //set the fog and camera background color (the same as the fog to blend nicely)
             RenderSettings.fogColor = targetFogColor;
+            RenderSettings.fogEndDistance = fogDistance;
             PlayerCamera.backgroundColor = targetFogColor;
 
-            //...and all of the light colors 
+            //...and all of the light colors
             RenderSettings.ambientSkyColor = targetSkyColor;
             RenderSettings.ambientEquatorColor = targetEquatorColor;
             RenderSettings.ambientGroundColor = targetGroundColor;
+        }
+
+        private void ChangeWeather()
+        {
+            isChangingWeather = true; weatherTime = 0f;
+
+            currentWeatherChangeInterval = Random.Range(weatherChangeIntervalRange.x, weatherChangeIntervalRange.y);
+
+            
+            oldWeather = currentWeather;
+
+            //while loop to ensure we pick a different weather
+            while (currentWeather.Equals(oldWeather))
+            {
+                currentWeather = weathers[Random.Range(0, weathers.Length)];
+            }
+        }
+
+        private float lerpI = 0f;
+
+        private void LerpWeather()
+        {
+            lerpI += Time.deltaTime * weatherLerpMultiplier;
+
+            timeGradient = utilities.Gradient.LerpNoAlpha(oldWeather.timeGradient, currentWeather.timeGradient, lerpI);
+            skyGradient = utilities.Gradient.LerpNoAlpha(oldWeather.skyGradient, currentWeather.skyGradient, lerpI);
+            equatorGradient = utilities.Gradient.LerpNoAlpha(oldWeather.equatorGradient, currentWeather.equatorGradient, lerpI);
+            groundGradient = utilities.Gradient.LerpNoAlpha(oldWeather.groundGradient, currentWeather.groundGradient, lerpI);
+
+            fogDistance = Mathf.Lerp(oldWeather.fogDistance, currentWeather.fogDistance, lerpI);
+
+            if (oldWeather.particles != null)
+            {
+                ParticleSystem.EmissionModule emissionModule = oldWeather.particles.emission;
+
+                emissionModule.rateOverTime = Mathf.Lerp(oldWeather.emmisionRate, 0, lerpI);
+            }
+
+            if (currentWeather.particles != null)
+            {
+                ParticleSystem.EmissionModule emissionModule = currentWeather.particles.emission;
+
+                emissionModule.rateOverTime = Mathf.Lerp(0, currentWeather.emmisionRate, lerpI);
+            }
+
+            if (lerpI >= 1f)
+            {
+                isChangingWeather = false;
+                lerpI = 0f;
+            }
         }
     }
 }

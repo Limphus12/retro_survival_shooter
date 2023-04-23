@@ -300,7 +300,7 @@ namespace com.limphus.retro_survival_shooter
                     {
                         float yPos = sas.structurePositions[j].y;
 
-                        Debug.Log("vertex " + i + " is within a structure area; moving it vertically to y - " + yPos);
+                        //Debug.Log("vertex " + i + " is within a structure area; moving it vertically to y - " + yPos);
 
                         vertices[i].y = yPos;
                     }

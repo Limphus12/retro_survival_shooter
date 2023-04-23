@@ -19,9 +19,15 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Slider masterVolumeSlider;
         [SerializeField] private Slider ambienceVolumeSlider, soundVolumeSlider;
 
+        private Resolution[] resolutions;
+
         public static float currentMasterVolume, currentAmbienceVolume, currentSoundVolume;
 
-        private Resolution[] resolutions;
+        public static Resolution currentResolution;
+
+        public static bool fullscreen;
+
+        public static int currentQualityLevel;
 
         private void Start()
         {
@@ -110,18 +116,21 @@ namespace com.limphus.retro_survival_shooter
 
         public void SetQuality(int i)
         {
+            currentQualityLevel = i;
             QualitySettings.SetQualityLevel(i);
         }
 
         public void SetFullscreen(bool i)
         {
+            fullscreen = i;
             Screen.fullScreen = i;
         }
 
         public void SetResolution(int i)
         {
             Resolution resolution = resolutions[i];
-            Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+            currentResolution = resolutions[i];
+            Screen.SetResolution(resolution.width, resolution.height, fullscreen);
         }
     }
 }

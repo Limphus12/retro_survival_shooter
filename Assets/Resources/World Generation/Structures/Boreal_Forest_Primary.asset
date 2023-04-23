@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ec098b230be5a046b31ef43b2383863, type: 3}
+  m_Name: Boreal_Forest_Primary
+  m_EditorClassIdentifier: 
+  assets:
+  - {fileID: 5526241313595988186, guid: 0269791c7a9a7664a992c31087115d60, type: 3}
+  - {fileID: 5018443917895002459, guid: 21c19e46adb734e478f19c685b227eb3, type: 3}
+  - {fileID: 8497537835393012876, guid: 117e4703b27070a4ab55042af9ddef8f, type: 3}

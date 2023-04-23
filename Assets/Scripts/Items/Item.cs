@@ -144,7 +144,7 @@ namespace com.limphus.retro_survival_shooter
         private void Update()
         {
             if (CanUse && useable != null) useable.CheckInput();
-            else if (CanUse) Inputs();
+            if (CanUse) Inputs();
         }
 
         private void Inputs()
@@ -313,6 +313,8 @@ namespace com.limphus.retro_survival_shooter
                 if (playerController && playerController.GetMovementState() == PlayerMovementState.RUNNING)
                 {
                     itemAnimation.PlayRunning();
+                    Debug.Log("Running");
+
                     return;
                 }
 

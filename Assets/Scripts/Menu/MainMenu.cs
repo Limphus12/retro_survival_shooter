@@ -7,7 +7,7 @@ namespace com.limphus.retro_survival_shooter
 {
     public class MainMenu : Menu
     {
-        [SerializeField] private GameObject[] mainMenuUI, optionsUI, audioUI, videoUI, controlsUI, playUI, newUI;
+        [SerializeField] private GameObject[] mainMenuUI, optionsUI, audioUI, videoUI, controlsUI, playUI, newUI, loadingUI;
 
         [Space]
         [SerializeField] private int playSceneIndex;
@@ -42,6 +42,11 @@ namespace com.limphus.retro_survival_shooter
         public void NewBackButton()
         {
             ToggleUI(playUI, newUI);
+        }
+
+        public void Loading()
+        {
+            ToggleUI(loadingUI, newUI);
         }
 
         public void OptionsButton()
@@ -86,6 +91,5 @@ namespace com.limphus.retro_survival_shooter
         {
             Application.Quit();
         }
-
     }
 }

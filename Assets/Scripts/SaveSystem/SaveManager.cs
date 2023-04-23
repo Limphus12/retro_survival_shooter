@@ -10,8 +10,9 @@ namespace com.limphus.retro_survival_shooter
         //had to change because unity cannot call get_persistentDataPath from a constuctor
         //private static string SAVE_FOLDER = "";
 
+        public static readonly string DEFAULT_FOLDER = Application.persistentDataPath;
         public static readonly string SAVE_FOLDER = Application.persistentDataPath + "/Saves/";
-        public static readonly string SAVE_FILE = "/save.json", WORLD_FILE = "/world.json", CHUNK_FILE = "/chunk.json";
+        public static readonly string SAVE_FILE = "/save.json", WORLD_FILE = "/world.json", CHUNK_FILE = "/chunk.json", SETTINGS_FILE = "/settings.json";
 
         public static void Init()
         {
@@ -23,21 +24,21 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        public static void Save(string saveString)
+        public static void Save(string fileLocation, string saveString)
         {
-            File.WriteAllText(SAVE_FOLDER + SAVE_FILE, saveString);
+            File.WriteAllText(fileLocation, saveString);
         }
 
-        public static string Load()
+        public static string Load(string fileLocation)
         {
             //checking if the file exists.
-            if (File.Exists(SAVE_FOLDER + SAVE_FILE))
+            if (File.Exists(fileLocation))
             {
                 //grabbing the data from the .txt file
-                string saveString = File.ReadAllText(SAVE_FOLDER + SAVE_FILE);
+                string fileString = File.ReadAllText(fileLocation);
 
                 //returns the save string
-                return saveString;
+                return fileString;
             }
 
             //if we cannot find the file, return null

@@ -9,7 +9,7 @@ namespace com.limphus.retro_survival_shooter
     public struct SoundStruct
     {
         public AudioClip[] clips;
-        public float distance, pitch;
+        public float maxDistance, pitch;
 
         public Transform transform;
     }
@@ -114,7 +114,7 @@ namespace com.limphus.retro_survival_shooter
             if (sounds.clips.Length == 0) return;
 
             //pick a random walk sound out of the array, and play one shot of it...
-            PlayOneShotSound(sounds.clips[Random.Range(0, sounds.clips.Length)], sounds.transform.position, sounds.distance, sounds.pitch);
+            PlayOneShotSound(sounds.clips[Random.Range(0, sounds.clips.Length)], sounds.transform.position, sounds.maxDistance, sounds.pitch);
         }
     }
 }

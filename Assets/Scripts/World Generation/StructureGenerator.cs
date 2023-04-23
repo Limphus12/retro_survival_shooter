@@ -23,6 +23,10 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         public int gridSize;
         public int gridMultiplier, gridOffset;
+
+        [Space]
+        public bool rightAngles;
+        public bool flatLand;
     }
 
     public class StructureGenerator : MonoBehaviour
@@ -32,8 +36,8 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private LayerMask layerMask;
 
         [Space]
-        [SerializeField] private int gridSize;
-        [SerializeField] private int gridMultiplier, gridOffset;
+        private int gridSize;
+        private int gridMultiplier, gridOffset;
 
         [Space]
         [SerializeField] private Vector2Int offset;
@@ -62,11 +66,11 @@ namespace com.limphus.retro_survival_shooter
         private void GenerateAssets()
         {
             //need to do 3 asset loops for the primary, secondary and tertiary assets! (doing them backwards tho)
-            if (StructureData.tertiaryStructures.structures != null) AssetLoop(StructureData.tertiaryStructures.gridSize, StructureData.tertiaryStructures.gridMultiplier, StructureData.tertiaryStructures.gridOffset, StructureData.tertiaryStructures.structures.assets, StructureData.tertiaryStructures.placementChance, StructureData.tertiaryStructures.heightPlacementOffset, false, false);
+            if (StructureData.tertiaryStructures.structures != null) AssetLoop(StructureData.tertiaryStructures.gridSize, StructureData.tertiaryStructures.gridMultiplier, StructureData.tertiaryStructures.gridOffset, StructureData.tertiaryStructures.structures.assets, StructureData.tertiaryStructures.placementChance, StructureData.tertiaryStructures.heightPlacementOffset, StructureData.tertiaryStructures.rightAngles, StructureData.tertiaryStructures.flatLand);
 
-            if (StructureData.secondaryStructures.structures != null) AssetLoop(StructureData.secondaryStructures.gridSize, StructureData.secondaryStructures.gridMultiplier, StructureData.secondaryStructures.gridOffset, StructureData.secondaryStructures.structures.assets, StructureData.secondaryStructures.placementChance, StructureData.secondaryStructures.heightPlacementOffset, false, false);
+            if (StructureData.secondaryStructures.structures != null) AssetLoop(StructureData.secondaryStructures.gridSize, StructureData.secondaryStructures.gridMultiplier, StructureData.secondaryStructures.gridOffset, StructureData.secondaryStructures.structures.assets, StructureData.secondaryStructures.placementChance, StructureData.secondaryStructures.heightPlacementOffset, StructureData.secondaryStructures.rightAngles, StructureData.secondaryStructures.flatLand);
 
-            if (StructureData.primaryStructures.structures != null) AssetLoop(StructureData.primaryStructures.gridSize, StructureData.primaryStructures.gridMultiplier, StructureData.primaryStructures.gridOffset, StructureData.primaryStructures.structures.assets, StructureData.primaryStructures.placementChance, StructureData.primaryStructures.heightPlacementOffset, true, false);
+            if (StructureData.primaryStructures.structures != null) AssetLoop(StructureData.primaryStructures.gridSize, StructureData.primaryStructures.gridMultiplier, StructureData.primaryStructures.gridOffset, StructureData.primaryStructures.structures.assets, StructureData.primaryStructures.placementChance, StructureData.primaryStructures.heightPlacementOffset, StructureData.primaryStructures.rightAngles, StructureData.primaryStructures.flatLand);
         }
 
         private void ClearAssets()

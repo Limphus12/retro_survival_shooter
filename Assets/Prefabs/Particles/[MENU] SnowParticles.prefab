@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5160648091077414833}
   - component: {fileID: 5160648091077414832}
   m_Layer: 0
-  m_Name: MainMenuSnowParticles
+  m_Name: '[MENU] SnowParticles'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
