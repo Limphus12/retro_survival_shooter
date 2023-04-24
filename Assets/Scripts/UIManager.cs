@@ -152,7 +152,7 @@ namespace com.limphus.retro_survival_shooter
 
                             if (firearm.Magazine.InfinteClip) text += "Inf."; else text += firearm.Magazine.CurrentMagazineCount;
 
-                            if (firearm.Magazine.InfinteAmmo) text += " / Inf."; else text += " / " + firearm.Magazine.CurrentAmmoReserves;
+                            if (firearm.Magazine.InfinteAmmo) text += " / Inf."; else text += " / " + PlayerAmmo.GetMaxAmmo(firearm.Magazine.AmmoType);
 
                             itemUIAmountText.text = text; return;
                         }
@@ -179,6 +179,11 @@ namespace com.limphus.retro_survival_shooter
                         {
                             itemUIAmountText.text = "" + consumable.GetRemainingUsageAmount();
                             return;
+                        }
+
+                        else
+                        {
+                            itemUIAmountText.text = "";
                         }
                     }
                 }

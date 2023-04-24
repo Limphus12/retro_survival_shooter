@@ -33,7 +33,7 @@ namespace com.limphus.retro_survival_shooter
         {
             switch (ammoType)
             {
-                case AmmoType.PISTOL: PlayerAmmo.AddAmmo(ammoType, amount, PlayerAmmo.PISTOL_AMMO_MAX); break;
+                case AmmoType.PISTOL: PlayerAmmo.AddAmmo(ammoType, amount); break;
             }
 
             Destroy(gameObject);

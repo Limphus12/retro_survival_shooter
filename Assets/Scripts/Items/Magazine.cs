@@ -4,34 +4,35 @@ using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
 {
+    public enum ReloadState { CANNOT, SINGLE, CLIP }
+
     public class Magazine : MonoBehaviour
     {
         //this class will act as the magazine function for the firearms;
         //enabling reloading and ammo usage
 
-        [Header("Attributes - Reloading")]
+        [Header("Attributes - Settings")]
+        [SerializeField] private AmmoType ammoType;
+
         [SerializeField] private bool infiniteAmmo;
         [SerializeField] private bool infiniteClip;
 
-        public bool InfinteAmmo { get; private set; }
-        public bool InfinteClip { get; private set; }
+        [Space]
+        [SerializeField] private int maxMagazineSize; //our internal mag size (how many bullets we can hold at once)
 
+        [Header("Attributes - Single Reloads")]
+        [SerializeField] private bool singleReloads;
         [SerializeField] private float reloadTime;
 
-        [Space]
+        [Header("Attributes - Clip Reloads")]
         [SerializeField] private bool clipReloads; //i guess we're assuming single-bullet reloads are the norm?
         [SerializeField] private int clipReloadAmount; //how many bullets we reload in a clip
         [SerializeField] private float clipReloadTime;
 
-        [Space]
-        [SerializeField] private int maxMagazineSize; //our internal mag size (how many bullets we can hold at once)
-        public int CurrentMagazineCount { get; private set; } //the current amount of bullets we have in our mag.
-
-        [Space]
-        [SerializeField] private int maxAmmoReserves; //our maximum ammo reserves for this weapon
-        public int CurrentAmmoReserves { get; private set; } //our current ammo reserves
-
-        public bool IsReloading { get; private set; } //we're gonna try this syntax
+        public int CurrentMagazineCount { get; private set; }
+        public bool IsReloading { get; private set; } public bool InfinteAmmo { get; private set; } public bool InfinteClip { get; private set; }
+        public AmmoType AmmoType { get; private set; }
+        public ReloadState ReloadState { get; private set; }
 
         private void Awake() => Init();
 
@@ -41,121 +42,85 @@ namespace com.limphus.retro_survival_shooter
             InfinteClip = infiniteClip;
 
             CurrentMagazineCount = maxMagazineSize;
-            CurrentAmmoReserves = maxAmmoReserves;
+
+            AmmoType = ammoType;
         }
 
-        //a method to compare ammo reserves to maxMagazineSize
-        private int CheckAmmoReserves(int amount)
+        private bool CanUse(int amount)
         {
-            if (CurrentAmmoReserves <= 0) return 0; //if we have no reserve ammo
-
-            else if (CurrentAmmoReserves < amount) return 1; //if we dont have enough to perform a reload with the amount required
-
-            else if (CurrentAmmoReserves >= amount) return 2; //if we have enough to perform a reload with the amount required
-
-            else return 3;
+            if (amount > CurrentMagazineCount) return false;
+            else return true;
         }
 
-        public int CheckMagazine()
+        private ReloadState CheckReloadState()
         {
-            if (CurrentMagazineCount <= 0) return 0; //if we have no ammo loaded
-            if (CurrentMagazineCount > 0) return 1; //if we have ammo loaded
-            else return 2;
+            //if we have enough for a clip reload and enough space to insert a clip
+            if (clipReloads && PlayerAmmo.HasAmmo(ammoType, clipReloadAmount)) return ReloadState.CLIP;
+
+            //if we have at least 1 bullet of reserve ammo and we can fit a single bullet into the mag
+            else if (singleReloads && PlayerAmmo.HasAmmo(ammoType) && (maxMagazineSize - CurrentMagazineCount) >= 1) return ReloadState.SINGLE;
+
+            else return ReloadState.CANNOT;
         }
 
-        public int CheckReload()
+        public void CheckReload()
         {
-            //KEY - 2 = Clip Reload, 1 = Single Reload, 0 = No Reload
+            if (IsReloading) return;
 
-            if (clipReloads)
+            ReloadState = CheckReloadState();
+
+            switch (ReloadState)
             {
-                //if we have enough ammo in our reserves for a clip reload
-                if (CheckAmmoReserves(clipReloadAmount) == 2)
-                {
-                    //if we have enough mag space
-                    if ((maxMagazineSize - CurrentMagazineCount) >= clipReloadAmount) return 2;
+                case ReloadState.CANNOT: Debug.Log("Cannot Reload!"); break;
 
-                    //if we don't have enough space for a clip, but we have enough for a single bullet
-                    else if ((maxMagazineSize - CurrentMagazineCount) >= 1) return 1;
+                case ReloadState.SINGLE: if (singleReloads) StartSingleBulletReload(); break;
 
-                    //else we cannot reload!
-                    else return 0;
-                }
-
-                //if we only have enough for a single bullet reload
-                else if (CheckAmmoReserves(1) == 2 && ((maxMagazineSize - CurrentMagazineCount) <= 1)) return 1;
-
-                //else we cannot reload!
-                else return 0;
+                case ReloadState.CLIP: if (clipReloads) StartClipReload(); else if (singleReloads) StartSingleBulletReload(); break;
             }
-
-            //if we are not doing clip reloads, we have enough ammo for a single bullet reload, and we have the mag space
-            else if (!clipReloads && CheckAmmoReserves(1) == 2 && ((maxMagazineSize - CurrentMagazineCount) <= 1)) return 1;
-
-            //else we cannot reload!
-            else return 0;
         }
 
-        public void StartReload()
-        {
-            Debug.Log("Started Single Bullet Reload");
+        private void StartSingleBulletReload() { IsReloading = true; Invoke(nameof(SingleBulletReload), reloadTime); }
 
-            IsReloading = true; Invoke(nameof(Reload), reloadTime);
-        }
-
-        public void StartClipReload()
-        {
-            Debug.Log("Started Clip Reload");
-
-            IsReloading = true; Invoke(nameof(ClipReload), clipReloadTime);
-        }
-
-        void Reload()
+        private void SingleBulletReload()
         {
             //reload!
-            SetCurrentMagazineCount(CurrentMagazineCount += 1);
+            SetCurrentMagazineCount(CurrentMagazineCount + 1);
+
+            if (!infiniteAmmo) PlayerAmmo.RemoveAmmo(ammoType, 1);
 
             //if we still need to reload
-            if (CurrentMagazineCount < maxMagazineSize) StartReload();
-            
-            else EndReload();
-        }
-
-        void ClipReload()
-        {
-            //reload via a clip!
-
-            //if we're not using infinite ammo, reload by the clip amount
-            if (!InfinteAmmo)
-            {
-                SetCurrentMagazineCount(CurrentMagazineCount += clipReloadAmount);
-                SetCurrentAmmoReserves(CurrentAmmoReserves -= clipReloadAmount);
-            }
-
-            else SetCurrentMagazineCount(maxMagazineSize);
-
-            //if we still have ammo to reload
-            if (CurrentMagazineCount < maxMagazineSize) StartReload();
+            if (CurrentMagazineCount < maxMagazineSize) StartSingleBulletReload();
 
             else EndReload();
         }
 
-        void EndReload() => IsReloading = false;
+        private void StartClipReload() { IsReloading = true; Invoke(nameof(ClipReload), clipReloadTime); }
 
-        //we can interrupt the reload to then fire straight after or something
-        //or to start sprinting
-        public void InterruptReload()
+        private void ClipReload()
         {
-            CancelInvoke(nameof(Reload)); CancelInvoke(nameof(ClipReload));
+            //reload via a clip, losing the loaded bullets in the process!
+            SetCurrentMagazineCount(clipReloadAmount);
 
-            EndReload();
+            if (!infiniteAmmo) PlayerAmmo.RemoveAmmo(ammoType, clipReloadAmount);
+
+            //if we still have ammo to reload - i wanna also add a check for doing another clip reload...
+            if (CurrentMagazineCount < maxMagazineSize) StartSingleBulletReload();
+
+            else EndReload();
         }
+
+        private void EndReload() => IsReloading = false;
+
+        //we can interrupt the reload to then i.e. fire straight after, or to start sprinting...
+        public void InterruptReload() { CancelInvoke(nameof(SingleBulletReload)); CancelInvoke(nameof(ClipReload)); EndReload(); }
 
         private void SetCurrentMagazineCount(int amount) => CurrentMagazineCount = Mathf.Clamp(amount, 0, maxMagazineSize);
-        private void SetCurrentAmmoReserves(int amount) => CurrentAmmoReserves = Mathf.Clamp(amount, 0, maxAmmoReserves);
-        public void UseAmmo(int amount)
+
+        public void DepleteAmmoFromMagazine(int amount)
         {
-            if (!InfinteClip) SetCurrentMagazineCount(CurrentMagazineCount -= amount);
+            CurrentMagazineCount -= amount;
+
+            CurrentMagazineCount = Mathf.Clamp(CurrentMagazineCount, 0, maxMagazineSize);
         }
     }
 }

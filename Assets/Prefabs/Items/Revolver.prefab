@@ -863,11 +863,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firearmData: {fileID: 11400000, guid: bdbaad293f52bb04a986d6ec2f6b2274, type: 2}
   infiniteAmmo: 0
-  cameraRecoil: {fileID: 0}
-  weaponRecoil: {fileID: 7562350580413066809}
-  reloadKey: 114
-  fireMouseButton: 0
-  aimMouseButton: 1
 --- !u!114 &6848814638209683725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -880,14 +875,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 190e5573edbfc2a4499bbf2a4c343ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infiniteAmmo: 0
+  ammoType: 0
+  infiniteAmmo: 1
   infiniteClip: 0
-  reloadTime: 5.25
+  maxMagazineSize: 6
+  singleReloads: 1
+  reloadTime: 0.875
   clipReloads: 1
   clipReloadAmount: 6
   clipReloadTime: 5.25
-  maxMagazineSize: 6
-  maxAmmoReserves: 18
 --- !u!114 &5160590522330889337
 MonoBehaviour:
   m_ObjectHideFlags: 0

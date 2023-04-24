@@ -80,6 +80,9 @@ namespace com.limphus.retro_survival_shooter
             PlayerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
             currentWeather = weathers[Random.Range(0, weathers.Length)];
+
+            //setting our ammo to full for now...
+            PlayerAmmo.SetAmmo(AmmoType.PISTOL, PlayerAmmo.GetMaxAmmo(AmmoType.PISTOL));
         }
 
         private void Start() => ChangeWeather();

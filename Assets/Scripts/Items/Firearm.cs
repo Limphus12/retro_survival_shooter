@@ -24,6 +24,10 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Firearm")]
         [SerializeField] private FirearmData firearmData;
 
+        public Magazine Magazine { get; private set; }
+
+        #region Private Variables
+
         private float firearmDamage, firearmAttackRate;
 
         private int magazineSize;
@@ -35,14 +39,12 @@ namespace com.limphus.retro_survival_shooter
          
         private FirearmShotType shotType;
 
-        [Header("Attributes - Reloading")]
-        [SerializeField] private bool infiniteAmmo;
-
-        public Magazine Magazine { get; private set; }
-
         private FirearmReloadType reloadType;
 
-        private float cockTime; //hah, cock
+        private float cockTime;
+
+        private WeaponRecoil weaponRecoil;
+        private WeaponRecoil cameraRecoil;
 
         private FirearmSound firearmSound;
 
@@ -52,13 +54,13 @@ namespace com.limphus.retro_survival_shooter
 
         private FirearmFunctionAnimation firearmFunctionAnimation;
         
-        [Space]
-        [SerializeField] private WeaponRecoil cameraRecoil;
-        [SerializeField] private WeaponRecoil weaponRecoil;
-
         private Transform playerCamera;
 
         private bool isAttacking, isAiming, isReloading, isCocked, isCocking;
+
+        #endregion
+
+        #region Initialization
 
         private void Awake() => Init();
 
@@ -92,6 +94,10 @@ namespace com.limphus.retro_survival_shooter
 
         private void InitEffects()
         {
+            if (!weaponRecoil) weaponRecoil = gameObject.GetComponentInChildren<WeaponRecoil>();
+
+            if (!cameraRecoil && playerCamera) cameraRecoil = playerCamera.GetComponentInParent<WeaponRecoil>();
+
             if (!firearmSway) firearmSway = gameObject.GetComponent<FirearmSway>();
 
             if (!firearmAnimation) firearmAnimation = gameObject.GetComponent<FirearmAnimation>();
@@ -103,6 +109,8 @@ namespace com.limphus.retro_survival_shooter
             if (!firearmFunctionAnimation) firearmFunctionAnimation = gameObject.GetComponent<FirearmFunctionAnimation>();
         }
 
+        #endregion
+
         public bool InUse()
         {
             if (isAttacking || isReloading || isCocking) return true;
@@ -112,234 +120,118 @@ namespace com.limphus.retro_survival_shooter
 
         public void CheckInputs(bool leftMouseInput, bool rightMouseInput, bool reloadInput)
         {
-            if (infiniteAmmo)
+            if (Magazine)
             {
-                //if were attacking already, dont do anything
-                if (isAttacking) return;
-
-                //check for r-mouse input and update aiming
-                Aim(rightMouseInput);
-
-                //if we're not shooting, run through the fire types
-                switch (fireType)
-                {
-                    case FirearmFireType.SEMI:
-
-                        //TO DO; actually implement semi auto fire e.g. the player has to click the mouse to fire,
-                        //not just hold it down. (maybe ill just get rid of semi and just use auto, but with a low fire rate?)
-
-                        if (leftMouseInput) StartAttack();
-
-                        break;
-
-                    case FirearmFireType.BURST:
-
-                        //TO DO; implement burst firing (i have done so in the past, so it should be easy)
-
-                        break;
-                    case FirearmFireType.AUTO:
-
-                        if (leftMouseInput) StartAttack();
-
-                        break;
-                    case FirearmFireType.COCK:
-
-                        //if we're cocking
-                        if (isCocking)
-                        {
-                            return;
-                        }
-
-                        //if we'te havent cocked, start doing so!
-                        else if (!isCocked)
-                        {
-                            StartCock();
-                            return;
-                        }
-
-                        //if were; not shooting, not cocking and we have cocked the firearm,
-                        //and we press the l-mouse button
-                        //uncock the weapon and start firing!
-                        if (leftMouseInput && isCocked)
-                        {
-                            isCocked = false;
-
-                            StartAttack();
-                        }
-
-                        break;
+                if (Magazine.IsReloading) 
+                { 
+                    if (leftMouseInput) Magazine.InterruptReload(); return; 
                 }
-            }
 
-            else
-            {
-                if (Magazine)
+                else if (!Magazine.IsReloading && !isAttacking && reloadInput)
                 {
-                    if (Magazine.IsReloading)
-                    {
-                        if (leftMouseInput) Magazine.InterruptReload();
-                    }
+                    Magazine.CheckReload();
 
-                    //if we press the r key and can reload, and we're not already reloading, and we can reload, then reload!
-                    else if (reloadInput && !Magazine.IsReloading && !isAttacking)
+                    if (Magazine.IsReloading)
                     {
                         if (firearmSound) firearmSound.PlayReloadingSound();
 
-                        Magazine.StartClipReload(); Aim(false); return;
-
-                        //if we can do the clip reload
-                        if (Magazine.CheckReload() == 2)
-                        {
-                            Magazine.StartClipReload(); Aim(false); return;
-                        }
-
-                        //if we can only do the single bullet reload
-                        else if (Magazine.CheckReload() == 1)
-                        {
-                            Magazine.StartReload(); Aim(false); return;
-                        }
-
-                        else if (Magazine.CheckReload() == 0) { }
+                        Aim(false); return;
                     }
                 }
+            }
 
-                //if were attacking already, dont do anything
-                if (isAttacking) return;
+            if (isAttacking) return;
 
-                //check for r-mouse input and update aiming
-                Aim(rightMouseInput);
+            Aim(rightMouseInput);
 
-                //if we're not shooting, run through the fire types
-                switch (fireType)
-                {
-                    case FirearmFireType.SEMI:
+            //if we're not shooting, run through the fire types
+            switch (fireType)
+            {
+                case FirearmFireType.SEMI:
 
-                        //TO DO; actually implement semi auto fire e.g. the player has to click the mouse to fire,
-                        //not just hold it down. (maybe ill just get rid of semi and just use auto, but with a low fire rate?)
-
-                        //if we have no ammo tho, cry about it
-                        if (Magazine.CheckMagazine() == 0)
-                        {
-                            //if we have the firearm sound reference, call the play dry firing sound
-                            if (firearmSound) firearmSound.PlayDryFiringSound();
-
-                            return;
+                    if (Magazine.CurrentMagazineCount <= 0)
+                    {
+                        if (Input.GetMouseButtonDown(0) && firearmSound) 
+                        { 
+                            firearmSound.PlayDryFiringSound(); 
                         }
 
-                        if (leftMouseInput) StartAttack();
+                        return;
+                    }
 
-                        break;
+                    if (leftMouseInput) StartAttack();
 
-                    case FirearmFireType.BURST:
+                    break;
 
-                        //TO DO; implement burst firing (i have done so in the past, so it should be easy)
+                case FirearmFireType.AUTO:
 
-                        break;
-                    case FirearmFireType.AUTO:
-
-                        //if we have no ammo tho, cry about it
-                        if (Magazine.CheckMagazine() == 0)
+                    if (Magazine.CurrentMagazineCount <= 0)
+                    {
+                        if (Input.GetMouseButtonDown(0) && firearmSound)
                         {
-                            //if we have the firearm sound reference, call the play dry firing sound
-                            if (firearmSound) firearmSound.PlayDryFiringSound();
-
-                            return;
+                            firearmSound.PlayDryFiringSound();
                         }
 
-                        if (leftMouseInput) StartAttack();
+                        return;
+                    }
 
-                        break;
-                    case FirearmFireType.COCK:
+                    if (leftMouseInput) StartAttack();
 
-                        //if we have no ammo tho, cry abou it
-                        if (Magazine.CheckMagazine() == 0)
+                    break;
+
+                case FirearmFireType.COCK:
+
+                    if (isCocking) return;
+
+                    else if (!isCocked) { StartCock(); return; }
+
+                    if(Magazine.CurrentMagazineCount <= 0)
+                    {
+                        if (Input.GetMouseButtonDown(0) && firearmSound)
                         {
-                            //if we have the firearm sound reference and we press teh left mouse button
-                            //*down*, call the play firing sound
-                            if (Input.GetMouseButtonDown(0) && firearmSound)
-                            {
-                                firearmSound.PlayDryFiringSound();
-                            }
-
-                            return;
+                            firearmSound.PlayDryFiringSound();
                         }
 
-                        //if we're cocking
-                        if (isCocking)
-                        {
-                            return;
-                        }
+                        return;
+                    }
 
-                        //if we'te havent cocked, start doing so!
-                        else if (!isCocked)
-                        {
-                            StartCock();
-                            return;
-                        }
+                    if (leftMouseInput && isCocked) { isCocked = false; StartAttack(); }
 
-                        //if were; not shooting, not cocking and we have cocked the firearm,
-                        //and we press the l-mouse button
-                        //uncock the weapon and start firing!
-                        if (leftMouseInput && isCocked)
-                        {
-                            isCocked = false;
-
-                            StartAttack();
-                        }
-
-                        break;
-                }
+                    break;
             }
         }
 
-        //starts shooting
+        #region Attack Functions
+
         private void StartAttack()
         {
             isAttacking = true;
 
-            //shoot immedietly, as this is a gun
-            Attack();
-
-            //if we have the firearm sound reference, call the play firing sound
             if (firearmSound) firearmSound.PlayFiringSound();
             
-            //if we have the firearm fx reference, play the bullet and muzzle effects
-            if (firearmFX)
-            {
-                firearmFX.PlayBulletEffect();
-                firearmFX.PlayMuzzleEffect();
-            }
+            if (firearmFX) { firearmFX.PlayBulletEffect(); firearmFX.PlayMuzzleEffect(); }
 
-            //if we have the firearm functions reference
             if (firearmFunctionAnimation) firearmFunctionAnimation.PlayFirearmUnCock();
 
+            Attack();
 
             //invoke end shoot after our rate of fire
             Invoke(nameof(EndAttack), 1 / firearmAttackRate);
         }
 
-        //shoots!
         private void Attack()
         {
             //call the hit function, passing through the player camera
             Hit(playerCamera);
 
-            //i think i wanna add an ammo usage variable in teh future, but idk yet.
-            Magazine.UseAmmo(1);
+            //remove ammo from the mag
+            Magazine.DepleteAmmoFromMagazine(1);
 
             //if we have the camera and weapon recoil references, call the recoil method on them too
-            if (cameraRecoil && weaponRecoil)
-            {
-                cameraRecoil.Recoil();
-                weaponRecoil.Recoil();
-            }
+            if (cameraRecoil && weaponRecoil) { cameraRecoil.Recoil(); weaponRecoil.Recoil(); }
         }
 
-        //ends shooting
-        private void EndAttack()
-        {
-            isAttacking = false;
-        }
+        private void EndAttack() => isAttacking = false;
 
         private void Hit(Transform point)
         {
@@ -354,6 +246,10 @@ namespace com.limphus.retro_survival_shooter
                 if (damageable != null) damageable.Damage(firearmDamage);
             }
         }
+
+        #endregion
+
+        #region Other Functions
 
         private void Aim(bool b)
         {
@@ -373,9 +269,6 @@ namespace com.limphus.retro_survival_shooter
         public FirearmState GetFirearmState()
         {
             if (isCocking) return FirearmState.COCKING;
-
-            //else if (!infiniteAmmo) { }
-
             else if (Magazine.IsReloading) return FirearmState.RELOADING;
             else if (isAiming && !isAttacking) return FirearmState.AIMING;
             if (isAttacking && isAiming) return FirearmState.AIMATTACK;
@@ -383,47 +276,20 @@ namespace com.limphus.retro_survival_shooter
             else return FirearmState.IDLE;
         }
 
-        //starts cocking
         private void StartCock()
         {
-            //set isCocking to true and invoke our cock method
             isCocking = true;
 
-            //if we have the weapon sway reference, call the cock method on it too
             if (firearmSway) firearmSway.Cock(isCocking);
-
-            //if we have the firearm sound reference, call the play cocking sound
             if (firearmSound) firearmSound.PlayCockingSound();
-
-            //if we have the firearm functions reference
             if (firearmFunctionAnimation) firearmFunctionAnimation.PlayFirearmCock();
 
             Invoke(nameof(Cock), cockTime);
         }
 
-        private void Cock()
-        {
-            //cock our gun!
-            isCocked = true; EndCock();
-        }
-
-        //ends cocking
-        private void EndCock()
-        {
-            //set isCocking to false
-            isCocking = false;
-
-            //if we have the weapon sway reference, call the cock method on it too
-            if (firearmSway) firearmSway.Cock(isCocking);
-        }
-
-        //heh
-        private void InterruptCock()
-        {
-            CancelInvoke(nameof(Cock));
-
-            EndCock();
-        }
+        private void Cock() { isCocked = true; EndCock(); }
+        private void EndCock() { isCocking = false; if (firearmSway) firearmSway.Cock(isCocking); }
+        private void InterruptCock() { CancelInvoke(nameof(Cock)); EndCock(); }
 
         //a method to interrupt the firearm functions
         public void Interrupt()
@@ -437,5 +303,7 @@ namespace com.limphus.retro_survival_shooter
                 if (isCocking) InterruptCock();
             }
         }
+
+        #endregion
     }
 }

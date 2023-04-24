@@ -11,6 +11,21 @@ namespace com.limphus.retro_survival_shooter
         public static readonly int PISTOL_AMMO_MAX = 18;
         
         /// <summary>
+        /// Returns the max ammo capacity based on the ammo type.
+        /// </summary>
+        /// <param name="ammo">The ammo type to specify.</param>
+        /// <returns></returns>
+        public static int GetMaxAmmo(AmmoType ammo)
+        {
+            switch (ammo)
+            {
+                case AmmoType.PISTOL: return PISTOL_AMMO_MAX;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
         /// Resets all ammo types back to 0.
         /// </summary>
         public static void ResetAmmo()
@@ -23,12 +38,11 @@ namespace com.limphus.retro_survival_shooter
         /// </summary>
         /// <param name="ammo">This is the ammo we want to set.</param>
         /// <param name="amount">This is the amount we want to set the ammo to.</param>
-        /// <param name="ammoMax">This is the maximum amount that the ammo can be at.</param>
-        public static void SetAmmo(AmmoType ammo, int amount, int ammoMax) 
+        public static void SetAmmo(AmmoType ammo, int amount) 
         {
             switch (ammo)
             {
-                case AmmoType.PISTOL: PISTOL_AMMO = amount; PISTOL_AMMO = Mathf.Clamp(PISTOL_AMMO, 0, ammoMax); break;
+                case AmmoType.PISTOL: PISTOL_AMMO = amount; PISTOL_AMMO = Mathf.Clamp(PISTOL_AMMO, 0, PISTOL_AMMO_MAX); break;
             }
         }
 
@@ -37,12 +51,11 @@ namespace com.limphus.retro_survival_shooter
         /// </summary>
         /// <param name="ammo">This is the ammo we want to increase.</param>
         /// <param name="amount">This is the amount we want to add to the ammo.</param>
-        /// <param name="ammoMax">This is the maximum amount that the ammo can be at.</param>
-        public static void AddAmmo(AmmoType ammo, int amount, int ammoMax) 
+        public static void AddAmmo(AmmoType ammo, int amount) 
         {
             switch (ammo)
             {
-                case AmmoType.PISTOL: PISTOL_AMMO += amount; PISTOL_AMMO = Mathf.Clamp(PISTOL_AMMO, 0, ammoMax); break;
+                case AmmoType.PISTOL: PISTOL_AMMO += amount; PISTOL_AMMO = Mathf.Clamp(PISTOL_AMMO, 0, PISTOL_AMMO_MAX); break;
             }
         }
         
@@ -51,12 +64,11 @@ namespace com.limphus.retro_survival_shooter
         /// </summary>
         /// <param name="ammo">This is the ammo we want to decrease.</param>
         /// <param name="amount">This is the amount we want to remove from the ammo.</param>
-        /// <param name="ammoMax">This is the maximum amount that the ammo can be at.</param>
-        public static void RemoveAmmo(AmmoType ammo, int amount, int ammoMax) 
+        public static void RemoveAmmo(AmmoType ammo, int amount) 
         {
             switch (ammo)
             {
-                case AmmoType.PISTOL: PISTOL_AMMO -= amount; PISTOL_AMMO = Mathf.Clamp(PISTOL_AMMO, 0, ammoMax); break;
+                case AmmoType.PISTOL: PISTOL_AMMO -= amount; PISTOL_AMMO = Mathf.Clamp(PISTOL_AMMO, 0, PISTOL_AMMO_MAX); break;
             }
         }
 
@@ -70,6 +82,23 @@ namespace com.limphus.retro_survival_shooter
             switch (ammo)
             {
                 case AmmoType.PISTOL: if (PISTOL_AMMO > 0) return true; else return false;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// Checks if we have more than the amount of a specified ammo remaining.
+        /// </summary>
+        /// <param name="ammo">The ammo we want to check.</param>
+        /// <param name="amount">The amount we want to check.</param>
+        /// <returns></returns>
+        public static bool HasAmmo(AmmoType ammo, int amount)
+        {
+            switch (ammo)
+            {
+                case AmmoType.PISTOL: if (PISTOL_AMMO >= amount) return true; else return false;
             }
 
             return false;
