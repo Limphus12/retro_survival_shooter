@@ -14,7 +14,6 @@ namespace com.limphus.retro_survival_shooter
         public Transform transform;
     }
 
-
     public class PlayerSounds : SoundHandler
     {
         [Header("Audio - Footsteps")]
@@ -27,6 +26,10 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("Audio - Breathing")]
         [SerializeField] private AudioSource breathingSource;
+
+        [Header("Audio - Interacting")]
+        [SerializeField] private SoundStruct eatingSounds;
+        [SerializeField] private SoundStruct drinkingSounds, medicineSounds, ammoSounds;
 
         private float footstepTimer = 0f;
         private float CurrentOffset()
@@ -50,13 +53,43 @@ namespace com.limphus.retro_survival_shooter
 
         private PlayerController playerController;
         private PlayerStats playerStats;
+        private PlayerInteraction playerInteraction;
 
         private void Awake() => Init();
 
         private void Init()
         {
-            playerController = gameObject.GetComponent<PlayerController>();
-            playerStats = gameObject.GetComponent<PlayerStats>();
+            playerController = GetComponent<PlayerController>();
+            playerStats = GetComponent<PlayerStats>();
+            playerInteraction = GetComponent<PlayerInteraction>();
+        }
+
+        private void Start()
+        {
+            playerInteraction.OnInteract += PlayerInteraction_OnInteract;
+        }
+
+        private void OnEnable()
+        {
+            playerInteraction.OnInteract += PlayerInteraction_OnInteract;
+        }
+
+        private void OnDisable()
+        {
+            playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
+        }
+
+        private void OnDestroy()
+        {
+            playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
+        }
+
+        private void PlayerInteraction_OnInteract(object sender, PlayerInteraction.OnInteractEventArgs e)
+        {
+            Food food = e.i.GetComponent<Food>(); if (food) { PlayEatingSounds(); return; }
+            Beverage beverage = e.i.GetComponent<Beverage>(); if (beverage) { PlayDrinkingSounds(); return; }
+            Medicine medicine = e.i.GetComponent<Medicine>(); if (medicine) { PlayMedicineSounds(); return; }
+            Ammo ammo = e.i.GetComponent<Ammo>(); if (ammo) { PlayAmmoSounds(); return; }
         }
 
         private void Update()
@@ -87,19 +120,19 @@ namespace com.limphus.retro_survival_shooter
                     {
                         case PlayerMovementState.WALKING:
 
-                            PlayFootstepSound(walkSounds);
+                            PlayRandomSound(walkSounds);
 
                             break;
 
                         case PlayerMovementState.RUNNING:
 
-                            PlayFootstepSound(runSounds);
+                            PlayRandomSound(runSounds);
 
                             break;
 
                         case PlayerMovementState.CROUCHING:
 
-                            PlayFootstepSound(crouchSounds);
+                            PlayRandomSound(crouchSounds);
 
                             break;
                     }
@@ -109,12 +142,17 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        private void PlayFootstepSound(SoundStruct sounds)
+        private void PlayRandomSound(SoundStruct sounds)
         {
             if (sounds.clips.Length == 0) return;
 
             //pick a random walk sound out of the array, and play one shot of it...
             PlayOneShotSound(sounds.clips[Random.Range(0, sounds.clips.Length)], sounds.transform.position, sounds.maxDistance, sounds.pitch);
         }
+
+        private void PlayEatingSounds() => PlayRandomSound(eatingSounds);
+        private void PlayDrinkingSounds() => PlayRandomSound(drinkingSounds);
+        private void PlayMedicineSounds() => PlayRandomSound(medicineSounds);
+        private void PlayAmmoSounds() => PlayRandomSound(ammoSounds);
     }
 }

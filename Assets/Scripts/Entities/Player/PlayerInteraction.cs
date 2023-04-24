@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -23,6 +24,12 @@ namespace com.limphus.retro_survival_shooter
         private bool isInteracting;
 
         private IInteractable interactable;
+
+        private InteractableItem interactableItem;
+
+        public class OnInteractEventArgs : EventArgs { public InteractableItem i; }
+
+        public event EventHandler<OnInteractEventArgs> OnInteract;
 
         private void Awake() => Init();
 
@@ -60,6 +67,8 @@ namespace com.limphus.retro_survival_shooter
             {
                 //attempt to grab the interactable conmponent
                 interactable = hit.transform.GetComponent<IInteractable>();
+
+                interactableItem = hit.transform.GetComponent<InteractableItem>();
             }
 
             else ResetInteract();
@@ -77,8 +86,8 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        private void Interact() { interactable.Interact(); ResetInteract(); }
+        private void Interact() { interactable.Interact(); OnInteract?.Invoke(this, new OnInteractEventArgs { i = interactableItem }); ResetInteract(); }
 
-        private void ResetInteract() => interactable = null;
+        private void ResetInteract() { interactable = null; interactableItem = null; }
     }
 }

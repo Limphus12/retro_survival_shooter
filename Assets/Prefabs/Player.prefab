@@ -4910,6 +4910,7 @@ Transform:
   m_Children:
   - {fileID: 2424475446836466769}
   - {fileID: 1769075431886854843}
+  - {fileID: 2511542522684109572}
   m_Father: {fileID: 5358056577461103854}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5332,6 +5333,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1900208289525518920
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2511542522684109572}
+  m_Layer: 0
+  m_Name: ConsumePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2511542522684109572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900208289525518920}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3672617580820991358}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2075584173704455334
 GameObject:
   m_ObjectHideFlags: 0
@@ -9462,6 +9493,57 @@ MonoBehaviour:
     pitch: 0.75
     transform: {fileID: 2424475446836466769}
   breathingSource: {fileID: 5919467638623215940}
+  eatingSounds:
+    clips:
+    - {fileID: 8300000, guid: bcddac839be48ad4faca60d65f7d33d3, type: 3}
+    - {fileID: 8300000, guid: 4df53a80120145b45ae99eef5e418c21, type: 3}
+    - {fileID: 8300000, guid: df49a361af8730a44af9f0e40931d24b, type: 3}
+    - {fileID: 8300000, guid: 0cb09c67d253aa2449bfa895f3dab623, type: 3}
+    - {fileID: 8300000, guid: 557e9a31b7df6b2418e371b2d1d3bb63, type: 3}
+    - {fileID: 8300000, guid: f5a90beb7fca2d242883d072b6d67fb3, type: 3}
+    - {fileID: 8300000, guid: ebca33e881af8c34d953d000463d65f0, type: 3}
+    - {fileID: 8300000, guid: 9690da179006e064aa38ecdcfbd72a2e, type: 3}
+    maxDistance: 5
+    pitch: 1
+    transform: {fileID: 2511542522684109572}
+  drinkingSounds:
+    clips:
+    - {fileID: 8300000, guid: a992d09c19154db47a5f2ecdd3c706cb, type: 3}
+    - {fileID: 8300000, guid: 51153caa1f0c6df449a9a4df992badfc, type: 3}
+    - {fileID: 8300000, guid: d18f2aa725a6d0349b5fc09e647e3862, type: 3}
+    - {fileID: 8300000, guid: 15ec3e6aa11590f4982de68aa747061e, type: 3}
+    - {fileID: 8300000, guid: 8b865a0c7155e664c8560e6359ffd9a1, type: 3}
+    - {fileID: 8300000, guid: 3df71f8ada6aa354b96fe6e707d3c6b4, type: 3}
+    - {fileID: 8300000, guid: 44c59c14b4d647b4c8b57e2b8e50bd7d, type: 3}
+    - {fileID: 8300000, guid: c36a178c2f6a72d4c906711079d292d7, type: 3}
+    maxDistance: 5
+    pitch: 1
+    transform: {fileID: 2511542522684109572}
+  medicineSounds:
+    clips:
+    - {fileID: 8300000, guid: 34b700d3fd336124b9d63d4236954868, type: 3}
+    maxDistance: 5
+    pitch: 1
+    transform: {fileID: 2511542522684109572}
+  ammoSounds:
+    clips:
+    - {fileID: 8300000, guid: 7279863a9d8804c40b254d0824ee6a3a, type: 3}
+    - {fileID: 8300000, guid: 9dcc4bc288ad0d3448555cf837e49e59, type: 3}
+    - {fileID: 8300000, guid: f880f22908f8b014b97ade29760d960b, type: 3}
+    - {fileID: 8300000, guid: 5c91c76ffb4e5064db697e436930a6f3, type: 3}
+    - {fileID: 8300000, guid: 8c875fe0e30b21340bd4894bc0f5865d, type: 3}
+    - {fileID: 8300000, guid: 65d0644a888a0574eba154f0130e39b2, type: 3}
+    - {fileID: 8300000, guid: 1d0fc8cb9302229458e29500f62ca3a6, type: 3}
+    - {fileID: 8300000, guid: d88205e3b828a0f479535dc4884993ba, type: 3}
+    - {fileID: 8300000, guid: 06408f5009a9db04bad6b11aa7618e16, type: 3}
+    - {fileID: 8300000, guid: 0c2854a30038b6f47b2f72f5601a67eb, type: 3}
+    - {fileID: 8300000, guid: 1cdb6dc079ad80b46b600eadcfc7c987, type: 3}
+    - {fileID: 8300000, guid: 6015eb7bd3148d3498d1547b2c00b9f3, type: 3}
+    - {fileID: 8300000, guid: 82c0362a23a470e4c876d648b21cf08c, type: 3}
+    - {fileID: 8300000, guid: b7e04dcf05ccc6a42ac193e00213df3d, type: 3}
+    maxDistance: 5
+    pitch: 1
+    transform: {fileID: 2511542522684109572}
 --- !u!1 &5358056577461103855
 GameObject:
   m_ObjectHideFlags: 0

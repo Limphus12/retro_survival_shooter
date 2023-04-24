@@ -700,7 +700,7 @@ MonoBehaviour:
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
-        placementChance: 0.0025
+        placementChance: 0.00175
         heightPlacementOffset: -0.01
         gridSize: 96
         gridMultiplier: 4
@@ -742,7 +742,7 @@ MonoBehaviour:
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
-        placementChance: 0.0025
+        placementChance: 0.00175
         heightPlacementOffset: -0.01
         gridSize: 96
         gridMultiplier: 4

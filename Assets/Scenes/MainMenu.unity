@@ -6593,7 +6593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1262529120276611571, guid: 01a353ee5ec09c1429d844c6106880b1, type: 3}
       propertyPath: timeMultiplier
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1262529120276611571, guid: 01a353ee5ec09c1429d844c6106880b1, type: 3}
       propertyPath: weathers.Array.data[1].particles

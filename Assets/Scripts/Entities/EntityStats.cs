@@ -40,7 +40,8 @@ namespace com.limphus.retro_survival_shooter
 
         //returns our current health
         //(maybe replace with events instead?)
-        public int GetCurrentHealth() => currentHealth;
+        public int GetCurrentHealth () => currentHealth;
+        public int GetMaxHealth() => maxHealth;
 
         //sets our current health
         public void SetCurrentHealth(int amount)
