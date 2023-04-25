@@ -55,7 +55,7 @@ namespace com.limphus.retro_survival_shooter
                 return;
             }
 
-            AssetLoop(gridSize, gridMultiplier, gridOffset, BiomeData.biomeData.assets, BiomeData.placementChance, BiomeData.heightPlacementOffset);
+            if (BiomeData.biomeData.assets != null) AssetLoop(gridSize, gridMultiplier, gridOffset, BiomeData.biomeData.assets, BiomeData.placementChance, BiomeData.heightPlacementOffset);
         }
 
         private void ClearAssets()

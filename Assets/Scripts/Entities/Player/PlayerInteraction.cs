@@ -12,9 +12,6 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private KeyCode interactKey = KeyCode.E;
         [SerializeField] private float interactionDistance = 2.0f;
 
-        [Space]
-        [SerializeField] private GameObject interactionUI;
-
         private PlayerController playerController;
         private PlayerInventory playerInventory;
         private PlayerStats playerStats;
@@ -23,9 +20,11 @@ namespace com.limphus.retro_survival_shooter
 
         private bool isInteracting;
 
-        private IInteractable interactable;
+        public IInteractable Interactable { get; private set; }
 
         private InteractableItem interactableItem;
+
+        public bool CanInteract { get; private set; }
 
         public class OnInteractEventArgs : EventArgs { public InteractableItem i; }
 
@@ -57,8 +56,7 @@ namespace com.limphus.retro_survival_shooter
 
             FindInteract();
 
-            if (interactable != null) CheckInteract();
-            else interactionUI.SetActive(false);
+            if (Interactable != null) CheckInteract();
         }
 
         private void FindInteract()
@@ -66,7 +64,7 @@ namespace com.limphus.retro_survival_shooter
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionDistance))
             {
                 //attempt to grab the interactable conmponent
-                interactable = hit.transform.GetComponent<IInteractable>();
+                Interactable = hit.transform.GetComponent<IInteractable>();
 
                 interactableItem = hit.transform.GetComponent<InteractableItem>();
             }
@@ -76,18 +74,18 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckInteract()
         {
-            if (!interactable.CanInteract()) interactionUI.SetActive(false);
+            if (!Interactable.CanInteract()) CanInteract = false;
 
-            else if (interactable.CanInteract())
+            else if (Interactable.CanInteract())
             {
-                interactionUI.SetActive(true);
+                CanInteract = true;
 
                 if (isInteracting) Interact();
             }
         }
 
-        private void Interact() { interactable.Interact(); OnInteract?.Invoke(this, new OnInteractEventArgs { i = interactableItem }); ResetInteract(); }
+        private void Interact() { Interactable.Interact(); OnInteract?.Invoke(this, new OnInteractEventArgs { i = interactableItem }); ResetInteract(); }
 
-        private void ResetInteract() { interactable = null; interactableItem = null; }
+        private void ResetInteract() { Interactable = null; interactableItem = null; }
     }
 }

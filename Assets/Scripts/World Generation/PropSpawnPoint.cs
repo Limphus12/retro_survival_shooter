@@ -15,6 +15,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [Tooltip("The amount of spawn attempts this will make")]
         [SerializeField] private int spawnAttempts;
+        [SerializeField] private float spawnDistance = 16f;
 
         [Space, SerializeField] private PropSpawnStruct[] props;
 
@@ -23,14 +24,28 @@ namespace com.limphus.retro_survival_shooter
 
         [Tooltip("Applies a random force to the spawned prop, granted it has a rigidbody")]
         [Space, SerializeField] private bool applyRandomForce;
+        [SerializeField] private float forceMulti = 1f;
+
+        [Space, SerializeField] private bool randomRotation;
 
         private GameObject prop;
 
         private RenderingHandler renderingHandler;
 
-        private void Start() => SpawnProp();
+        private bool spawnedProps = false;
 
-        private void SpawnProp()
+        private void Update()
+        {
+            float distance = Vector3.Distance(GameManager.Player.transform.position, transform.position);
+
+            if (distance <= spawnDistance && !spawnedProps)
+            {
+                spawnedProps = true;
+                SpawnProps();
+            }
+        }
+
+        private void SpawnProps()
         {
             if (props.Length == 0) return;
 
@@ -48,7 +63,12 @@ namespace com.limphus.retro_survival_shooter
 
                         float j = Random.Range(0f, 100f);
 
-                        if (j <= props[k].chanceToSpawn) prop = Instantiate(props[k].prop, transform.position, transform.rotation, transform);
+                        Quaternion targetRotation;
+
+                        if (randomRotation) targetRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+                        else targetRotation = transform.rotation;
+
+                        if (j <= props[k].chanceToSpawn) prop = Instantiate(props[k].prop, transform.position, targetRotation, transform);
                     }
                 }
 
@@ -60,7 +80,12 @@ namespace com.limphus.retro_survival_shooter
 
                     float j = Random.Range(0f, 100f);
 
-                    if (j <= props[k].chanceToSpawn) prop = Instantiate(props[k].prop, transform.position, transform.rotation, transform);
+                    Quaternion targetRotation;
+
+                    if (randomRotation) targetRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+                    else targetRotation = transform.rotation;
+
+                    if (j <= props[k].chanceToSpawn) prop = Instantiate(props[k].prop, transform.position, targetRotation, transform);
                 }
 
                 if (prop && applyRandomForce) ApplyRandomForce();
@@ -77,7 +102,7 @@ namespace com.limphus.retro_survival_shooter
             //attempt to grab the rigidbody and chuck it in a random direction
             Rigidbody rb = prop.GetComponent<Rigidbody>();
 
-            if (rb) rb.AddExplosionForce(100f, prop.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)), 2f);
+            if (rb) rb.AddExplosionForce(100f * forceMulti, prop.transform.position + new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)), 2f);
         }
     }
 }

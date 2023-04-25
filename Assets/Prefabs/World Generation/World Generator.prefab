@@ -700,7 +700,7 @@ MonoBehaviour:
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: de45e4e8074bc2a43ac192b6f152f740, type: 2}
-        placementChance: 0.00175
+        placementChance: 0.0018
         heightPlacementOffset: -0.01
         gridSize: 96
         gridMultiplier: 4
@@ -826,8 +826,8 @@ MonoBehaviour:
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: 55e93523768e16d4ba51ebfa7fe0535b, type: 2}
-        placementChance: 0.0025
-        heightPlacementOffset: -0.5
+        placementChance: 0.01
+        heightPlacementOffset: -0.75
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 36
@@ -851,7 +851,7 @@ MonoBehaviour:
         gridOffset: 32
         rightAngles: 0
         flatLand: 0
-  - name: Ruined Battlefield
+  - name: Ruined Military Base
     terrainData:
       noiseScale: 16
       octaves: 4
@@ -862,13 +862,13 @@ MonoBehaviour:
       terrainMaterial: {fileID: 2100000, guid: 5fdc579de7f0ef34283116401149e404, type: 2}
       colorChance: {x: 25, y: 50, z: 75}
     biomeData:
-      biomeData: {fileID: 11400000, guid: 8336768904d3749458b06339f5ebf57f, type: 2}
-      placementChance: 0.025
+      biomeData: {fileID: 11400000, guid: f51e815290fa724489e87dde832b9341, type: 2}
+      placementChance: 0.1
       heightPlacementOffset: -0.1
     structureData:
       primaryStructures:
         structures: {fileID: 11400000, guid: fd4226047c982a840b9ebebef509cda7, type: 2}
-        placementChance: 0.003
+        placementChance: 0.006
         heightPlacementOffset: -0.1
         gridSize: 96
         gridMultiplier: 4
@@ -876,18 +876,60 @@ MonoBehaviour:
         rightAngles: 0
         flatLand: 0
       secondaryStructures:
-        structures: {fileID: 0}
+        structures: {fileID: 11400000, guid: 6e5be6c1a1501a642bfddeefb76f8090, type: 2}
         placementChance: 0.01
-        heightPlacementOffset: -0.5
+        heightPlacementOffset: -0.1
         gridSize: 96
         gridMultiplier: 4
-        gridOffset: 32
+        gridOffset: 34
+        rightAngles: 1
+        flatLand: 1
+      tertiaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.001
+        heightPlacementOffset: -0.01
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 34
+        rightAngles: 0
+        flatLand: 1
+  - name: Military Checkpoint
+    terrainData:
+      noiseScale: 16
+      octaves: 4
+      persistance: 0.5
+      lacunarity: 2
+      heightMultiplier: 4
+      normalizeMode: 0
+      terrainMaterial: {fileID: 2100000, guid: f1319808aeed9964f82e6530a71da28b, type: 2}
+      colorChance: {x: 25, y: 50, z: 75}
+    biomeData:
+      biomeData: {fileID: 11400000, guid: c4746a0354013a149b5ebb4a889fdfde, type: 2}
+      placementChance: 0.01
+      heightPlacementOffset: -0.1
+    structureData:
+      primaryStructures:
+        structures: {fileID: 11400000, guid: 6e5be6c1a1501a642bfddeefb76f8090, type: 2}
+        placementChance: 0.01
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 36
+        rightAngles: 1
+        flatLand: 1
+      secondaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.002
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 16
         rightAngles: 0
         flatLand: 0
       tertiaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.05
-        heightPlacementOffset: -0.1
+        structures: {fileID: 11400000, guid: aee311d6a7f8a704f897308609265eeb, type: 2}
+        placementChance: 0.0025
+        heightPlacementOffset: -0.05
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 32

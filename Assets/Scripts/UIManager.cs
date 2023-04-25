@@ -20,7 +20,7 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("UI - Text")]
         [SerializeField] private TextMeshProUGUI itemUINameText;
-        [SerializeField] private TextMeshProUGUI itemUIAmountText, worldBorderText;
+        [SerializeField] private TextMeshProUGUI itemUIAmountText, worldBorderText, interactionText;
 
         [Space]
         [SerializeField] private TextMeshProUGUI healthText;
@@ -31,6 +31,7 @@ namespace com.limphus.retro_survival_shooter
 
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
+        private PlayerInteraction playerInteraction;
         
         // Start is called before the first frame update
         void Start()
@@ -38,6 +39,7 @@ namespace com.limphus.retro_survival_shooter
             //make sure we have our playerstats
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
             if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+            if (!playerInteraction) playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
 
             //need to subscribe to events in the playerstats class.
             playerStats.OnHealthChanged += PlayerStatsOnHealthChanged;
@@ -57,6 +59,8 @@ namespace com.limphus.retro_survival_shooter
         {
             //make sure we have our playerstats
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+            if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+            if (!playerInteraction) playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
 
             //need to subscribe to events in the playerstats class.
             playerStats.OnHealthChanged += PlayerStatsOnHealthChanged;
@@ -75,6 +79,8 @@ namespace com.limphus.retro_survival_shooter
         {
             //make sure we have our playerstats
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+            if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+            if (!playerInteraction) playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
 
             //need to unsubscribe to events in the playerstats class.
             playerStats.OnHealthChanged -= PlayerStatsOnHealthChanged;
@@ -93,6 +99,8 @@ namespace com.limphus.retro_survival_shooter
         {
             //make sure we have our playerstats
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+            if (!playerInventory) playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+            if (!playerInteraction) playerInteraction = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInteraction>();
 
             //need to unsubscribe to events in the playerstats class.
             playerStats.OnHealthChanged -= PlayerStatsOnHealthChanged;
@@ -124,6 +132,17 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckUI()
         {
+            if (playerInteraction && interactionText)
+            {
+                string text = "";
+
+                if (playerInteraction.Interactable == null) text = "";
+                else if (playerInteraction.CanInteract) text = "[E]";
+                else if (!playerInteraction.CanInteract) text = "Cannot Interact";
+
+                interactionText.text = text;
+            }
+
             if (playerInventory && itemUINameText && itemUIAmountText)
             {
                 GameObject item = playerInventory.GetCurrentItem();
@@ -152,7 +171,7 @@ namespace com.limphus.retro_survival_shooter
 
                             if (firearm.Magazine.InfinteClip) text += "Inf."; else text += firearm.Magazine.CurrentMagazineCount;
 
-                            if (firearm.Magazine.InfinteAmmo) text += " / Inf."; else text += " / " + PlayerAmmo.GetMaxAmmo(firearm.Magazine.AmmoType);
+                            if (firearm.Magazine.InfinteAmmo) text += " / Inf."; else text += " / " + PlayerAmmo.GetAmmo(firearm.Magazine.AmmoType);
 
                             itemUIAmountText.text = text; return;
                         }
@@ -183,7 +202,7 @@ namespace com.limphus.retro_survival_shooter
 
                         else
                         {
-                            itemUIAmountText.text = "";
+                            itemUIAmountText.text = "Inf.";
                         }
                     }
                 }

@@ -170,7 +170,7 @@ namespace com.limphus.retro_survival_shooter
                                 {
                                     if (assetRemover.AssetTag == "StructAsset" && flatLand)
                                     {
-                                        structureAreaStruct.structurePositions.Add(assetRemover.transform.position);
+                                        structureAreaStruct.structurePositions.Add(assetRemover.transform.position + assetRemover.GetOffset());
                                         structureAreaStruct.structureAreas.Add(assetRemover.GetBoxExtents());
                                     }
                                 }

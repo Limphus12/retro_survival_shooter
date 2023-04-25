@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using com.limphus.utilities;
+using UnityEngine.Rendering;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -11,8 +11,8 @@ namespace com.limphus.retro_survival_shooter
         public string name;
 
         [Space]
-        public UnityEngine.Gradient timeGradient;
-        public UnityEngine.Gradient skyGradient, equatorGradient, groundGradient;
+        public Gradient timeGradient;
+        public Gradient skyGradient, equatorGradient, groundGradient;
 
         [Space]
         public ParticleSystem particles;
@@ -24,6 +24,8 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         public AudioSource weatherSound;
         public float volume;
+
+        //public Volume postProcessingVolume; ADD LATER, AFTER DEADLINE!
     }
 
     public class GameManager : MonoBehaviour
@@ -81,8 +83,11 @@ namespace com.limphus.retro_survival_shooter
 
             currentWeather = weathers[Random.Range(0, weathers.Length)];
 
-            //setting our ammo to full for now...
-            PlayerAmmo.SetAmmo(AmmoType.PISTOL, PlayerAmmo.GetMaxAmmo(AmmoType.PISTOL));
+            //how to access the post processing volume
+            //currentWeather.postProcessingVolume.profile.
+
+            //setting our ammo to half full for now...
+            PlayerAmmo.SetAmmo(AmmoType.PISTOL, PlayerAmmo.GetMaxAmmo(AmmoType.PISTOL) / 2);
         }
 
         private void Start() => ChangeWeather();

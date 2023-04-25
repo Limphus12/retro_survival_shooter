@@ -7,6 +7,7 @@ namespace com.limphus.retro_survival_shooter
     public class AssetRemover : MonoBehaviour
     {
         [SerializeField] private Vector3 boxExtents = Vector3.one;
+        [SerializeField] private Vector3 offset = Vector3.zero;
 
         [SerializeField] private string assetTag;
         public string AssetTag { get; private set; }
@@ -21,36 +22,35 @@ namespace com.limphus.retro_survival_shooter
         // Start is called before the first frame update
         void Start()
         {
-            Collider[] collisions = Physics.OverlapBox(transform.position, boxExtents);
+            Collider[] collisions = Physics.OverlapBox(transform.position + offset, boxExtents, transform.rotation);
 
             if (collisions.Length != 0)
             {
                 int i = 0;
                 foreach (Collider col in collisions)
                 {
-                    if (col.CompareTag(AssetTag))
+                    //if the collider matches the asset tag and it's not our parent
+                    if (col.CompareTag(AssetTag) && transform.parent != col.transform)
                     {
                         Destroy(col.gameObject);
 
                         i++;
                     }
                 }
-
-                //Debug.Log("Removed " + i + " " + assetTag + "s");
             }
 
-            //destroy this object after removing shit
             Destroy(gameObject);
         }
 
         public Vector3 GetBoxExtents() => boxExtents;
+        public Vector3 GetOffset() => offset;
 
         private void OnDrawGizmos()
         {
             if (debug)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireCube(transform.position, boxExtents);
+                Gizmos.DrawWireCube(transform.position + offset, boxExtents);
             }
         }
     }

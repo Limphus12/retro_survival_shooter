@@ -30,6 +30,18 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected float cockingTiltSmooth = 8.0f;
         [SerializeField] protected float cockingTiltAmount = 4.0f, cockingTiltMaximum = 8.0f;
 
+        [Header("Attributes - Firearm Aim Cocking Settings")]
+        [SerializeField] protected Vector3 aimCockingPosition;
+        [SerializeField] protected Quaternion aimCockingRotation;
+
+        [Space]
+        [SerializeField] protected float aimCockingSwaySmooth = 4.0f;
+        [SerializeField] protected float aimCockingSwayAmount = 0.0f, aimCockingSwayMaximum = 2.0f;
+
+        [Space]
+        [SerializeField] protected float aimCockingTiltSmooth = 8.0f;
+        [SerializeField] protected float aimCockingTiltAmount = 4.0f, aimCockingTiltMaximum = 8.0f;
+
         protected bool isReloading, isCocking;
 
         public void Reload(bool b) => isReloading = b;
@@ -42,10 +54,14 @@ namespace com.limphus.retro_survival_shooter
             {
                 Sway(runningSwayAmount, runningSwayMaximum, runningSwaySmooth, runningPosition);
             }
-            
+
             else if (isReloading) Sway(reloadingSwayAmount, reloadingSwayMaximum, reloadingSwaySmooth, reloadingPosition);
 
-            else if (isCocking) Sway(cockingSwayAmount, cockingSwayMaximum, cockingSwaySmooth, cockingPosition);
+            else if (isCocking)
+            {
+                if (!isAiming) Sway(cockingSwayAmount, cockingSwayMaximum, cockingSwaySmooth, cockingPosition);
+                else if (isAiming) Sway(aimCockingSwayAmount, aimCockingSwayMaximum, aimCockingSwaySmooth, aimCockingPosition);
+            }
 
             else if (!isAiming && !isCocking) Sway(defaultSwayAmount, defaultSwayMaximum, defaultSwaySmooth, defaultPosition);
 
@@ -61,7 +77,11 @@ namespace com.limphus.retro_survival_shooter
 
             else if (isReloading) Tilt(reloadingTiltAmount, reloadingTiltMaximum, reloadingTiltSmooth, reloadingRotation);
 
-            else if (isCocking) Tilt(cockingTiltAmount, cockingTiltMaximum, cockingTiltSmooth, cockingRotation);
+            else if (isCocking)
+            {
+                if (!isAiming) Tilt(cockingTiltAmount, cockingTiltMaximum, cockingTiltSmooth, cockingRotation);
+                else if (isAiming) Tilt(aimCockingTiltAmount, aimCockingTiltMaximum, aimCockingTiltSmooth, aimCockingRotation);
+            }
 
             else if (!isAiming && !isCocking) Tilt(defaultTiltAmount, defaultTiltMaximum, defaultTiltSmooth, defaultRotation);
 

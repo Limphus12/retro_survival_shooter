@@ -819,7 +819,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5160590522330889341}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.1, y: -0.1, z: 0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -862,7 +862,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firearmData: {fileID: 11400000, guid: bdbaad293f52bb04a986d6ec2f6b2274, type: 2}
-  infiniteAmmo: 0
 --- !u!114 &6848814638209683725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -876,7 +875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammoType: 0
-  infiniteAmmo: 1
+  infiniteAmmo: 0
   infiniteClip: 0
   maxMagazineSize: 6
   singleReloads: 1
@@ -933,7 +932,7 @@ MonoBehaviour:
   runningTiltSmooth: 5
   runningTiltAmount: 5
   runningTiltMaximum: 10
-  aimingPosition: {x: 0, y: -0.067, z: 0.05}
+  aimingPosition: {x: 0, y: -0.067, z: 0.06}
   aimingRotation: {x: 0, y: 0, z: 0, w: 1}
   aimingSwaySmooth: 8
   aimingSwayAmount: 0
@@ -958,6 +957,14 @@ MonoBehaviour:
   cockingTiltSmooth: 5
   cockingTiltAmount: 5
   cockingTiltMaximum: 10
+  aimCockingPosition: {x: 0.02, y: -0.067, z: 0.06}
+  aimCockingRotation: {x: 0, y: 0, z: 0, w: 0}
+  aimCockingSwaySmooth: 8
+  aimCockingSwayAmount: 0
+  aimCockingSwayMaximum: 2
+  aimCockingTiltSmooth: 5
+  aimCockingTiltAmount: 5
+  aimCockingTiltMaximum: 10
 --- !u!114 &6977410469014900902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -970,6 +977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c1ff17d2b6f344f9a79cae329f8bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!95 &5160590522330889342
 Animator:
   serializedVersion: 3
@@ -1018,6 +1026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d5562e6966159241b7cc41e03fbd939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
 --- !u!1 &6947028865212514830
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ namespace com.limphus.retro_survival_shooter
     public class PlayerAmmo : MonoBehaviour
     {
         public static int PISTOL_AMMO;
-        public static readonly int PISTOL_AMMO_MAX = 18;
+        public static readonly int PISTOL_AMMO_MAX = 24;
         
         /// <summary>
         /// Returns the max ammo capacity based on the ammo type.
@@ -20,6 +20,16 @@ namespace com.limphus.retro_survival_shooter
             switch (ammo)
             {
                 case AmmoType.PISTOL: return PISTOL_AMMO_MAX;
+            }
+
+            return 0;
+        }
+
+        public static int GetAmmo(AmmoType ammo)
+        {
+            switch (ammo)
+            {
+                case AmmoType.PISTOL: return PISTOL_AMMO;
             }
 
             return 0;
