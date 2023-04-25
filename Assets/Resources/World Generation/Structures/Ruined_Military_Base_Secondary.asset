@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ruined_Military_Base_Secondary
   m_EditorClassIdentifier: 
   assets:
-  - {fileID: 8968367754644053805, guid: 9cd258be8f456a74ead4879c31429dd3, type: 3}
-  - {fileID: 5526241313595988186, guid: 0269791c7a9a7664a992c31087115d60, type: 3}
+  - {fileID: 5567984208027476449, guid: 566de636534954a4aaf6b0a34b90b5ee, type: 3}
+  - {fileID: 242112888217792496, guid: 5e3646273fb58624ea702e59e2a844c8, type: 3}

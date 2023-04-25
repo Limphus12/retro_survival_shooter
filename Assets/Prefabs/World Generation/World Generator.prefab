@@ -783,14 +783,14 @@ MonoBehaviour:
       heightPlacementOffset: -0.1
     structureData:
       primaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.5
-        heightPlacementOffset: -0.05
+        structures: {fileID: 11400000, guid: 059a4c8a25bca1d418d60ec33fc93411, type: 2}
+        placementChance: 0.0025
+        heightPlacementOffset: -0.1
         gridSize: 96
         gridMultiplier: 4
-        gridOffset: 32
-        rightAngles: 0
-        flatLand: 0
+        gridOffset: 36
+        rightAngles: 1
+        flatLand: 1
       secondaryStructures:
         structures: {fileID: 0}
         placementChance: 0.5
@@ -867,74 +867,32 @@ MonoBehaviour:
       heightPlacementOffset: -0.1
     structureData:
       primaryStructures:
-        structures: {fileID: 11400000, guid: fd4226047c982a840b9ebebef509cda7, type: 2}
-        placementChance: 0.006
-        heightPlacementOffset: -0.1
-        gridSize: 96
-        gridMultiplier: 4
-        gridOffset: 32
-        rightAngles: 0
-        flatLand: 0
-      secondaryStructures:
         structures: {fileID: 11400000, guid: 6e5be6c1a1501a642bfddeefb76f8090, type: 2}
-        placementChance: 0.01
-        heightPlacementOffset: -0.1
-        gridSize: 96
-        gridMultiplier: 4
-        gridOffset: 34
-        rightAngles: 1
-        flatLand: 1
-      tertiaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.001
-        heightPlacementOffset: -0.01
-        gridSize: 96
-        gridMultiplier: 4
-        gridOffset: 34
-        rightAngles: 0
-        flatLand: 1
-  - name: Military Checkpoint
-    terrainData:
-      noiseScale: 16
-      octaves: 4
-      persistance: 0.5
-      lacunarity: 2
-      heightMultiplier: 4
-      normalizeMode: 0
-      terrainMaterial: {fileID: 2100000, guid: f1319808aeed9964f82e6530a71da28b, type: 2}
-      colorChance: {x: 25, y: 50, z: 75}
-    biomeData:
-      biomeData: {fileID: 11400000, guid: c4746a0354013a149b5ebb4a889fdfde, type: 2}
-      placementChance: 0.01
-      heightPlacementOffset: -0.1
-    structureData:
-      primaryStructures:
-        structures: {fileID: 11400000, guid: 6e5be6c1a1501a642bfddeefb76f8090, type: 2}
-        placementChance: 0.01
-        heightPlacementOffset: -0.1
-        gridSize: 96
-        gridMultiplier: 4
-        gridOffset: 36
-        rightAngles: 1
-        flatLand: 1
-      secondaryStructures:
-        structures: {fileID: 0}
-        placementChance: 0.002
+        placementChance: 0.007
         heightPlacementOffset: -0.1
         gridSize: 96
         gridMultiplier: 4
         gridOffset: 16
         rightAngles: 0
         flatLand: 0
-      tertiaryStructures:
-        structures: {fileID: 11400000, guid: aee311d6a7f8a704f897308609265eeb, type: 2}
-        placementChance: 0.0025
-        heightPlacementOffset: -0.05
+      secondaryStructures:
+        structures: {fileID: 11400000, guid: fd4226047c982a840b9ebebef509cda7, type: 2}
+        placementChance: 0.006
+        heightPlacementOffset: -0.1
         gridSize: 96
         gridMultiplier: 4
-        gridOffset: 32
+        gridOffset: 36
+        rightAngles: 1
+        flatLand: 1
+      tertiaryStructures:
+        structures: {fileID: 0}
+        placementChance: 0.005
+        heightPlacementOffset: -0.1
+        gridSize: 96
+        gridMultiplier: 4
+        gridOffset: 36
         rightAngles: 0
-        flatLand: 0
+        flatLand: 1
   terrainGenerator: {fileID: 8224924336892737701}
   biomeGenerator: {fileID: 8224924335699164626}
   structureGenerator: {fileID: 8224924336919173151}

@@ -101,11 +101,11 @@ MonoBehaviour:
   spawnDistance: 96
   props:
   - prop: {fileID: 772879758433947751, guid: ffdcbe16d052e174ba7941f9f1afc111, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 6406231651693857252, guid: 318a5cf596a3c594d9fc760b92358fc1, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 4216288911213677840, guid: f42656fe4def45d4b99ca32f1949f3ed, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   forceSpawn: 0
   applyRandomForce: 1
   forceMulti: 1
@@ -157,11 +157,11 @@ MonoBehaviour:
   spawnDistance: 96
   props:
   - prop: {fileID: 772879758433947751, guid: ffdcbe16d052e174ba7941f9f1afc111, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 6406231651693857252, guid: 318a5cf596a3c594d9fc760b92358fc1, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 4216288911213677840, guid: f42656fe4def45d4b99ca32f1949f3ed, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   forceSpawn: 0
   applyRandomForce: 1
   forceMulti: 1
@@ -213,11 +213,11 @@ MonoBehaviour:
   spawnDistance: 96
   props:
   - prop: {fileID: 772879758433947751, guid: ffdcbe16d052e174ba7941f9f1afc111, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 6406231651693857252, guid: 318a5cf596a3c594d9fc760b92358fc1, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 4216288911213677840, guid: f42656fe4def45d4b99ca32f1949f3ed, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   forceSpawn: 0
   applyRandomForce: 1
   forceMulti: 1
@@ -446,11 +446,11 @@ MonoBehaviour:
   spawnDistance: 96
   props:
   - prop: {fileID: 772879758433947751, guid: ffdcbe16d052e174ba7941f9f1afc111, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 6406231651693857252, guid: 318a5cf596a3c594d9fc760b92358fc1, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   - prop: {fileID: 4216288911213677840, guid: f42656fe4def45d4b99ca32f1949f3ed, type: 3}
-    chanceToSpawn: 25
+    chanceToSpawn: 50
   forceSpawn: 0
   applyRandomForce: 1
   forceMulti: 1
