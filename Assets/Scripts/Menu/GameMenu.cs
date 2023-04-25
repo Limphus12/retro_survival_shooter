@@ -26,7 +26,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckInput()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && !GameManager.PlayerStats.IsDead)
             {
                 toggleMenu = !toggleMenu;
 
@@ -39,16 +39,19 @@ namespace com.limphus.retro_survival_shooter
 
         private void ToggleFunctionality()
         {
-            PlayerController.canMove = !toggleMenu;
-            PlayerController.canRotate = !toggleMenu;
-            PlayerController.canCameraLean = !toggleMenu;
+            if (!GameManager.PlayerStats.IsDead)
+            {
+                PlayerController.canMove = !toggleMenu;
+                PlayerController.canRotate = !toggleMenu;
+                PlayerController.canCameraLean = !toggleMenu;
 
-            Item.CanUse = !toggleMenu;
+                Item.CanUse = !toggleMenu;
 
-            Cursor.visible = toggleMenu;
+                Cursor.visible = toggleMenu;
 
-            if (toggleMenu) Cursor.lockState = CursorLockMode.Confined;
-            else if (!toggleMenu) Cursor.lockState = CursorLockMode.Locked;
+                if (toggleMenu) Cursor.lockState = CursorLockMode.Confined;
+                else if (!toggleMenu) Cursor.lockState = CursorLockMode.Locked;
+            }
         }
 
         public void MainMenuButton()

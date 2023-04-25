@@ -17432,13 +17432,9 @@ MonoBehaviour:
   props:
   - prop: {fileID: 1449503897730965091, guid: 26c8c27e0ea9ec6419615bca0795aa48, type: 3}
     chanceToSpawn: 50
-  - prop: {fileID: 7117965838914323573, guid: 3d8d2749445ec38489791905cc2d3609, type: 3}
-    chanceToSpawn: 50
-  - prop: {fileID: 2286525430341494987, guid: f74b2bdcffb7c5f44b99611932218445, type: 3}
-    chanceToSpawn: 50
   - prop: {fileID: 8163710212787019469, guid: 96114597f58467e408f9d1e88e7e5bea, type: 3}
     chanceToSpawn: 50
-  forceSpawn: 1
+  forceSpawn: 0
   applyRandomForce: 0
   forceMulti: 1
   randomRotation: 0
@@ -18769,13 +18765,9 @@ MonoBehaviour:
   props:
   - prop: {fileID: 1449503897730965091, guid: 26c8c27e0ea9ec6419615bca0795aa48, type: 3}
     chanceToSpawn: 50
-  - prop: {fileID: 7117965838914323573, guid: 3d8d2749445ec38489791905cc2d3609, type: 3}
-    chanceToSpawn: 50
-  - prop: {fileID: 2286525430341494987, guid: f74b2bdcffb7c5f44b99611932218445, type: 3}
-    chanceToSpawn: 50
   - prop: {fileID: 8163710212787019469, guid: 96114597f58467e408f9d1e88e7e5bea, type: 3}
     chanceToSpawn: 50
-  forceSpawn: 1
+  forceSpawn: 0
   applyRandomForce: 0
   forceMulti: 1
   randomRotation: 0
@@ -39071,13 +39063,9 @@ MonoBehaviour:
   props:
   - prop: {fileID: 1449503897730965091, guid: 26c8c27e0ea9ec6419615bca0795aa48, type: 3}
     chanceToSpawn: 50
-  - prop: {fileID: 7117965838914323573, guid: 3d8d2749445ec38489791905cc2d3609, type: 3}
-    chanceToSpawn: 50
-  - prop: {fileID: 2286525430341494987, guid: f74b2bdcffb7c5f44b99611932218445, type: 3}
-    chanceToSpawn: 50
   - prop: {fileID: 8163710212787019469, guid: 96114597f58467e408f9d1e88e7e5bea, type: 3}
     chanceToSpawn: 50
-  forceSpawn: 1
+  forceSpawn: 0
   applyRandomForce: 0
   forceMulti: 1
   randomRotation: 0
@@ -45174,13 +45162,9 @@ MonoBehaviour:
   props:
   - prop: {fileID: 1449503897730965091, guid: 26c8c27e0ea9ec6419615bca0795aa48, type: 3}
     chanceToSpawn: 50
-  - prop: {fileID: 7117965838914323573, guid: 3d8d2749445ec38489791905cc2d3609, type: 3}
-    chanceToSpawn: 50
-  - prop: {fileID: 2286525430341494987, guid: f74b2bdcffb7c5f44b99611932218445, type: 3}
-    chanceToSpawn: 50
   - prop: {fileID: 8163710212787019469, guid: 96114597f58467e408f9d1e88e7e5bea, type: 3}
     chanceToSpawn: 50
-  forceSpawn: 1
+  forceSpawn: 0
   applyRandomForce: 0
   forceMulti: 1
   randomRotation: 0

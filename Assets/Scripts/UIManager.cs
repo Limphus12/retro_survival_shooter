@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 using com.limphus.utilities;
@@ -16,7 +17,7 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("UI - GameObjects")]
         [SerializeField] private GameObject lootUI;
-        [SerializeField] private GameObject statsUI, inventoryUI, crosshairUI, healthUI;
+        [SerializeField] private GameObject statsUI, inventoryUI, crosshairUI, healthUI, deathUI;
 
         [Header("UI - Text")]
         [SerializeField] private TextMeshProUGUI itemUINameText;
@@ -27,7 +28,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private TextMeshProUGUI hungerText, thirstText, staminaText, meleeStaminaText;
 
         [Header("UI - Animation")]
-        [SerializeField] private Animator worldBorderAnimator; 
+        [SerializeField] private Animator worldBorderAnimator, deathAnimator; 
 
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
@@ -124,6 +125,8 @@ namespace com.limphus.retro_survival_shooter
         {
             CheckUI();
 
+            CheckDeathUI();
+
             if (Input.GetKeyDown(KeyCode.F1))
             {
                 uiToggle = !uiToggle;
@@ -131,6 +134,27 @@ namespace com.limphus.retro_survival_shooter
                 //togggle some of the ui, so we can have a cleaner screen
                 statsUI.SetActive(uiToggle); inventoryUI.SetActive(uiToggle); crosshairUI.SetActive(uiToggle); healthUI.SetActive(uiToggle);
             }
+        }
+
+        bool death = false;
+
+        private void CheckDeathUI()
+        {
+            if (GameManager.PlayerStats.IsDead && !death)
+            {
+                death = true;
+
+                deathUI.SetActive(true);
+
+                deathAnimator.Play("death");
+
+                Invoke(nameof(ReturnToMainMenu), 10f);
+            }
+        }
+
+        private void ReturnToMainMenu()
+        {
+            SceneManager.LoadSceneAsync(0);
         }
 
         private void CheckUI()

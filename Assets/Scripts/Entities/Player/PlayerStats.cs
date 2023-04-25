@@ -18,14 +18,10 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private Temperature startingTemperature;
 
-        [Header("Variables - Player Survival - Current Stats")]
-        [SerializeField] private int currentHunger;
-        [SerializeField] private int currentThirst, currentStamina, currentMeleeStamina;
-
-        [Space]
-        [SerializeField] private Temperature currentTemperature;
-
-
+        //[Header("Variables - Player Survival - Current Stats")]
+        private int currentHunger;
+        private int currentThirst, currentStamina, currentMeleeStamina;
+        private Temperature currentTemperature;
 
         [Header("Variables - Player Survival - Hunger & Thirst Depletion")]
         [Tooltip("[IN SECONDS] - How quickly Hunger depletes")] [SerializeField] private float hungerTickRate;
@@ -87,8 +83,8 @@ namespace com.limphus.retro_survival_shooter
             base.InitVariables();
 
             //set our current variables
-            SetCurrentHunger(maxHunger);
-            SetCurrentThirst(maxThirst);
+            SetCurrentHunger(1);
+            SetCurrentThirst(1);
             SetCurrentStamina(maxStamina);
             SetCurrentMeleeStamina(maxMeleeStamina);
             SetCurrentTemperature(startingTemperature);
@@ -97,6 +93,61 @@ namespace com.limphus.retro_survival_shooter
         #endregion
 
         #region Stats
+
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.H) && !IsDead)
+            {
+                DepleteHealth(10);
+            }
+        }
+
+        bool death = false;
+
+        protected override void Kill()
+        {
+            if (!death)
+            {
+                death = true;
+
+                base.Kill();
+
+                //make it so we cannot move
+                PlayerController.canMove = false;
+                PlayerController.canRotate = false;
+                PlayerController.canCameraLean = false;
+
+                PlayerController pc = GameManager.PlayerController;
+                if (pc) pc.CharacterController.enabled = false;
+
+                //grab the player camera game object
+                GameObject playerCamera = GameManager.PlayerCamera.gameObject;
+
+                if (playerCamera)
+                {
+                    //add a rigidbody and sphere collider
+                    playerCamera.transform.parent = null;
+
+                    Rigidbody rb = playerCamera.AddComponent<Rigidbody>();
+                    BoxCollider bx = playerCamera.AddComponent<BoxCollider>();
+
+                    if (bx) bx.size = Vector3.one / 4;
+
+                    for (int i = 0; i < playerCamera.transform.childCount; i++)
+                    {
+                        playerCamera.transform.GetChild(i).gameObject.SetActive(false);
+                    }
+
+                    float offsetF = 0.2f;
+
+                    Vector3 offset = new Vector3(UnityEngine.Random.Range(-offsetF, offsetF), 0.01f, UnityEngine.Random.Range(-offsetF, offsetF));
+
+                    if (rb) rb.AddExplosionForce(1000f, playerCamera.transform.position + offset, 2f);
+                }
+            }
+        }
+
 
         #region Hunger
 

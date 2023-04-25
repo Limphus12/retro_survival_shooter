@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 783790291407040821}
-  - component: {fileID: -1808882554121509203}
   m_Layer: 0
   m_Name: Soviet-Table-Television
   m_TagString: Untagged
@@ -36,20 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &-1808882554121509203
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120266448328665999}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &1725132038477934163
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,6 +106,7 @@ GameObject:
   - component: {fileID: 3067470912299272805}
   - component: {fileID: 1615183998229260648}
   - component: {fileID: 4995893106783397408}
+  - component: {fileID: 7343327679038222772}
   m_Layer: 0
   m_Name: "\u041A\u0443\u0431.001"
   m_TagString: Untagged
@@ -193,6 +179,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7343327679038222772
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3584550187091645617}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8031619785718356097, guid: c17d0d751211d1741b915253454e7767, type: 3}
 --- !u!1 &5504668429288276241
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,10 +236,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c5504ef195bc14ba94d2156a3ec8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnAttempts: 0
+  spawnDistance: 16
   props:
   - prop: {fileID: 3052943372623425880, guid: 4882314a91ff0eb409321bb9587365a7, type: 3}
     chanceToSpawn: 40
   forceSpawn: 0
+  applyRandomForce: 0
+  forceMulti: 1
+  randomRotation: 0
 --- !u!1 &6107312438262361748
 GameObject:
   m_ObjectHideFlags: 0

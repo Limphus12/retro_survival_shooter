@@ -53,10 +53,7 @@ namespace com.limphus.retro_survival_shooter
 
         public static bool canMove = true, canRotate = true, canCameraLean = true;
 
-        public void ToggleCanMove(bool b) => canMove = b;
-        public void ToggleCanRotate(bool b) => canRotate = b;
-
-        private CharacterController characterController;
+        public CharacterController CharacterController { get; private set; }
         private Vector3 moveDirection = Vector3.zero;
         private float rotationX = 0, originalStepOffset, currentSpeed, currentCeilingRaycast, currentGroundRaycast;
         private bool isCrouching, isRunning, isJumping, isCoyoteTime;
@@ -75,7 +72,7 @@ namespace com.limphus.retro_survival_shooter
         private void Init()
         {
             //Grabs the CharacterController from the player object
-            if (!characterController) characterController = GetComponent<CharacterController>();
+            if (!CharacterController) CharacterController = GetComponent<CharacterController>();
 
             //Grabs the main camera, as this is the one we have for our player...
             if (!playerCamera) playerCamera = Camera.main;
@@ -91,7 +88,7 @@ namespace com.limphus.retro_survival_shooter
             Cursor.visible = false;
 
             //Set the original step offset - used for a bugfix
-            originalStepOffset = characterController.stepOffset;
+            originalStepOffset = CharacterController.stepOffset;
         }
 
         //Update is called once per frame
@@ -214,9 +211,9 @@ namespace com.limphus.retro_survival_shooter
 
             //isGrounded is checked first to ensure the y velocity is reset when the player
             //hits the ground. After that, check for the player input, and jump if so.
-            if (characterController.isGrounded)
+            if (CharacterController.isGrounded)
             {
-                characterController.stepOffset = originalStepOffset;
+                CharacterController.stepOffset = originalStepOffset;
 
                 if (HitGround())
                 {
@@ -239,7 +236,7 @@ namespace com.limphus.retro_survival_shooter
             //Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
             //when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
             //as an acceleration (ms^-2)
-            if (!characterController.isGrounded)
+            if (!CharacterController.isGrounded)
             { 
                 //if we hit the ceiling when jumping, cancel our vertical velocity.
                 if (HitCeiling())
@@ -249,7 +246,7 @@ namespace com.limphus.retro_survival_shooter
 
                 moveDirection.y -= gravity * Time.deltaTime;
 
-                characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
+                CharacterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
             }
 
             CalculateFall();
@@ -268,8 +265,6 @@ namespace com.limphus.retro_survival_shooter
             {
                 //calculate the distance we fell
                 float distanceFell = fallStartPosY - transform.position.y;
-
-                Debug.Log(distanceFell);
 
                 //if we fell farther than the minimum fall distance
                 if (distanceFell > minFallDistance)
@@ -298,7 +293,7 @@ namespace com.limphus.retro_survival_shooter
         void Move()
         {
             //Move the controller
-            if (canMove) characterController.Move(moveDirection * Time.deltaTime);
+            if (canMove) CharacterController.Move(moveDirection * Time.deltaTime);
 
             //Player and Camera rotation
             if (canRotate)
@@ -402,8 +397,8 @@ namespace com.limphus.retro_survival_shooter
                 stanceI = 0f;
             }
 
-            characterController.height = height;
-            characterController.center = center;
+            CharacterController.height = height;
+            CharacterController.center = center;
 
             playerCameraHolder.localPosition = Vector3.Lerp(playerCameraHolder.localPosition, cameraPos, (stanceI + Time.deltaTime) * cameraSmoothRate);
 

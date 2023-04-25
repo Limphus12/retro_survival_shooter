@@ -12,8 +12,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] protected int maxHealth = 100;
         [SerializeField] protected int currentHealth;
 
-        [Space]
-        [SerializeField] protected bool isDead;
+        public bool IsDead { get; private set; }
 
         //later down the line we should do this max stuff in scriptable objects instead...
         //then just load in the stats from that scriptable object...
@@ -29,7 +28,7 @@ namespace com.limphus.retro_survival_shooter
         {
             SetCurrentHealth(maxHealth);
 
-            isDead = false;
+            IsDead = false;
         }
 
         //returns our current health
@@ -55,6 +54,8 @@ namespace com.limphus.retro_survival_shooter
         //a method to deplete health
         public void DepleteHealth(int amount)
         {
+            if (IsDead) return;
+
             //decreases current health
             SetCurrentHealth(GetCurrentHealth() - amount);
 
@@ -93,6 +94,8 @@ namespace com.limphus.retro_survival_shooter
         //a method to kill this entity
         protected virtual void Kill()
         {
+            IsDead = true;
+
             //currently we're only debug logging lmao.
             Debug.Log("Character (" + gameObject.name + ") is Dead");
         }
