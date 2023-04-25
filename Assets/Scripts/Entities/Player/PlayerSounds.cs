@@ -31,6 +31,9 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private SoundStruct eatingSounds;
         [SerializeField] private SoundStruct drinkingSounds, medicineSounds, ammoSounds;
 
+        [Header("Audio - Hurt")]
+        [SerializeField] private SoundStruct hurtSounds;
+
         private float footstepTimer = 0f;
         private float CurrentOffset()
         {
@@ -67,21 +70,25 @@ namespace com.limphus.retro_survival_shooter
         private void Start()
         {
             playerInteraction.OnInteract += PlayerInteraction_OnInteract;
+            playerStats.OnHealthDepleted += PlayerStats_OnHealthDepleted;
         }
 
         private void OnEnable()
         {
             playerInteraction.OnInteract += PlayerInteraction_OnInteract;
+            playerStats.OnHealthDepleted += PlayerStats_OnHealthDepleted;
         }
 
         private void OnDisable()
         {
             playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
+            playerStats.OnHealthDepleted -= PlayerStats_OnHealthDepleted;
         }
 
         private void OnDestroy()
         {
             playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
+            playerStats.OnHealthDepleted -= PlayerStats_OnHealthDepleted;
         }
 
         private void PlayerInteraction_OnInteract(object sender, PlayerInteraction.OnInteractEventArgs e)
@@ -91,6 +98,8 @@ namespace com.limphus.retro_survival_shooter
             Medicine medicine = e.i.GetComponent<Medicine>(); if (medicine) { PlayMedicineSounds(); return; }
             Ammo ammo = e.i.GetComponent<Ammo>(); if (ammo) { PlayAmmoSounds(); return; }
         }
+
+        private void PlayerStats_OnHealthDepleted(object sender, System.EventArgs e) => PlayHurtSounds();
 
         private void Update()
         {
@@ -154,5 +163,6 @@ namespace com.limphus.retro_survival_shooter
         private void PlayDrinkingSounds() => PlayRandomSound(drinkingSounds);
         private void PlayMedicineSounds() => PlayRandomSound(medicineSounds);
         private void PlayAmmoSounds() => PlayRandomSound(ammoSounds);
+        private void PlayHurtSounds() => PlayRandomSound(hurtSounds);
     }
 }

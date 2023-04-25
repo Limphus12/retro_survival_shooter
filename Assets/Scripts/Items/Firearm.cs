@@ -26,6 +26,8 @@ namespace com.limphus.retro_survival_shooter
 
         public Magazine Magazine { get; private set; }
 
+        public bool IsAiming { get; private set; }
+
         #region Private Variables
 
         private float firearmDamage, firearmAttackRate;
@@ -256,6 +258,8 @@ namespace com.limphus.retro_survival_shooter
             if (Magazine.IsReloading) b = false;
 
             else isAiming = b;
+
+            IsAiming = isAiming;
 
             //if we have the camera and weapon recoil references, as well as the weapon sway reference, call the aim method on them too
             if (cameraRecoil && weaponRecoil && firearmSway)

@@ -15,7 +15,7 @@ namespace com.limphus.retro_survival_shooter
 
         public int currentQualityLevel;
 
-        public float currentMasterVolume, currentAmbienceVolume, currentSoundVolume;
+        public float currentMasterVolume, currentAmbienceVolume, currentSoundVolume, currentUIScale;
     }
 
     public class SaveSystem : MonoBehaviour
@@ -55,7 +55,8 @@ namespace com.limphus.retro_survival_shooter
                 currentQualityLevel = Settings.currentQualityLevel,
                 currentMasterVolume = Settings.currentMasterVolume + 80,
                 currentAmbienceVolume = Settings.currentAmbienceVolume + 80,
-                currentSoundVolume = Settings.currentSoundVolume + 80
+                currentSoundVolume = Settings.currentSoundVolume + 80,
+                currentUIScale = UIManager.UIScale
             };
 
             //creating a new save object, setting the values
@@ -87,6 +88,7 @@ namespace com.limphus.retro_survival_shooter
                 Settings.currentMasterVolume = settingsData.currentMasterVolume - 80;
                 Settings.currentAmbienceVolume = settingsData.currentAmbienceVolume - 80;
                 Settings.currentSoundVolume = settingsData.currentSoundVolume - 80;
+                UIManager.UIScale = settingsData.currentUIScale;
             }
 
             else Debug.Log("No Settings Save Detected!");

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -16,6 +17,10 @@ namespace com.limphus.retro_survival_shooter
 
         [Space]
         [SerializeField] private float speedSmoothRate;
+
+        [Header("Falling Settings")]
+        [SerializeField] private float minFallDistance;
+        [SerializeField] private AnimationCurve fallDamageCurve;
 
         [Header("Camera Settings")]
         [SerializeField] private Camera playerCamera;
@@ -59,13 +64,15 @@ namespace com.limphus.retro_survival_shooter
         public float CurrentHeight { get; private set; }
 
         public bool Grounded { get; private set; }
+        public bool WasGrounded { get; private set; }
         public bool IsMoving { get; private set; }
 
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
 
-        //Start is called before the first frame update
-        void Start()
+        private void Awake() => Init();
+
+        private void Init()
         {
             //Grabs the CharacterController from the player object
             if (!characterController) characterController = GetComponent<CharacterController>();
@@ -211,13 +218,12 @@ namespace com.limphus.retro_survival_shooter
             {
                 characterController.stepOffset = originalStepOffset;
 
-                //if we hit the ground
                 if (HitGround())
                 {
                     //fixes a stutter issue when we're going down small slopes
                     moveDirection.y = -antiBumpAmount;
                 }
-                
+
                 //jumping!
                 if (Input.GetButton("Jump") && canMove)
                 {
@@ -246,7 +252,46 @@ namespace com.limphus.retro_survival_shooter
                 characterController.stepOffset = 0f; //Fixes a bug where jumping against something that, if will end up at your step height during the jump, it would suddenly put you back on the ground. 
             }
 
+            CalculateFall();
+
             Move();
+        }
+
+        float fallStartPosY;
+
+        private void CalculateFall()
+        {
+            bool b = HitGround();
+
+            //if we were not grounded last frame
+            if (!WasGrounded && Grounded)
+            {
+                //calculate the distance we fell
+                float distanceFell = fallStartPosY - transform.position.y;
+
+                Debug.Log(distanceFell);
+
+                //if we fell farther than the minimum fall distance
+                if (distanceFell > minFallDistance)
+                {
+                    //calculate fall damage
+                    distanceFell -= minFallDistance;
+
+                    //rounding to the nearest int
+                    int damage = Mathf.RoundToInt(fallDamageCurve.Evaluate(distanceFell));
+
+                    playerStats.DepleteHealth(damage);
+                }
+            }
+
+            //else if we were grounded last frame
+            else if (WasGrounded && !Grounded)
+            {
+                //set our starting y position
+                fallStartPosY = transform.position.y;
+            }
+            
+            WasGrounded = Grounded;
         }
 
         //Deals with Movement
@@ -403,18 +448,18 @@ namespace com.limphus.retro_survival_shooter
             {
                 if (hit.transform != transform)
                 {
-                    Grounded = true; return true;
+                    Grounded = true; return Grounded;
                 }
 
                 else
                 {
-                    Grounded = false; return false;
+                    Grounded = false; return Grounded;
                 }
             }
 
             else
             {
-                Grounded = false; return false;
+                Grounded = false; return Grounded;
             }
         }
 

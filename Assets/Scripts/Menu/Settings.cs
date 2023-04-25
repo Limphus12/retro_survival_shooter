@@ -17,7 +17,7 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("Audio - Sliders")]
         [SerializeField] private Slider masterVolumeSlider;
-        [SerializeField] private Slider ambienceVolumeSlider, soundVolumeSlider;
+        [SerializeField] private Slider ambienceVolumeSlider, soundVolumeSlider, UIScaleSlider;
 
         private Resolution[] resolutions;
 
@@ -79,6 +79,8 @@ namespace com.limphus.retro_survival_shooter
                     masterMixer.SetFloat("SoundVolume", currentSoundVolume);
                 }
             }
+
+            if (UIScaleSlider) UIScaleSlider.value = UIManager.UIScale;
         }
 
         //set the master volume
@@ -131,6 +133,11 @@ namespace com.limphus.retro_survival_shooter
             Resolution resolution = resolutions[i];
             currentResolution = resolutions[i];
             Screen.SetResolution(resolution.width, resolution.height, fullscreen);
+        }
+
+        public void SetUIScale(float i)
+        {
+            UIManager.UIScale = i;
         }
     }
 }

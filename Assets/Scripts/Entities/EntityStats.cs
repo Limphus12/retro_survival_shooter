@@ -15,14 +15,13 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] protected bool isDead;
 
-
         //later down the line we should do this max stuff in scriptable objects instead...
         //then just load in the stats from that scriptable object...
 
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
 
         public event EventHandler<Events.OnIntChangedEventArgs> OnHealthChanged;
-
+        public event EventHandler<EventArgs> OnHealthDepleted;
 
         private void Awake() => InitVariables();
 
@@ -31,11 +30,6 @@ namespace com.limphus.retro_survival_shooter
             SetCurrentHealth(maxHealth);
 
             isDead = false;
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.H)) DepleteHealth(10);
         }
 
         //returns our current health
@@ -63,6 +57,8 @@ namespace com.limphus.retro_survival_shooter
         {
             //decreases current health
             SetCurrentHealth(GetCurrentHealth() - amount);
+
+            OnHealthDepleted?.Invoke(this, new EventArgs { });
 
             //check our health
             CheckHealth();

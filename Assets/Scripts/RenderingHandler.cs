@@ -32,7 +32,7 @@ namespace com.limphus.retro_survival_shooter
             float distance = Vector3.Distance(transform.position, GameManager.Player.transform.position);
 
             //using teh fog end distance!
-            if (distance <= RenderSettings.fogEndDistance) inRange = true;
+            if (distance <= RenderSettings.fogEndDistance + 16f) inRange = true;
             else inRange = false;
 
             if (previousInRange != inRange) ToggleRenderers(inRange);

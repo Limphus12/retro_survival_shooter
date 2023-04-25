@@ -16,7 +16,7 @@ namespace com.limphus.retro_survival_shooter
 
         [Header("UI - GameObjects")]
         [SerializeField] private GameObject lootUI;
-        [SerializeField] private GameObject statsUI, inventoryUI;
+        [SerializeField] private GameObject statsUI, inventoryUI, crosshairUI, healthUI;
 
         [Header("UI - Text")]
         [SerializeField] private TextMeshProUGUI itemUINameText;
@@ -32,6 +32,8 @@ namespace com.limphus.retro_survival_shooter
         private PlayerStats playerStats;
         private PlayerInventory playerInventory;
         private PlayerInteraction playerInteraction;
+
+        public static float UIScale = 1f;
         
         // Start is called before the first frame update
         void Start()
@@ -53,6 +55,7 @@ namespace com.limphus.retro_survival_shooter
             //and subscribe to the event in the world border class.
             WorldBorder.OnBorderChanged += WorldBorderOnBorderChanged;
 
+            ScaleUI();
         }
 
         void OnEnable()
@@ -126,7 +129,7 @@ namespace com.limphus.retro_survival_shooter
                 uiToggle = !uiToggle;
 
                 //togggle some of the ui, so we can have a cleaner screen
-                statsUI.SetActive(uiToggle); inventoryUI.SetActive(uiToggle);
+                statsUI.SetActive(uiToggle); inventoryUI.SetActive(uiToggle); crosshairUI.SetActive(uiToggle); healthUI.SetActive(uiToggle);
             }
         }
 
@@ -156,16 +159,17 @@ namespace com.limphus.retro_survival_shooter
                         if (itemScript.GetItemData() != null) itemUINameText.text = "" + itemScript.GetItemData().itemName;
 
                         Melee melee = itemScript.GetMelee();
+                        Firearm firearm = itemScript.GetFirearm();
+                        Throwable throwable = itemScript.GetThrowable();
+                        Placeable placeable = itemScript.GetPlaceable();
+                        Consumable consumable = itemScript.GetConsumable();
 
                         if (melee)
                         {
                             itemUIAmountText.text = "Melee";
-                            return;
                         }
 
-                        Firearm firearm = itemScript.GetFirearm();
-
-                        if (firearm)
+                        else if (firearm)
                         {
                             string text = ""; //setting our text to be either the infinte stuff or the current mag & ammo counts
 
@@ -173,31 +177,24 @@ namespace com.limphus.retro_survival_shooter
 
                             if (firearm.Magazine.InfinteAmmo) text += " / Inf."; else text += " / " + PlayerAmmo.GetAmmo(firearm.Magazine.AmmoType);
 
-                            itemUIAmountText.text = text; return;
+                            itemUIAmountText.text = text;
+
+                            if (crosshairUI && uiToggle) crosshairUI.SetActive(!firearm.IsAiming);
                         }
 
-                        Throwable throwable = itemScript.GetThrowable();
-
-                        if (throwable)
+                        else if (throwable)
                         {
                             itemUIAmountText.text = "Throwable";
-                            return;
                         }
 
-                        Placeable placeable = itemScript.GetPlaceable();
-
-                        if (placeable)
+                        else if (placeable)
                         {
                             itemUIAmountText.text = "Placeable";
-                            return;
                         }
 
-                        Consumable consumable = itemScript.GetConsumable();
-
-                        if (consumable)
+                        else if (consumable)
                         {
                             itemUIAmountText.text = "" + consumable.GetRemainingUsageAmount();
-                            return;
                         }
 
                         else
@@ -207,6 +204,14 @@ namespace com.limphus.retro_survival_shooter
                     }
                 }
             }
+        }
+
+        private void ScaleUI()
+        {
+            //scale the ui elements
+            statsUI.transform.localScale = Vector2.one * UIScale;
+            inventoryUI.transform.localScale = Vector2.one * UIScale;
+            healthUI.transform.localScale = Vector2.one * UIScale;
         }
 
         #region Events
