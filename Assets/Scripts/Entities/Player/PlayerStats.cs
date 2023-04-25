@@ -83,8 +83,8 @@ namespace com.limphus.retro_survival_shooter
             base.InitVariables();
 
             //set our current variables
-            SetCurrentHunger(1);
-            SetCurrentThirst(1);
+            SetCurrentHunger(maxHunger);
+            SetCurrentThirst(maxThirst);
             SetCurrentStamina(maxStamina);
             SetCurrentMeleeStamina(maxMeleeStamina);
             SetCurrentTemperature(startingTemperature);
