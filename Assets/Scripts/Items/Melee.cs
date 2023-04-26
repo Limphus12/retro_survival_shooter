@@ -12,15 +12,18 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private MeleeData meleeData;
 
         private float lightAttackRate;
-        private float lightAttackDamage, attackRange, lightAttackTimeToHit;
+        private int lightAttackDamage;
+        private float attackRange, lightAttackTimeToHit;
         private int lightAttackStaminaCost;
 
         private float heavyAttackRate;
-        private float heavyAttackDamage, chargeUpTime, heavyAttackTimeToHit;
+        private int heavyAttackDamage;
+        private float chargeUpTime, heavyAttackTimeToHit;
         private int heavyAttackStaminaCost;
 
         private float exhaustedAttackRate;
-        private float exhaustedAttackDamage, exhaustedAttackTimeToHit;
+        private int exhaustedAttackDamage;
+        private float exhaustedAttackTimeToHit;
 
         private PlayerStats playerStats;
         private Transform playerCamera;
@@ -180,10 +183,11 @@ namespace com.limphus.retro_survival_shooter
             }
         }
 
-        protected float currentTimeToHit, currentAttackRate, currentDamage;
+        protected float currentTimeToHit, currentAttackRate;
+        protected int currentDamage;
 
         //takes in a time to hit, attack rate & damage
-        protected void SetupAttack(float hitTime, float attackRate, float damage, int staminaCost)
+        protected void SetupAttack(float hitTime, float attackRate, int damage, int staminaCost)
         {
             currentTimeToHit = hitTime;
             currentAttackRate = attackRate;

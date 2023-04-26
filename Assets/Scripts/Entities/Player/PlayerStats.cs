@@ -99,7 +99,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (Input.GetKeyDown(KeyCode.H) && !IsDead)
             {
-                DepleteHealth(10);
+                Damage(10);
             }
         }
 
@@ -411,12 +411,12 @@ namespace com.limphus.retro_survival_shooter
         //damage ticks - when hunger and thirst are depleted
         private void HungerDepletedTick()
         {
-            DepleteHealth(hungerDepletedDamage);
+            Damage(hungerDepletedDamage);
         }
 
         private void ThirstDepletedTick()
         {
-            DepleteHealth(thirstDepletedDamage);
+            Damage(thirstDepletedDamage);
         }
 
         //STAMINA

@@ -6,7 +6,7 @@ using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
-    public class EntityStats : MonoBehaviour
+    public class EntityStats : MonoBehaviour, IDamageable
     {
         [Header("Variables - Health")]
         [SerializeField] protected int maxHealth = 100;
@@ -52,7 +52,7 @@ namespace com.limphus.retro_survival_shooter
         }
 
         //a method to deplete health
-        public void DepleteHealth(int amount)
+        public void Damage(int amount)
         {
             if (IsDead) return;
 

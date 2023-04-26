@@ -275,7 +275,7 @@ namespace com.limphus.retro_survival_shooter
                     //rounding to the nearest int
                     int damage = Mathf.RoundToInt(fallDamageCurve.Evaluate(distanceFell));
 
-                    playerStats.DepleteHealth(damage);
+                    playerStats.Damage(damage);
                 }
             }
 

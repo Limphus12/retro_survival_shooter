@@ -30,10 +30,8 @@ namespace com.limphus.retro_survival_shooter
 
         #region Private Variables
 
-        private float firearmDamage, firearmAttackRate;
-
-        private int magazineSize;
-        private float reloadTime;
+        private int firearmDamage, magazineSize;
+        private float reloadTime, firearmAttackRate;
         private int maxAmmoReserves;
 
         private FirearmFireType fireType;

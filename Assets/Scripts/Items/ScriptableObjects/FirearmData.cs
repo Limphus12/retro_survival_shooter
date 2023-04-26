@@ -10,7 +10,7 @@ namespace com.limphus.retro_survival_shooter
     public class FirearmData : ItemData
     {
         [Header("Attributes - Firearm")]
-        public float firearmDamage;
+        public int firearmDamage;
         public float firearmAttackRate;
 
         [Space]

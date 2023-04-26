@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IUseable
+namespace com.limphus.retro_survival_shooter
 {
-    void CheckInput();
-    bool DetectKeyboardInput(KeyCode key);
-    bool DetectMouseInput(int button);
+    public interface IUseable
+    {
+        void CheckInput();
+        bool DetectKeyboardInput(KeyCode key);
+        bool DetectMouseInput(int button);
+    }
 }

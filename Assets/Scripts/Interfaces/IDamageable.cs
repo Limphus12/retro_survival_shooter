@@ -6,6 +6,6 @@ namespace com.limphus.retro_survival_shooter
 {
     public interface IDamageable
     {
-        void Damage(float amount);
+        void Damage(int amount);
     }
 }
