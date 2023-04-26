@@ -132,7 +132,7 @@ namespace com.limphus.retro_survival_shooter
                 uiToggle = !uiToggle;
 
                 //togggle some of the ui, so we can have a cleaner screen
-                statsUI.SetActive(uiToggle); inventoryUI.SetActive(uiToggle); crosshairUI.SetActive(uiToggle); healthUI.SetActive(uiToggle);
+                statsUI.SetActive(uiToggle); inventoryUI.SetActive(uiToggle); healthUI.SetActive(uiToggle);
             }
         }
 

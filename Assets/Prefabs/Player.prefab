@@ -10504,7 +10504,7 @@ MonoBehaviour:
   statsUI: {fileID: 1393034961}
   inventoryUI: {fileID: 2232844943822396494}
   crosshairUI: {fileID: 0}
-  healthUI: {fileID: 9209600416187624921}
+  healthUI: {fileID: 1536869955308157778}
   deathUI: {fileID: 5894881900129145304}
   itemUINameText: {fileID: 1010726390761544323}
   itemUIAmountText: {fileID: 6663488609764499416}
