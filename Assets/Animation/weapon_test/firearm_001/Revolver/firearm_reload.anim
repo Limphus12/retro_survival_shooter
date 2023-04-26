@@ -5367,7 +5367,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_002
+    path: WeaponRecoil/GFX
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5377,7 +5377,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_002
+    path: WeaponRecoil/GFX
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5387,7 +5387,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_002
+    path: WeaponRecoil/GFX
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5397,7 +5397,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_005
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_002
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5407,7 +5407,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_005
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_002
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5417,37 +5417,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_005
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
-    path: WeaponRecoil/GFX
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: WeaponRecoil/GFX
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: WeaponRecoil/GFX
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_002
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -5487,36 +5457,6 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_003
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_003
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_003
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.z
     path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_001
     classID: 4
     script: {fileID: 0}
@@ -5547,36 +5487,6 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_006
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.y
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_006
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
-    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_006
-    classID: 4
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalEulerAngles.x
     path: WeaponRecoil/GFX/Revolver/Release
     classID: 4
     script: {fileID: 0}
@@ -5587,6 +5497,16 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
+    path: WeaponRecoil/GFX/Revolver/Release
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
     path: WeaponRecoil/GFX/Revolver/Release
     classID: 4
     script: {fileID: 0}
@@ -5597,7 +5517,87 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: WeaponRecoil/GFX/Revolver/Release
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_005
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_005
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_005
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_003
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_003
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_003
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_006
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_006
+    classID: 4
+    script: {fileID: 0}
+  - curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: WeaponRecoil/GFX/Revolver/Release/Cylinder/Bullet_006
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

@@ -143,7 +143,7 @@ namespace com.limphus.retro_survival_shooter
 
                     Vector3 offset = new Vector3(UnityEngine.Random.Range(-offsetF, offsetF), 0.01f, UnityEngine.Random.Range(-offsetF, offsetF));
 
-                    if (rb) rb.AddExplosionForce(1000f, playerCamera.transform.position + offset, 2f);
+                    if (rb) rb.AddExplosionForce(100f, playerCamera.transform.position + offset, 2f);
                 }
             }
         }
