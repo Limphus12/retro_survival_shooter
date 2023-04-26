@@ -38,7 +38,7 @@ namespace com.limphus.retro_survival_shooter
 
         private TextMeshProUGUI debugtext;
 
-        private void Awake()
+        private void Start()
         {
             //initializing the save manager
             SaveManager.Init();
@@ -92,21 +92,6 @@ namespace com.limphus.retro_survival_shooter
             }
 
             else Debug.Log("No Settings Save Detected!");
-        }
-
-        private void Start()
-        {
-            //finding the player in the scene
-            //if (!playerTransform) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
-            //finding the player stats in the scene
-            if (!playerStats) playerStats = FindObjectOfType<PlayerStats>();
-            
-            //finding the player in the scene (using the player stats reference)
-            if (playerStats) playerTransform = playerStats.transform;
-
-            //finding the world generator in the scene
-            if (!worldGenerator) worldGenerator = FindObjectOfType<WorldGenerator>();
         }
 
         private void Update()
