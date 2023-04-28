@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7628803388898947273}
   - component: {fileID: 1011627191725876635}
   - component: {fileID: 4021242623322501931}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Hammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 5102848183747077005}
   - component: {fileID: 5997526589021618592}
   - component: {fileID: 1568115872355817521}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 2056486366464068065}
   - component: {fileID: 363452066374616354}
   - component: {fileID: 2587132301398769135}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Release
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +242,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -273,7 +273,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3070289424578123422}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 3099880243923623836}
   - component: {fileID: 4835295187293873813}
   - component: {fileID: 5917006469109193912}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,7 +353,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 2903686162102149227}
   - component: {fileID: 5651765350695855892}
   - component: {fileID: 1993251260813037959}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +434,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -467,7 +467,7 @@ GameObject:
   - component: {fileID: 7457065685600677428}
   - component: {fileID: 6051609688218308804}
   - component: {fileID: 7814891778445422593}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -548,7 +548,7 @@ GameObject:
   - component: {fileID: 2640999303638041156}
   - component: {fileID: 3151290776448657507}
   - component: {fileID: 4122456363104097278}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -629,7 +629,7 @@ GameObject:
   - component: {fileID: 6925431616629163287}
   - component: {fileID: 4053192347978338588}
   - component: {fileID: 585154167323775747}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +677,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -710,7 +710,7 @@ GameObject:
   - component: {fileID: 98084103263951138}
   - component: {fileID: 9130371848537960470}
   - component: {fileID: 188560653068399834}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +765,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -805,7 +805,7 @@ GameObject:
   - component: {fileID: 5160590522330889342}
   - component: {fileID: 6888573491044735037}
   - component: {fileID: 4021242622762772207}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1036,7 +1036,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7720046478790547636}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1071,7 +1071,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7562350580413066810}
   - component: {fileID: 7562350580413066809}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WeaponRecoil
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1118,7 +1118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7562350581167009443}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,7 +1152,7 @@ GameObject:
   - component: {fileID: 7597791476649823410}
   - component: {fileID: 3095154353322212488}
   - component: {fileID: 4494065410760357891}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ejector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1200,7 +1200,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1233,7 +1233,7 @@ GameObject:
   - component: {fileID: 662436094551480690}
   - component: {fileID: 7498886103566975227}
   - component: {fileID: 7815720222202622283}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1281,7 +1281,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1314,7 +1314,7 @@ GameObject:
   - component: {fileID: 7698832715775677470}
   - component: {fileID: 3051517232283267927}
   - component: {fileID: 3912337001196065898}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bullet_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,7 +1362,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: d0915c96828b0844ca88110b211ddf13, type: 3}
+  - {fileID: 2100000, guid: d28325f22cbe6804e830ea7688dedd5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

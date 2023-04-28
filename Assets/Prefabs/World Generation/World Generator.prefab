@@ -364,7 +364,7 @@ Transform:
   - {fileID: 8224924335899335179}
   - {fileID: 8224924336563355267}
   m_Father: {fileID: 8224924337041208562}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8224924336563355268
 GameObject:
@@ -601,7 +601,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8224924336919173136
 Transform:
   m_ObjectHideFlags: 0
@@ -665,6 +665,7 @@ Transform:
   - {fileID: 8224924336892737702}
   - {fileID: 8224924335699164627}
   - {fileID: 8224924336919173136}
+  - {fileID: 7740244760961501179}
   - {fileID: 8224924336504708297}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -896,6 +897,7 @@ MonoBehaviour:
   terrainGenerator: {fileID: 8224924336892737701}
   biomeGenerator: {fileID: 8224924335699164626}
   structureGenerator: {fileID: 8224924336919173151}
+  navMeshGenerator: {fileID: 273652824901885260}
 --- !u!1 &8224924337437130158
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,3 +942,77 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 4096, z: 128}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8347411587267664687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7740244760961501179}
+  - component: {fileID: 273652824901885260}
+  - component: {fileID: 8619648927268737080}
+  m_Layer: 0
+  m_Name: NavMesh Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7740244760961501179
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347411587267664687}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8224924337041208562}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &273652824901885260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347411587267664687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0735252267014a4b85810c5afb752aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshSurface: {fileID: 8619648927268737080}
+--- !u!114 &8619648927268737080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347411587267664687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 1
+  m_TileSize: 128
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.16666667
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 0}
