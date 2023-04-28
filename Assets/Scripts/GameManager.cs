@@ -37,6 +37,7 @@ namespace com.limphus.retro_survival_shooter
         public static PlayerStats PlayerStats;
         public static PlayerInventory PlayerInventory;
         public static PlayerInteraction PlayerInteraction;
+        public static Vector3 PlayerPosition;
 
         public static Camera PlayerCamera;
 
@@ -77,6 +78,7 @@ namespace com.limphus.retro_survival_shooter
                 PlayerStats = Player.GetComponent<PlayerStats>();
                 PlayerInventory = Player.GetComponent<PlayerInventory>();
                 PlayerInteraction = Player.GetComponent<PlayerInteraction>();
+                PlayerPosition = Player.transform.position;
             }
 
             PlayerCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -94,6 +96,8 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
+            if (Player) PlayerPosition = Player.transform.position;
+
             if (isChangingWeather) LerpWeather();
 
             UpdateTime(); UpdateWeather();
