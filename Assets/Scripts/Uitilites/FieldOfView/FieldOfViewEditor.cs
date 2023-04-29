@@ -10,37 +10,36 @@ namespace com.limphus.utilities
     {
         private void OnSceneGUI()
         {
-            FieldOfView fov = (FieldOfView)target; Vector3 fowPos = fov.transform.position + Vector3.up;
+            FieldOfView fov = (FieldOfView)target; 
+            
+            if (!fov.eyes) return; Vector3 fovPos = fov.eyes.position;
 
-            Handles.color = Color.white;
             Vector3 viewAngleA = fov.DirectionFromAngle(-fov.viewAngle / 2, false);
             Vector3 viewAngleB = fov.DirectionFromAngle(fov.viewAngle / 2, false);
-            Handles.DrawWireArc(fowPos, Vector3.up, viewAngleA, fov.viewAngle, fov.viewRadius);
 
-            if (fov.viewAngle != 0)
-            {
-                Handles.color = Color.green;
-            }
+            Handles.color = Color.red;
+            Handles.DrawWireArc(fov.transform.position + Vector3.up, Vector3.up, Vector3.forward, 360, fov.minViewRadius);
 
+            Handles.color = Color.white;
+            Handles.DrawWireArc(fovPos, Vector3.up, viewAngleA, fov.viewAngle, fov.viewRadius);
+
+            if (fov.viewAngle != 0) Handles.color = Color.green;
             else Handles.color = Color.yellow;
 
-            Handles.DrawLine(fowPos, fowPos + viewAngleA * fov.viewRadius);
-            Handles.DrawLine(fowPos, fowPos + viewAngleB * fov.viewRadius);
+            Handles.DrawLine(fovPos, fovPos + viewAngleA * fov.viewRadius);
+            Handles.DrawLine(fovPos, fovPos + viewAngleB * fov.viewRadius);
 
             Handles.color = new Color(255, 128, 0);
-            foreach (Transform visibleTarget in fov.visibleTargets)
+
+            if (fov.VisibleTargets == null) return;
+
+            if (fov.VisibleTargets.Count > 0)
             {
-                if (visibleTarget == fov.closestTarget) continue;
-
-                Handles.DrawLine(fowPos, visibleTarget.position);
+                foreach (Transform visibleTarget in fov.VisibleTargets)
+                {
+                    Handles.DrawLine(fovPos, visibleTarget.position);
+                }
             }
-
-            if (fov.closestTarget)
-            {
-                Handles.color = Color.red;
-                Handles.DrawLine(fowPos, fov.closestTarget.position);
-            }
-
         }
     }
 }

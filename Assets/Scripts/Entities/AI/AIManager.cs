@@ -8,19 +8,17 @@ namespace com.limphus.retro_survival_shooter
 {
     public class AIManager : MonoBehaviour
     {
-        [SerializeField] private State currentState;
-        [SerializeField] private State remainState;
-
-        private float stateTimeElapsed;
-
         private NavMeshAgent agent;
         public Vector3 OriginPosition { get; private set; }
-        public Vector3 LastKnownTargetPosition { get; private set; }
 
         private Vector3 targetPosition, previousTargetPosition;
 
-        public void SetTargetPos(Vector3 pos) => targetPosition = pos;
-        public void SetLastKnownTargetPosition(Vector3 pos) => LastKnownTargetPosition = pos;
+        public bool IsMoving { get; private set; }
+
+        public void SetTargetPos(Vector3 pos)
+        {
+            targetPosition = pos; SetDestination();
+        }
 
         private void Awake() => Init();
 
@@ -32,44 +30,20 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
-            CalculateState();
+            CheckDestination();
         }
 
-        private void CalculateState()
+        private void CheckDestination()
         {
-            currentState.UpdateState(this);
-                
-            SetDestination();
-        }
-
-        public void TransitionToState(State nextState)
-        {
-            if (nextState != remainState)
+            if (Vector3.Distance(transform.position, targetPosition) < 1f)
             {
-                currentState = nextState;
-                ExitState();
-            }
-        }
-
-        public bool HasTimeElapsed(float duration)
-        {
-            stateTimeElapsed += Time.deltaTime;
-
-            if (stateTimeElapsed >= duration)
-            {
-                stateTimeElapsed = 0;
-                return true;
+                IsMoving = false;
             }
 
-            else return false;
+            else IsMoving = true;
         }
 
-        private void ExitState()
-        {
-            stateTimeElapsed = 0;
-        }
-
-        private void SetDestination()
+        public void SetDestination()
         {
             if (targetPosition != previousTargetPosition)
             {
@@ -81,14 +55,8 @@ namespace com.limphus.retro_survival_shooter
 
         private void OnDrawGizmos()
         {
-            if (currentState)
-            {
-                Gizmos.color = currentState.gizmosColor;
-                Gizmos.DrawWireSphere(transform.position + Vector3.up, 2f);
-            }
-
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(OriginPosition, 0.5f);
+            Gizmos.DrawWireSphere(OriginPosition, 0.25f);
         }
     }
 }
