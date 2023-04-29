@@ -23,6 +23,18 @@ namespace com.limphus.retro_survival_shooter
             CheckWander(ai);
         }
 
+        public override bool Condition(AIManager ai)
+        {
+            Debug.Log("Checking Wander Condition");
+
+            if (ai.FOV.VisibleTargets.Count > 0)
+            {
+                return false;
+            }
+
+            else return false;
+        }
+
         private void CheckWander(AIManager ai)
         {
             if (ai.IsMoving) return;

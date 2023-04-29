@@ -27,6 +27,11 @@ namespace com.limphus.retro_survival_shooter
             CheckPatrol(ai);
         }
 
+        public override bool Condition(AIManager ai)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private void CheckPatrol(AIManager ai)
         {
             if (ai.IsMoving) return;

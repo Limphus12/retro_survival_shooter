@@ -23,6 +23,16 @@ namespace com.limphus.retro_survival_shooter
             Search(ai);
         }
 
+        public override bool Condition(AIManager ai)
+        {
+            while (!HasSearched)
+            {
+                return false;
+            }
+
+            ResetSearch(); return true;
+        }
+
         public void StartSearch()
         {
             currentSearchTime = Random.Range(searchTimeRange.x, searchTimeRange.y);
@@ -51,10 +61,6 @@ namespace com.limphus.retro_survival_shooter
 
         private void Search(AIManager ai)
         {
-            //search via wandering around a target area
-            //stopping and looking around every few seconds
-            //after a certain amount of time, go back to patrolling or wandering
-
             searchTimer += Time.deltaTime;
 
             if (searchTimer > currentSearchTime) { EndSearch(); return; }

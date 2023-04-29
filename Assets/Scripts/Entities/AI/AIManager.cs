@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using com.limphus.utilities;
 
 namespace com.limphus.retro_survival_shooter
 {
@@ -12,6 +13,8 @@ namespace com.limphus.retro_survival_shooter
         public Vector3 OriginPosition { get; private set; }
 
         private Vector3 targetPosition, previousTargetPosition;
+
+        public FieldOfView FOV { get; private set; }
 
         public bool IsMoving { get; private set; }
 
@@ -25,6 +28,8 @@ namespace com.limphus.retro_survival_shooter
         private void Init()
         {
             agent = GetComponent<NavMeshAgent>();
+            FOV = GetComponent<FieldOfView>();
+
             OriginPosition = transform.position;
         }
 
