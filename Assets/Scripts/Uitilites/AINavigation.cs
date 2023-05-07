@@ -16,5 +16,18 @@ namespace com.limphus.utilities
 
             return navHit.position;
         }
+
+        /// <summary>
+        /// A function for converting world to navmesh position.
+        /// </summary>
+        /// <param name="worldPos">The world position to convert to a navmesh position.</param>
+        /// <param name="layerMask">The layermask of the navmesh.</param>
+        /// <returns></returns>
+        public static Vector3 WorldToNavPoint(Vector3 worldPos, LayerMask layerMask)
+        {
+            NavMesh.SamplePosition(worldPos, out NavMeshHit navHit, Mathf.Infinity, layerMask);
+
+            return navHit.position;
+        }
     }
 }

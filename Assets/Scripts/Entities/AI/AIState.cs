@@ -17,10 +17,7 @@ namespace com.limphus.retro_survival_shooter
         public List<AIAction> actions = new List<AIAction>();
 
         // Current state of the AI
-        private AIAction currentAction;
-
-        // Dictionary of all possible transitions and the states they lead to
-        private Dictionary<AIAction, List<AIAction>> transitions = new Dictionary<AIAction, List<AIAction>>();
+        private AIAction currentState;
 
         private AIManager ai;
 
@@ -31,16 +28,11 @@ namespace com.limphus.retro_survival_shooter
 
         private void Init()
         {
+            // Get the AIManager component from this game object
             ai = GetComponent<AIManager>();
 
-            // Set up the transitions for each AI action
-            foreach (AIAction action in actions)
-            {
-                transitions[action] = action.GetTransitions();
-            }
-
             // Set the initial state to the first action in the list
-            currentAction = actions[0];
+            currentState = actions[0];
         }
 
         private void Update()
@@ -51,21 +43,28 @@ namespace com.limphus.retro_survival_shooter
         private void UpdateState()
         {
             // Execute the current state's action
-            currentAction.Act(ai);
+            currentState.Act(ai);
 
             // Check if a transition to a new state is necessary
-            foreach (AIAction action in transitions[currentAction])
+            foreach (Transition transition in currentState.transitions)
             {
-                if (action.Condition(ai))
+                if (transition.CheckCondition(ai))
                 {
-                    // Transition to the new state
-                    currentAction = action;
+                    SetState(transition.trueState); break;
+                }
 
-                    Debug.Log(currentAction);
-
-                    break;
+                else if (!transition.CheckCondition(ai))
+                {
+                    SetState(transition.falseState); break;
                 }
             }
+        }
+
+        private void SetState(AIAction newState)
+        {
+            if (newState == currentState) return;
+            else currentState = newState;
+            Debug.Log(currentState);
         }
     }
 }

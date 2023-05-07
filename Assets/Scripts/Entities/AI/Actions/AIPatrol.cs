@@ -27,11 +27,6 @@ namespace com.limphus.retro_survival_shooter
             CheckPatrol(ai);
         }
 
-        public override bool Condition(AIManager ai)
-        {
-            throw new System.NotImplementedException();
-        }
-
         private void CheckPatrol(AIManager ai)
         {
             if (ai.IsMoving) return;
@@ -81,7 +76,9 @@ namespace com.limphus.retro_survival_shooter
                     break;
             }
 
-            ai.SetTargetPos(patrolPoints[currentPatrolPoint].position);
+            Vector3 targetPoint = AINavigation.WorldToNavPoint(patrolPoints[currentPatrolPoint].position,LayerMask.NameToLayer("Terrain"));
+
+            ai.SetTargetPos(targetPoint);
         }
 
         private void ResetIdleTimer()

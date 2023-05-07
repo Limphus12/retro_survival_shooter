@@ -12,11 +12,6 @@ namespace com.limphus.retro_survival_shooter
             CheckAttack(ai);
         }
 
-        public override bool Condition(AIManager ai)
-        {
-            throw new NotImplementedException();
-        }
-
         private void CheckAttack(AIManager ai)
         {
             //ideally we'd have an inventory to check our weapons

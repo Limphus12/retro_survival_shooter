@@ -13,7 +13,7 @@ namespace com.limphus.retro_survival_shooter
         [SerializeField] private Vector2 searchTimeRange, searchWaitTimeRange;
         [SerializeField] private float wanderDistance;
 
-        private float searchTimer, waitTimer, currentSearchTime, currentWaitTime;
+        private float searchTimer = 0, waitTimer = 0, currentSearchTime, currentWaitTime;
 
         public bool IsSearching { get; private set; }
         public bool HasSearched{ get; private set; }
@@ -23,21 +23,9 @@ namespace com.limphus.retro_survival_shooter
             Search(ai);
         }
 
-        public override bool Condition(AIManager ai)
-        {
-            while (!HasSearched)
-            {
-                return false;
-            }
-
-            ResetSearch(); return true;
-        }
-
         public void StartSearch()
         {
-            currentSearchTime = Random.Range(searchTimeRange.x, searchTimeRange.y);
-
-            searchTimer = 0;
+            ResetSearchTimer();
 
             IsSearching = true;
             HasSearched = false;
@@ -61,23 +49,21 @@ namespace com.limphus.retro_survival_shooter
 
         private void Search(AIManager ai)
         {
-            searchTimer += Time.deltaTime;
+            if (searchTimer == 0) StartSearch();
 
+            searchTimer += Time.deltaTime;
+            
             if (searchTimer > currentSearchTime) { EndSearch(); return; }
 
             if (ai.IsMoving) return;
 
-            else if(!ai.IsMoving)
+            else if (!ai.IsMoving)
             {
                 waitTimer += Time.deltaTime;
 
                 if (waitTimer >= currentWaitTime)
                 {
-                    Vector3 targetPos = AINavigation.RandomNavSphere(ai.transform.position, wanderDistance, layerMask);
-
-                    Debug.Log(targetPos);
-
-                    ai.SetTargetPos(targetPos);
+                    ai.SetTargetPos(AINavigation.RandomNavSphere(ai.transform.position, wanderDistance, layerMask));
 
                     ResetIdleTimer();
                 }
@@ -87,6 +73,11 @@ namespace com.limphus.retro_survival_shooter
         private void ResetIdleTimer()
         {
             currentWaitTime = Random.Range(searchWaitTimeRange.x, searchWaitTimeRange.y); waitTimer = 0;
+        }
+
+        private void ResetSearchTimer()
+        {
+            currentSearchTime = Random.Range(searchTimeRange.x, searchTimeRange.y); searchTimer = 0;
         }
     }
 }

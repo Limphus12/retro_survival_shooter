@@ -31,6 +31,9 @@ namespace com.limphus.retro_survival_shooter
             FOV = GetComponent<FieldOfView>();
 
             OriginPosition = transform.position;
+            targetPosition = transform.position;
+
+            IsMoving = false;
         }
 
         private void Update()
@@ -40,7 +43,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckDestination()
         {
-            if (Vector3.Distance(transform.position, targetPosition) < 1f)
+            if (Vector3.Distance(transform.position, targetPosition) < 2f)
             {
                 IsMoving = false;
             }

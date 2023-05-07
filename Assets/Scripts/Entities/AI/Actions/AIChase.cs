@@ -20,11 +20,6 @@ namespace com.limphus.retro_survival_shooter
             CheckChase(ai);
         }
 
-        public override bool Condition(AIManager ai)
-        {
-            return !HasTarget;
-        }
-
         private void CheckChase(AIManager ai)
         {
             if (!fov) return;
