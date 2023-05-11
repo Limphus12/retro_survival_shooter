@@ -18,6 +18,8 @@ namespace com.limphus.retro_survival_shooter
         public override void Act(AIManager ai)
         {
             CheckChase(ai);
+
+            ai.Run();
         }
 
         private void CheckChase(AIManager ai)

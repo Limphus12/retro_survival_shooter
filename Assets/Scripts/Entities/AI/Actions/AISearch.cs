@@ -21,6 +21,8 @@ namespace com.limphus.retro_survival_shooter
         public override void Act(AIManager ai)
         {
             Search(ai);
+
+            ai.Walk();
         }
 
         public void StartSearch()

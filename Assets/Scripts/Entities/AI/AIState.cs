@@ -50,12 +50,12 @@ namespace com.limphus.retro_survival_shooter
             {
                 if (transition.CheckCondition(ai))
                 {
-                    SetState(transition.trueState); break;
+                    SetState(transition.trueState);
                 }
 
                 else if (!transition.CheckCondition(ai))
                 {
-                    SetState(transition.falseState); break;
+                    SetState(transition.falseState);
                 }
             }
         }

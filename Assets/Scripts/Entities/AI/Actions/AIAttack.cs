@@ -10,6 +10,8 @@ namespace com.limphus.retro_survival_shooter
         public override void Act(AIManager ai)
         {
             CheckAttack(ai);
+
+            ai.Walk();
         }
 
         private void CheckAttack(AIManager ai)
@@ -17,7 +19,9 @@ namespace com.limphus.retro_survival_shooter
             //ideally we'd have an inventory to check our weapons
             //then we'd be able to equip different items and whatnot...
 
-            //oh what if we have the ai 
+            Debug.Log("Attacking!");
+
+            ai.SetTargetPos(transform.position);
         }
     }
 }

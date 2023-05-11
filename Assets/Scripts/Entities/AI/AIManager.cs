@@ -14,11 +14,23 @@ namespace com.limphus.retro_survival_shooter
 
         private Vector3 targetPosition, previousTargetPosition;
 
+        private AIStats stats;
+
         public FieldOfView FOV { get; private set; }
 
         public bool IsMoving { get; private set; }
 
         public bool CanMove { get; set; }
+
+        public void Walk()
+        {
+            Agent.speed = stats.GetWalkSpeed();
+        }
+
+        public void Run()
+        {
+            Agent.speed = stats.GetRunSpeed();
+        }
 
         public void SetTargetPos(Vector3 pos)
         {
@@ -31,12 +43,15 @@ namespace com.limphus.retro_survival_shooter
         {
             Agent = GetComponent<NavMeshAgent>();
             FOV = GetComponent<FieldOfView>();
+            stats = GetComponent<AIStats>();
 
             OriginPosition = transform.position;
             targetPosition = transform.position;
 
             IsMoving = false;
             CanMove = true;
+
+            Walk();
         }
 
         private void Update()

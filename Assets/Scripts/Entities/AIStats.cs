@@ -14,6 +14,9 @@ namespace com.limphus.retro_survival_shooter
 
         [SerializeField] protected float walkSpeed, runSpeed;
 
+        public float GetWalkSpeed() => walkSpeed;
+        public float GetRunSpeed() => runSpeed;
+
         private void Start()
         {
             if (!ragdoll) ragdoll = GetComponentInChildren<RagdollManager>();
