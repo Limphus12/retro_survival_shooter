@@ -10,7 +10,7 @@ namespace com.limphus.retro_survival_shooter
     {
         [Header("Variables - Health")]
         [SerializeField] protected int maxHealth = 100;
-        [SerializeField] protected int currentHealth;
+        protected int currentHealth;
 
         public bool IsDead { get; private set; }
 

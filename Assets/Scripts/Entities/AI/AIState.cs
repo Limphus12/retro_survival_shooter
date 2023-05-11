@@ -37,7 +37,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void Update()
         {
-            UpdateState();
+            if (ai.CanMove) UpdateState();
         }
 
         private void UpdateState()

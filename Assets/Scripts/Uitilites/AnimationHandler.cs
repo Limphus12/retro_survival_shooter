@@ -6,14 +6,15 @@ namespace com.limphus.utilities
 {
     public class AnimationHandler : MonoBehaviour
     {
+        [Header("Attributes - Animation")]
         [SerializeField] protected Animator animator;
+
+        protected string currentState;
 
         private void Awake()
         {
             if (!animator) animator = GetComponent<Animator>();
         }
-
-        protected string currentState;
 
         protected void PlayAnimation(string newState)
         {
@@ -25,6 +26,27 @@ namespace com.limphus.utilities
 
             //reassign the current state
             currentState = newState;
+        }
+
+        protected void SetParamater(string paramater, int value)
+        {
+            animator.SetInteger(paramater, value);
+        }
+
+        protected void SetParamater(string paramater, float value)
+        {
+            animator.SetFloat(paramater, value);
+        }
+
+        protected void SetParamater(string paramater, bool value)
+        {
+            animator.SetBool(paramater, value);
+        }
+
+        protected void SetTrigger(string paramater, bool value)
+        {
+            if (value) animator.SetTrigger(paramater);
+            else animator.ResetTrigger(paramater);
         }
     }
 }

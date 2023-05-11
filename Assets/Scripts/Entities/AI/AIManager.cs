@@ -9,7 +9,7 @@ namespace com.limphus.retro_survival_shooter
 {
     public class AIManager : MonoBehaviour
     {
-        private NavMeshAgent agent;
+        public NavMeshAgent Agent { get; private set; }
         public Vector3 OriginPosition { get; private set; }
 
         private Vector3 targetPosition, previousTargetPosition;
@@ -17,6 +17,8 @@ namespace com.limphus.retro_survival_shooter
         public FieldOfView FOV { get; private set; }
 
         public bool IsMoving { get; private set; }
+
+        public bool CanMove { get; set; }
 
         public void SetTargetPos(Vector3 pos)
         {
@@ -27,13 +29,14 @@ namespace com.limphus.retro_survival_shooter
 
         private void Init()
         {
-            agent = GetComponent<NavMeshAgent>();
+            Agent = GetComponent<NavMeshAgent>();
             FOV = GetComponent<FieldOfView>();
 
             OriginPosition = transform.position;
             targetPosition = transform.position;
 
             IsMoving = false;
+            CanMove = true;
         }
 
         private void Update()
@@ -43,7 +46,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void CheckDestination()
         {
-            if (Vector3.Distance(transform.position, targetPosition) < 2f)
+            if (Vector3.Distance(transform.position, targetPosition) < 0.25f)
             {
                 IsMoving = false;
             }
@@ -55,7 +58,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (targetPosition != previousTargetPosition)
             {
-                agent.SetDestination(targetPosition);
+                Agent.SetDestination(targetPosition);
             }
 
             previousTargetPosition = targetPosition;
