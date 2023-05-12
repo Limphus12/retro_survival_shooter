@@ -849,6 +849,8 @@ MonoBehaviour:
   throwable: {fileID: 0}
   placeable: {fileID: 0}
   consumable: {fileID: 0}
+  playerItem: 1
+  firePoint: {fileID: 0}
 --- !u!114 &5160590522330889338
 MonoBehaviour:
   m_ObjectHideFlags: 0

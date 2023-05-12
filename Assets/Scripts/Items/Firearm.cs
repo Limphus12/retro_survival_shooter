@@ -24,9 +24,9 @@ namespace com.limphus.retro_survival_shooter
         [Header("Attributes - Firearm")]
         [SerializeField] private FirearmData firearmData;
 
-        public Magazine Magazine { get; private set; }
+        [Space, SerializeField] private bool playerItem;
 
-        public bool IsAiming { get; private set; }
+        public Magazine Magazine { get; private set; }
 
         #region Private Variables
 
@@ -53,10 +53,14 @@ namespace com.limphus.retro_survival_shooter
         private FirearmFX firearmFX;
 
         private FirearmFunctionAnimation firearmFunctionAnimation;
-        
-        private Transform playerCamera;
 
-        private bool isAttacking, isAiming, isReloading, isCocked, isCocking;
+        private Transform firePoint;
+
+        public bool IsAttacking { get; private set; }
+        public bool IsAiming { get; private set; }
+        public bool IsReloading { get; private set; }
+        public bool IsCocked { get; private set; }
+        public bool IsCocking { get; private set; }
 
         #endregion
 
@@ -67,7 +71,7 @@ namespace com.limphus.retro_survival_shooter
         private void Init()
         {
             if (!Magazine) Magazine = GetComponent<Magazine>();
-            if (!playerCamera) playerCamera = Camera.main.transform;
+            if (!firePoint && playerItem) firePoint = Camera.main.transform;
 
             InitStats(); InitEffects();
         }
@@ -96,7 +100,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (!weaponRecoil) weaponRecoil = gameObject.GetComponentInChildren<WeaponRecoil>();
 
-            if (!cameraRecoil && playerCamera) cameraRecoil = playerCamera.GetComponentInParent<WeaponRecoil>();
+            if (!cameraRecoil && firePoint) cameraRecoil = firePoint.GetComponentInParent<WeaponRecoil>();
 
             if (!firearmSway) firearmSway = gameObject.GetComponent<FirearmSway>();
 
@@ -113,7 +117,7 @@ namespace com.limphus.retro_survival_shooter
 
         public bool InUse()
         {
-            if (isAttacking || isReloading || isCocking) return true;
+            if (IsAttacking || IsReloading || IsCocking) return true;
 
             else return false;
         }
@@ -127,7 +131,7 @@ namespace com.limphus.retro_survival_shooter
                     if (leftMouseInput) Magazine.InterruptReload(); return; 
                 }
 
-                else if (!Magazine.IsReloading && !isAttacking && reloadInput)
+                else if (!Magazine.IsReloading && !IsAttacking && reloadInput)
                 {
                     Magazine.CheckReload();
 
@@ -140,7 +144,7 @@ namespace com.limphus.retro_survival_shooter
                 }
             }
 
-            if (isAttacking) return;
+            if (IsAttacking) return;
 
             Aim(rightMouseInput);
 
@@ -181,9 +185,9 @@ namespace com.limphus.retro_survival_shooter
 
                 case FirearmFireType.COCK:
 
-                    if (isCocking) return;
+                    if (IsCocking) return;
 
-                    else if (!isCocked) { StartCock(); return; }
+                    else if (!IsCocked) { StartCock(); return; }
 
                     if(Magazine.CurrentMagazineCount <= 0)
                     {
@@ -195,7 +199,7 @@ namespace com.limphus.retro_survival_shooter
                         return;
                     }
 
-                    if (leftMouseInput && isCocked) { isCocked = false; StartAttack(); }
+                    if (leftMouseInput && IsCocked) { IsCocked = false; StartAttack(); }
 
                     break;
             }
@@ -205,7 +209,7 @@ namespace com.limphus.retro_survival_shooter
 
         private void StartAttack()
         {
-            isAttacking = true;
+            IsAttacking = true;
 
             if (firearmSound) firearmSound.PlayFiringSound();
             
@@ -222,7 +226,7 @@ namespace com.limphus.retro_survival_shooter
         private void Attack()
         {
             //call the hit function, passing through the player camera
-            Hit(playerCamera);
+            Hit(firePoint);
 
             //remove ammo from the mag
             Magazine.DepleteAmmoFromMagazine(1);
@@ -231,7 +235,7 @@ namespace com.limphus.retro_survival_shooter
             if (cameraRecoil && weaponRecoil) { cameraRecoil.Recoil(); weaponRecoil.Recoil(); }
         }
 
-        private void EndAttack() => isAttacking = false;
+        private void EndAttack() => IsAttacking = false;
 
         private void Hit(Transform point)
         {
@@ -255,9 +259,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (Magazine.IsReloading) b = false;
 
-            else isAiming = b;
-
-            IsAiming = isAiming;
+            else IsAiming = b;
 
             //if we have the camera and weapon recoil references, as well as the weapon sway reference, call the aim method on them too
             if (cameraRecoil && weaponRecoil && firearmSway)
@@ -270,27 +272,27 @@ namespace com.limphus.retro_survival_shooter
 
         public FirearmState GetFirearmState()
         {
-            if (isCocking) return FirearmState.COCKING;
+            if (IsCocking) return FirearmState.COCKING;
             else if (Magazine.IsReloading) return FirearmState.RELOADING;
-            else if (isAiming && !isAttacking) return FirearmState.AIMING;
-            if (isAttacking && isAiming) return FirearmState.AIMATTACK;
-            else if (isAttacking) return FirearmState.ATTACKING;
+            else if (IsAiming && !IsAttacking) return FirearmState.AIMING;
+            if (IsAttacking && IsAiming) return FirearmState.AIMATTACK;
+            else if (IsAttacking) return FirearmState.ATTACKING;
             else return FirearmState.IDLE;
         }
 
         private void StartCock()
         {
-            isCocking = true;
+            IsCocking = true;
 
-            if (firearmSway) firearmSway.Cock(isCocking);
+            if (firearmSway) firearmSway.Cock(IsCocking);
             if (firearmSound) firearmSound.PlayCockingSound();
             if (firearmFunctionAnimation) firearmFunctionAnimation.PlayFirearmCock();
 
             Invoke(nameof(Cock), cockTime);
         }
 
-        private void Cock() { isCocked = true; EndCock(); }
-        private void EndCock() { isCocking = false; if (firearmSway) firearmSway.Cock(isCocking); }
+        private void Cock() { IsCocked = true; EndCock(); }
+        private void EndCock() { IsCocking = false; if (firearmSway) firearmSway.Cock(IsCocking); }
         private void InterruptCock() { CancelInvoke(nameof(Cock)); EndCock(); }
 
         //a method to interrupt the firearm functions
@@ -302,7 +304,7 @@ namespace com.limphus.retro_survival_shooter
             {
                 if (Magazine && Magazine.IsReloading) Magazine.InterruptReload();
 
-                if (isCocking) InterruptCock();
+                if (IsCocking) InterruptCock();
             }
         }
 

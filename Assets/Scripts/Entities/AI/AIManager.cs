@@ -22,6 +22,8 @@ namespace com.limphus.retro_survival_shooter
 
         public bool CanMove { get; set; }
 
+        public float CurrentSpeed => Agent.speed;
+
         public void Walk()
         {
             Agent.speed = stats.GetWalkSpeed();

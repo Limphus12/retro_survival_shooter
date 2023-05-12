@@ -33,7 +33,9 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] private Consumable consumable;
 
-        private Transform playerCamera;
+        [Space, SerializeField] private bool playerItem;
+
+        [SerializeField] private Transform firePoint;
         private PlayerStats playerStats;
         private PlayerController playerController;
 
@@ -88,9 +90,11 @@ namespace com.limphus.retro_survival_shooter
 
         private void InitReferences()
         {
+            if (!playerItem) return;
+
             if (!playerStats) playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
             if (!playerController) playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-            if (!playerCamera) playerCamera = Camera.main.transform;
+            if (!firePoint) firePoint = Camera.main.transform;
         }
 
         private void InitEffects()
@@ -137,12 +141,13 @@ namespace com.limphus.retro_survival_shooter
 
         private void Start()
         {
-            //if this item is not equipped, then return;
+            //if this item is not equipped, then return
             if (!isEquipped) return;
         }
 
         private void Update()
         {
+            if (!playerItem) return;
             if (CanUse && useable != null) useable.CheckInput();
             if (CanUse) Inputs();
         }

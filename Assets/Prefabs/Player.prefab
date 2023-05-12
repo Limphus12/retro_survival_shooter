@@ -9694,7 +9694,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 100
   maxHunger: 100
   maxThirst: 100
   maxStamina: 100
@@ -11367,6 +11366,10 @@ PrefabInstance:
     - target: {fileID: 4853223484956157666, guid: 183f7d6e344fee94ea8633e37d4f399a, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5160590522330889338, guid: 183f7d6e344fee94ea8633e37d4f399a, type: 3}
+      propertyPath: playerItem
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5160590522330889338, guid: 183f7d6e344fee94ea8633e37d4f399a, type: 3}
       propertyPath: cameraRecoil

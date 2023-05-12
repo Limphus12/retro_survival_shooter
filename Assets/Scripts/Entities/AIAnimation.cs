@@ -21,6 +21,8 @@ namespace com.limphus.retro_survival_shooter
         {
             if (ai.IsMoving) Move();
             else StopMove();
+
+            SetSpeed();
         }
 
         public void StopAnimation()
@@ -29,6 +31,9 @@ namespace com.limphus.retro_survival_shooter
         }
 
         const string MOVING = "IsMoving";
+        const string SPEED = "Speed";
+
+        void SetSpeed() => SetParamater(SPEED, ai.CurrentSpeed);
 
         public void Move() => SetParamater(MOVING, true);
         public void StopMove() => SetParamater(MOVING, false);

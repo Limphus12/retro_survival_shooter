@@ -7,6 +7,8 @@ namespace com.limphus.retro_survival_shooter
 {
     public class AIAttack : AIAction
     {
+        [SerializeField] private Firearm firearm;
+
         public override void Act(AIManager ai)
         {
             CheckAttack(ai);
@@ -22,6 +24,13 @@ namespace com.limphus.retro_survival_shooter
             Debug.Log("Attacking!");
 
             ai.SetTargetPos(transform.position);
+
+            if (firearm && !firearm.InUse())
+            {
+                firearm.CheckInputs(true, false, false);
+            }
         }
+
+        public bool IsAttacking => firearm.IsAttacking;
     }
 }

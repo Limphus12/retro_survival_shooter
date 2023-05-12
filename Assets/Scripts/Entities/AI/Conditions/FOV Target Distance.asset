@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a99f34eea359c4ab3c24f9c5ce9ee8, type: 3}
   m_Name: FOV Target Distance
   m_EditorClassIdentifier: 
-  distance: 10
+  distance: 8
