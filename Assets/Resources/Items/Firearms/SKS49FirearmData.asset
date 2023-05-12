@@ -15,21 +15,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   itemName: SKS-49
   itemWeight: 6
-  attackRange: 2
-  lightAttackRate: 1
-  lightAttackDamage: 10
-  lightAttackTimeToHit: 0.5
-  lightAttackStaminaCost: 10
-  heavyAttackRate: 0.66
-  heavyAttackDamage: 25
-  chargeUpTime: 1
-  heavyAttackTimeToHit: 0.5
-  heavyAttackStaminaCost: 25
-  exhaustedAttackRate: 0.33
-  exhaustedAttackDamage: 5
-  exhaustedAttackTimeToHit: 1.5
-  firearmDamage: 100
-  firearmAttackRate: 1
+  firearmDamage: 25
+  firearmAttackRate: 0.33
   magazineSize: 6
   reloadTime: 1.5
   maxAmmoReserves: 18

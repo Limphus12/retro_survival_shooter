@@ -7,35 +7,48 @@ namespace com.limphus.retro_survival_shooter
 {
     public class AIAnimation : AnimationHandler
     {
-        private AIManager ai;
+        private AIController ai;
 
         private void Awake() => Init();
 
         private void Init()
         {
             // Get the AIManager component from this game object
-            ai = GetComponent<AIManager>();
+            ai = GetComponent<AIController>();
         }
 
         private void Update()
         {
-            if (ai.IsMoving) Move();
-            else StopMove();
-
-            SetSpeed();
+            UpdateAnimations();
         }
 
-        public void StopAnimation()
+        private void UpdateAnimations()
         {
-            animator.enabled = false;
+            SetSpeed();
+            SetMove();
+
+            SetSearch();
+            SetAttacking();
+            SetFiring();
+        }
+
+        public void ToggleAnimator(bool b)
+        {
+            animator.enabled = b;
         }
 
         const string MOVING = "IsMoving";
         const string SPEED = "Speed";
+        const string SEARCH = "IsSearching";
+        const string ATTACK = "IsAttacking";
+        const string FIRING = "IsFiring";
+        const string RELOAD = "IsReloading";
 
-        void SetSpeed() => SetParamater(SPEED, ai.CurrentSpeed);
-
-        public void Move() => SetParamater(MOVING, true);
-        public void StopMove() => SetParamater(MOVING, false);
+        private void SetSpeed() => SetParamater(SPEED, ai.CurrentSpeed);
+        private void SetMove() => SetParamater(MOVING, ai.IsMoving);
+        private void SetSearch() => SetParamater(SEARCH, ai.IsSearching);
+        private void SetAttacking() => SetParamater(ATTACK, ai.IsFiring);
+        private void SetFiring() => SetParamater(FIRING, ai.IsFiring);
+        //private void SetReloading() => SetParamater(RELOAD, ai.IsReloading);
     }
 }

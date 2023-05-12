@@ -1,6 +1,4 @@
-    using System;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace com.limphus.retro_survival_shooter
@@ -54,7 +52,7 @@ namespace com.limphus.retro_survival_shooter
 
         private FirearmFunctionAnimation firearmFunctionAnimation;
 
-        private Transform firePoint;
+        public Transform FirePoint { get; set; }
 
         public bool IsAttacking { get; private set; }
         public bool IsAiming { get; private set; }
@@ -71,7 +69,7 @@ namespace com.limphus.retro_survival_shooter
         private void Init()
         {
             if (!Magazine) Magazine = GetComponent<Magazine>();
-            if (!firePoint && playerItem) firePoint = Camera.main.transform;
+            if (!FirePoint && playerItem) FirePoint = Camera.main.transform;
 
             InitStats(); InitEffects();
         }
@@ -100,7 +98,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (!weaponRecoil) weaponRecoil = gameObject.GetComponentInChildren<WeaponRecoil>();
 
-            if (!cameraRecoil && firePoint) cameraRecoil = firePoint.GetComponentInParent<WeaponRecoil>();
+            if (!cameraRecoil && FirePoint) cameraRecoil = FirePoint.GetComponentInParent<WeaponRecoil>();
 
             if (!firearmSway) firearmSway = gameObject.GetComponent<FirearmSway>();
 
@@ -226,7 +224,7 @@ namespace com.limphus.retro_survival_shooter
         private void Attack()
         {
             //call the hit function, passing through the player camera
-            Hit(firePoint);
+            Hit(FirePoint);
 
             //remove ammo from the mag
             Magazine.DepleteAmmoFromMagazine(1);

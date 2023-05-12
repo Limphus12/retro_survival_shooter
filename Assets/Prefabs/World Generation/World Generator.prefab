@@ -1,5 +1,59 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6568330408589660994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3039336064877374053}
+  - component: {fileID: 3125254080684933790}
+  m_Layer: 0
+  m_Name: AI Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3039336064877374053
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568330408589660994}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8224924337041208562}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3125254080684933790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568330408589660994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed25f5e675a70a44286f82e62d1f2cac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AI:
+  - {fileID: 4912969140345942545, guid: cb26fc6bd622d6e48b786769ccacb1a0, type: 3}
+  placementChance: 0.005
+  gridSize: 96
+  gridMultiplier: 4
+  gridOffset: 36
+  raycastHeight: 1000
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  offset: {x: 0, y: 0}
 --- !u!1 &8224924335407260637
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +418,7 @@ Transform:
   - {fileID: 8224924335899335179}
   - {fileID: 8224924336563355267}
   m_Father: {fileID: 8224924337041208562}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8224924336563355268
 GameObject:
@@ -666,6 +720,7 @@ Transform:
   - {fileID: 8224924335699164627}
   - {fileID: 8224924336919173136}
   - {fileID: 7740244760961501179}
+  - {fileID: 3039336064877374053}
   - {fileID: 8224924336504708297}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -898,6 +953,7 @@ MonoBehaviour:
   biomeGenerator: {fileID: 8224924335699164626}
   structureGenerator: {fileID: 8224924336919173151}
   navMeshGenerator: {fileID: 273652824901885260}
+  aiGenerator: {fileID: 3125254080684933790}
 --- !u!1 &8224924337437130158
 GameObject:
   m_ObjectHideFlags: 0

@@ -864,6 +864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firearmData: {fileID: 11400000, guid: bdbaad293f52bb04a986d6ec2f6b2274, type: 2}
+  playerItem: 0
 --- !u!114 &6848814638209683725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -905,6 +906,7 @@ MonoBehaviour:
   dryFiringClip: {fileID: 0}
   reloadingClip: {fileID: 0}
   cockingClip: {fileID: 0}
+  isPlayer: 1
 --- !u!114 &7349482920330941890
 MonoBehaviour:
   m_ObjectHideFlags: 0

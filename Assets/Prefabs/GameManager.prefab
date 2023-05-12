@@ -291,7 +291,7 @@ MonoBehaviour:
     emmisionRate: 300
     fogDistance: 64
     weatherSound: {fileID: 0}
-    volume: 0.2
+    volume: 0.1
   - name: Blizzard
     timeGradient:
       serializedVersion: 2

@@ -27,7 +27,7 @@ namespace com.limphus.retro_survival_shooter
             //assign to the correct audio mixer and play!
             audioSource.outputAudioMixerGroup = audioMixerGroup;
             audioSource.PlayOneShot(clip);
-            audioSource.spatialBlend = 0f; //3D
+            audioSource.spatialBlend = 0f; //2D
 
             //make sure to destroy the sound game object after the sound is done!
             Destroy(soundGameObject, clip.length);

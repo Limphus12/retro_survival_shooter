@@ -118,6 +118,8 @@ namespace com.limphus.retro_survival_shooter
 
         public void DepleteAmmoFromMagazine(int amount)
         {
+            if (infiniteClip || infiniteAmmo) return;
+
             CurrentMagazineCount -= amount;
 
             CurrentMagazineCount = Mathf.Clamp(CurrentMagazineCount, 0, maxMagazineSize);

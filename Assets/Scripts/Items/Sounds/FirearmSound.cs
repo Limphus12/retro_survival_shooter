@@ -16,6 +16,8 @@ namespace com.limphus.retro_survival_shooter
         [Space]
         [SerializeField] protected AudioClip cockingClip;
 
+        [Space, SerializeField] private bool isPlayer;
+
         protected override void Init()
         {
             if (!firearmSoundData)
@@ -35,9 +37,25 @@ namespace com.limphus.retro_survival_shooter
             cockingClip = firearmSoundData.cockingClip;
         }
 
-        public void PlayFiringSound() => PlaySound(firingClip);
-        public void PlayReloadingSound() => PlaySound(reloadingClip);
-        public void PlayDryFiringSound() => PlaySound(dryFiringClip);
-        public void PlayCockingSound() => PlaySound(cockingClip);
+        public void PlayFiringSound()
+        {
+            if (!isPlayer) { PlaySound(firingClip, transform.position); return; }
+            PlaySound(firingClip);
+        }
+        public void PlayReloadingSound()
+        {
+            if (!isPlayer) { PlaySound(reloadingClip, transform.position); return; }
+            PlaySound(reloadingClip);
+        }
+        public void PlayDryFiringSound()
+        {
+            if (!isPlayer) { PlaySound(dryFiringClip, transform.position); return; }
+            PlaySound(dryFiringClip);
+        }
+        public void PlayCockingSound()
+        {
+            if (!isPlayer) { PlaySound(cockingClip, transform.position); return; }
+            PlaySound(cockingClip);
+        }
     }
 }

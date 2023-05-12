@@ -39,6 +39,8 @@ namespace com.limphus.retro_survival_shooter
 
         [SerializeField] private NavMeshGenerator navMeshGenerator;
 
+        [SerializeField] private AIGenerator aiGenerator;
+
         public WorldDataStruct CurrentWorldData { get; private set; }
 
         public static void SetCurrentSeed(int i) => Seed = i;
@@ -105,6 +107,12 @@ namespace com.limphus.retro_survival_shooter
             }
 
             if (navMeshGenerator) navMeshGenerator.GenerateNavMesh();
+
+            if (aiGenerator)
+            {
+                aiGenerator.SetOffset(currentChunk);
+                aiGenerator.GenerateAI();
+            }
         }
 
         public void EditorGenerateWorld()
@@ -150,6 +158,12 @@ namespace com.limphus.retro_survival_shooter
             }
 
             if (navMeshGenerator) navMeshGenerator.GenerateNavMesh();
+
+            if (aiGenerator)
+            {
+                aiGenerator.SetOffset(currentChunk);
+                aiGenerator.GenerateAI();
+            }
         }
 
         public void ClearWorld()
