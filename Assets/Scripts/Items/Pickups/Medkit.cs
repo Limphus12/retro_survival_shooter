@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace com.limphus.retro_survival_shooter
+namespace com.limphus.retro_survival_shooter.items
 {
     public class Medkit : Pickup
     {
@@ -10,7 +10,7 @@ namespace com.limphus.retro_survival_shooter
         {
             if (GameManager.PlayerStats.CanReplenishHealth())
             {
-                GameManager.PlayerStats.ReplenishHealth(pickupAmount);
+                GameManager.PlayerStats.ReplenishHealth(amount);
 
                 Destroy();
             }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace com.limphus.retro_survival_shooter
+namespace com.limphus.retro_survival_shooter.items
 {
     public class Pickup : MonoBehaviour
     {
-        [SerializeField] protected int pickupAmount;
+        [SerializeField] protected int amount;
 
         private void OnTriggerEnter(Collider other)
         {

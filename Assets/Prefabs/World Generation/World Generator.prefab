@@ -952,8 +952,8 @@ MonoBehaviour:
   terrainGenerator: {fileID: 8224924336892737701}
   biomeGenerator: {fileID: 8224924335699164626}
   structureGenerator: {fileID: 8224924336919173151}
-  navMeshGenerator: {fileID: 273652824901885260}
-  aiGenerator: {fileID: 3125254080684933790}
+  navMeshGenerator: {fileID: 0}
+  aiGenerator: {fileID: 0}
 --- !u!1 &8224924337437130158
 GameObject:
   m_ObjectHideFlags: 0

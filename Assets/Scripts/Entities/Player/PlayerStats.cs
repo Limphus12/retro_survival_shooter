@@ -142,6 +142,12 @@ namespace com.limphus.retro_survival_shooter
 
         #region Hunger
 
+        public bool CanReplenishHunger()
+        {
+            if (currentHunger < maxHunger) return true;
+            else return false;
+        }
+
         //used to grab our current hunger
         //(maybe replace with events instead?)
         public int GetCurrentHunger() => currentHunger;
@@ -200,6 +206,12 @@ namespace com.limphus.retro_survival_shooter
         #endregion
 
         #region Thirst
+
+        public bool CanReplenishThirst()
+        {
+            if (currentThirst < maxThirst) return true;
+            else return false;
+        }
 
         //used to grab our current thirst
         //(maybe replace with events instead?)
@@ -260,6 +272,12 @@ namespace com.limphus.retro_survival_shooter
 
         #region Stamina
 
+        public bool CanReplenishStamina()
+        {
+            if (currentStamina < maxStamina) return true;
+            else return false;
+        }
+
         //used to grab our current stamina
         //(maybe replace with events instead?)
         public int GetCurrentStamina() => currentStamina;
@@ -318,6 +336,12 @@ namespace com.limphus.retro_survival_shooter
         #endregion
 
         #region Melee Stamina
+
+        public bool CanReplenishMeleeStamina()
+        {
+            if (currentMeleeStamina < maxMeleeStamina) return true;
+            else return false;
+        }
 
         public int GetCurrentMeleeStamina() => currentMeleeStamina;
         public int GetMaxMeleeStamina() => maxMeleeStamina;
