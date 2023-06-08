@@ -21,6 +21,7 @@ namespace com.limphus.retro_survival_shooter
 
         public event EventHandler<Events.OnIntChangedEventArgs> OnHealthChanged;
         public event EventHandler<EventArgs> OnHealthDepleted;
+        public event EventHandler<EventArgs> OnHealthReplenished;
 
         private void Awake() => InitVariables();
 
@@ -29,6 +30,12 @@ namespace com.limphus.retro_survival_shooter
             SetCurrentHealth(maxHealth);
 
             IsDead = false;
+        }
+
+        public bool CanReplenishHealth()
+        {
+            if (currentHealth < maxHealth) return true;
+            else return false;
         }
 
         //returns our current health
@@ -86,7 +93,10 @@ namespace com.limphus.retro_survival_shooter
         {
             //increaes current health
             SetCurrentHealth(GetCurrentHealth() + amount);
-            
+
+            //replenish event
+            OnHealthReplenished?.Invoke(this, new EventArgs { });
+
             //check our health
             CheckHealth();
         }

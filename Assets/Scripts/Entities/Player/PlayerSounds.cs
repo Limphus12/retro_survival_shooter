@@ -71,24 +71,28 @@ namespace com.limphus.retro_survival_shooter
         {
             playerInteraction.OnInteract += PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted += PlayerStats_OnHealthDepleted;
+            playerStats.OnHealthReplenished += PlayerStats_OnHealthReplenished;
         }
 
         private void OnEnable()
         {
             playerInteraction.OnInteract += PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted += PlayerStats_OnHealthDepleted;
+            playerStats.OnHealthReplenished += PlayerStats_OnHealthReplenished;
         }
 
         private void OnDisable()
         {
             playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted -= PlayerStats_OnHealthDepleted;
+            playerStats.OnHealthReplenished -= PlayerStats_OnHealthReplenished;
         }
 
         private void OnDestroy()
         {
             playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted -= PlayerStats_OnHealthDepleted;
+            playerStats.OnHealthReplenished -= PlayerStats_OnHealthReplenished;
         }
 
         private void PlayerInteraction_OnInteract(object sender, PlayerInteraction.OnInteractEventArgs e)
@@ -100,6 +104,8 @@ namespace com.limphus.retro_survival_shooter
         }
 
         private void PlayerStats_OnHealthDepleted(object sender, System.EventArgs e) => PlayHurtSounds();
+
+        private void PlayerStats_OnHealthReplenished(object sender, System.EventArgs e) => PlayMedicineSounds();
 
         private void Update()
         {

@@ -94,15 +94,6 @@ namespace com.limphus.retro_survival_shooter
 
         #region Stats
 
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.H) && !IsDead)
-            {
-                Damage(10);
-            }
-        }
-
         bool death = false;
 
         protected override void Kill()
