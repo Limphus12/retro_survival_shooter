@@ -71,6 +71,8 @@ namespace com.limphus.retro_survival_shooter
         {
             playerInteraction.OnInteract += PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted += PlayerStats_OnHealthDepleted;
+            playerStats.OnHungerReplenished += PlayerStats_OnHungerReplenished;
+            playerStats.OnThirstReplenished += PlayerStats_OnThirstReplenished;
             playerStats.OnHealthReplenished += PlayerStats_OnHealthReplenished;
         }
 
@@ -78,6 +80,8 @@ namespace com.limphus.retro_survival_shooter
         {
             playerInteraction.OnInteract += PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted += PlayerStats_OnHealthDepleted;
+            playerStats.OnHungerReplenished += PlayerStats_OnHungerReplenished;
+            playerStats.OnThirstReplenished += PlayerStats_OnThirstReplenished;
             playerStats.OnHealthReplenished += PlayerStats_OnHealthReplenished;
         }
 
@@ -85,6 +89,8 @@ namespace com.limphus.retro_survival_shooter
         {
             playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted -= PlayerStats_OnHealthDepleted;
+            playerStats.OnHungerReplenished -= PlayerStats_OnHungerReplenished;
+            playerStats.OnThirstReplenished -= PlayerStats_OnThirstReplenished;
             playerStats.OnHealthReplenished -= PlayerStats_OnHealthReplenished;
         }
 
@@ -92,6 +98,8 @@ namespace com.limphus.retro_survival_shooter
         {
             playerInteraction.OnInteract -= PlayerInteraction_OnInteract;
             playerStats.OnHealthDepleted -= PlayerStats_OnHealthDepleted;
+            playerStats.OnHungerReplenished -= PlayerStats_OnHungerReplenished;
+            playerStats.OnThirstReplenished -= PlayerStats_OnThirstReplenished;
             playerStats.OnHealthReplenished -= PlayerStats_OnHealthReplenished;
         }
 
@@ -105,6 +113,8 @@ namespace com.limphus.retro_survival_shooter
 
         private void PlayerStats_OnHealthDepleted(object sender, System.EventArgs e) => PlayHurtSounds();
 
+        private void PlayerStats_OnHungerReplenished(object sender, System.EventArgs e) => PlayEatingSounds();
+        private void PlayerStats_OnThirstReplenished(object sender, System.EventArgs e) => PlayDrinkingSounds();
         private void PlayerStats_OnHealthReplenished(object sender, System.EventArgs e) => PlayMedicineSounds();
 
         private void Update()

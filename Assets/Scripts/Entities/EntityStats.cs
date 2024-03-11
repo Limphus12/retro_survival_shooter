@@ -20,8 +20,7 @@ namespace com.limphus.retro_survival_shooter
         public class OnTemperatureChangedEventArgs : EventArgs { public Temperature i; }
 
         public event EventHandler<Events.OnIntChangedEventArgs> OnHealthChanged;
-        public event EventHandler<EventArgs> OnHealthDepleted;
-        public event EventHandler<EventArgs> OnHealthReplenished;
+        public event EventHandler<EventArgs> OnHealthDepleted, OnHealthReplenished;
 
         private void Awake() => InitVariables();
 

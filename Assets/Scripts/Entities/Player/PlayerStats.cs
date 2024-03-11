@@ -66,6 +66,8 @@ namespace com.limphus.retro_survival_shooter
         public event EventHandler<Events.OnIntChangedEventArgs> OnHungerChanged, OnThirstChanged, OnStaminaChanged, OnMeleeStaminaChanged;
         public event EventHandler<OnTemperatureChangedEventArgs> OnTemperatureChanged;
 
+        public event EventHandler<EventArgs> OnHungerReplenished, OnThirstReplenished;
+
         #region Initialization
 
         private void Start()
@@ -189,6 +191,9 @@ namespace com.limphus.retro_survival_shooter
             //increaes current hunger
             SetCurrentHunger(GetCurrentHunger() + amount);
 
+            //replenish event
+            OnHungerReplenished?.Invoke(this, new EventArgs { });
+
             //if we're above 0 hunger
             if (GetCurrentHunger() > 0)
             {
@@ -253,6 +258,9 @@ namespace com.limphus.retro_survival_shooter
         {
             //increaes current thirst
             SetCurrentThirst(GetCurrentThirst() + amount);
+
+            //replenish event
+            OnThirstReplenished?.Invoke(this, new EventArgs { });
 
             //if we're above 0 thirst
             if (GetCurrentThirst() > 0)
